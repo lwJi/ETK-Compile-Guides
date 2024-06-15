@@ -5,7 +5,7 @@
     ```bash
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents
     chmod a+x GetComponents
-    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/spacetimex.th
+    ./GetComponents --root Cactus --parallel --no-shallow https://github.com/EinsteinToolkit/SpacetimeX/blob/main/Docs/thornlist/asterx-frontier.th
     ```
 
 ## The Short Way
