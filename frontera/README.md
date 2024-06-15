@@ -1,4 +1,4 @@
-# Install CarpetX with Spack (Frontera)
+# Install CarpetX on Frontera (with Spack)
 
 * Use interactive session
 
@@ -11,7 +11,7 @@
     ```bash
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents
     chmod a+x GetComponents
-    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/SpacetimeX/main/Docs/thornlist/spacetimex.th
+    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/spacetimex.th
     ```
 
 
@@ -27,8 +27,8 @@
 
     ```bash
     cd Cactus
-    gmake SpacetimeX-oneapi options=repos/SpacetimeX/Docs/compile-notes/frontera/configs/config-frontera-oneapi-impi.cfg
-    cp repos/SpacetimeX/Docs/thornlist/spacetimex.th configs/SpacetimeX-oneapi/ThornList
+    gmake SpacetimeX-oneapi options=ETK-Compile-Guides/frontera/configs/config-frontera-oneapi-impi.cfg
+    cp ETK-Compile-Guides/ThornList/spacetimex.th configs/SpacetimeX-oneapi/ThornList
     gmake -j24 SpacetimeX-oneapi
     ```
 
@@ -46,8 +46,8 @@
     spack load cuda@11.8.0
 
     cd Cactus
-    gmake SpacetimeX-cuda options=repos/SpacetimeX/Docs/compile-notes/frontera/configs/config-frontera-gcc-cuda-impi.cfg
-    cp repos/SpacetimeX/Docs/thornlist/spacetimex.th configs/SpacetimeX-cuda/ThornList
+    gmake SpacetimeX-cuda options=ETK-Compile-Guides/frontera/configs/config-frontera-gcc-cuda-impi.cfg
+    cp ETK-Compile-Guides/ThornList/spacetimex.th configs/SpacetimeX-cuda/ThornList
     gmake -j16 SpacetimeX-cuda
     ```
 
@@ -62,13 +62,12 @@
 
 * Download spack
 
-    - `git clone -c feature.manyFiles=true https://github.com/spack/spack.git`
-
-    - `git checkout releases/v0.20`
-
-    - `. share/spack/setup-env.sh`
-    
-    - `spack compiler find`
+    ```bash
+    git clone -c feature.manyFiles=true https://github.com/spack/spack.git
+    git checkout releases/v0.20
+    . share/spack/setup-env.sh
+    spack compiler find
+    ```
 
 * Create a dir where you want put `view` in (say `/work2/.../username/frontera/SpackView/oneapi`)
 
@@ -89,7 +88,7 @@
     ```bash
     cd Cactus
     gmake SpacetimeX-oneapi options=config-frontera-oneapi-impi.cfg
-    cp repos/SpacetimeX/Docs/thornlist/spacetimex.th configs/SpacetimeX-oneapi/ThornList
+    cp ETK-Compile-Guides/ThornList/spacetimex.th configs/SpacetimeX-oneapi/ThornList
     gmake -j24 SpacetimeX-oneapi
     ```
 
@@ -102,13 +101,12 @@
 
 * Download spack
 
-    - `git clone -c feature.manyFiles=true https://github.com/spack/spack.git`
-
-    - `git checkout relesases/v0.21`
-
-    - `. share/spack/setup-env.sh`
-
-    - `spack compiler find`
+    ```bash
+    git clone -c feature.manyFiles=true https://github.com/spack/spack.git
+    git checkout releases/v0.21
+    . share/spack/setup-env.sh
+    spack compiler find
+    ```
 
 * Install gcc@11.2.0
 
@@ -139,6 +137,6 @@ spack load gcc@11.2.0
 spack load cuda@11.8.0
 cd Cactus
 gmake SpacetimeX-cuda options=config-frontera-gcc-cuda-impi.cfg
-cp repos/SpacetimeX/Docs/thornlist/spacetimex.th configs/SpacetimeX-cuda/ThornList
+cp ETK-Compile-Guides/ThornList/spacetimex.th configs/SpacetimeX-cuda/ThornList
 gmake -j16 SpacetimeX-cuda
 ```
