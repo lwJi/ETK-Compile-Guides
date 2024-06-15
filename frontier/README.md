@@ -1,6 +1,6 @@
 # Compile CarpetX on Frontier
 
-* Download CarpetX and SpacetimeX
+* Download CarpetX, SpacetimeX and AsterX
 
     ```bash
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents
@@ -75,3 +75,7 @@
     It will install `amrex` library to `${HOME}/local/amrex-24.06-amd`.
 
 * Modify `frontier-amd.cfg` to use your own `amrex` library.
+
+### Compile AsterX
+
+* Install AsterX as in The Short Way
