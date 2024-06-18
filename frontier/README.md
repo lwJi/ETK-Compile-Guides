@@ -25,7 +25,7 @@
     gmake -j24 AsterX
     ```
 
-#### rocm6.0-cce17.0.0
+#### cce17.0.0-rocm6.0 (not working with GPU-aware-MPI)
 
 * Install
 
@@ -39,40 +39,8 @@
 
 ### CRAY
 
-### cce-17.0.0 (amrex-24.06)
+#### cce17.0.0-rocm6.0
 
-* Load modules
-
-    ```bash
-    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce17-amd.sh
-    ```
-
-* Install AsterX
-
-    ```bash
-    cd Cactus
-    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-amd.cfg
-    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
-    gmake -j24 AsterX
-    ```
-
-
-### cce-15.0.0 (amrex-23.06)
-
-* Load modules
-
-    ```bash
-    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce15.sh
-    ```
-
-* Install AsterX
-
-    ```bash
-    cd Cactus
-    gmake AsterX options=simfactory/mdb/optionlists/frontier.cfg
-    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
-    gmake -j24 AsterX
-    ```
 
 
 
