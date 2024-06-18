@@ -4,6 +4,7 @@
 # basic
 ###############################################################################
 module purge
+module load PrgEnv-cray/8.5.0
 module load cce/17.0.0
 module load cpe/23.12
 module load amd-mixed/6.0.0
@@ -17,6 +18,7 @@ module load cray-dsmml/0.2.2
 module load cray-pmi/6.1.13
 module load perftools-base/23.12.0
 module load xpmem/2.6.2-2.5_2.22__gd067c3f.shasta
+module unload darshan-runtime
 
 ###############################################################################
 # more for carpetx
@@ -28,6 +30,6 @@ module load hwloc
 module load openblas
 module load zlib
 module load libjpeg-turbo
-#module load adios2
-#module load openpmd-api
-#module load boost
+module load adios2
+module load openpmd-api
+module load boost
