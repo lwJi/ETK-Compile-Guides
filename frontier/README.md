@@ -8,8 +8,36 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://github.com/EinsteinToolkit/SpacetimeX/blob/main/Docs/thornlist/asterx-frontier.th
     ```
 
+
 ## The Short Way
 
+### AMD
+
+#### cce15.0.0-rocm6.0
+
+* Install
+
+    ```bash
+    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce15-rocm6.0-amd.sh
+    cd Cactus
+    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-amd.cfg
+    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
+    gmake -j24 AsterX
+    ```
+
+#### rocm6.0-cce17.0.0
+
+* Install
+
+    ```bash
+    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce17-rocm6.0-amd.sh
+    cd Cactus
+    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-amd.cfg
+    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
+    gmake -j24 AsterX
+    ```
+
+### CRAY
 
 ### cce-17.0.0 (amrex-24.06)
 
@@ -52,18 +80,13 @@
 
 ### Compile AMReX
 
-* Clone `amrex`
+* Install `amrex` to `$HOME/local/amrex24.06-rocm6.0-cce15-amd-gpumpi`
 
     ```bash
     git clone https://github.com/AMReX-Codes/amrex.git
-    ```
 
-* Install `amrex` to `$HOME/local/amrex-24.06`
-
-    ```bash
     cd amrex
-    mkdir build
-    cd build
+    mkdir build && cd build
     
     source ETK-Compile-Guides/frontier/amrex/amd/Load-Module-AMReX.sh
     source ETK-Compile-Guides/frontier/amrex/amd/Export-AMReX.sh
@@ -72,9 +95,9 @@
     make -j24 install
     ```
 
-    It will install `amrex` library to `${HOME}/local/amrex-24.06-amd`.
+    - modify `Compile-AMReX.sh` if you want to install `amrex` somewhere else.
 
-* Modify `frontier-amd.cfg` to use your own `amrex` library.
+* Modify `ETK-Compile-Guides/frontier/configs/frontier-amd.cfg` to use your own `amrex` library.
 
 ### Compile AsterX
 
