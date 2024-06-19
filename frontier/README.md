@@ -8,7 +8,7 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
     ```
 
-* Note that you need to use the `eschnett/crusher` branch of the `flesh`. And you need to run `git merge master` locally to make it work with current version of `CarpetX`.
+* If you are setting `EXTERNAL_FOO` in you `cfg` file (say the `frontier.cfg` file in simfactory), you need to use the `eschnett/crusher` branch of the `flesh`, and you need to run `git merge master` locally to make it work with current version of `CarpetX`.
 
 
 ## The Short Way
