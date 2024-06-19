@@ -39,7 +39,7 @@
     gmake -j24 AsterX
     ```
 
-### CRAY
+### CRAY (not working for the moment)
 
 #### cce17.0.0-rocm6.0
 
