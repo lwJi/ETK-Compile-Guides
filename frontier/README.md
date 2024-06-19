@@ -5,8 +5,10 @@
     ```bash
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents
     chmod a+x GetComponents
-    ./GetComponents --root Cactus --parallel --no-shallow https://github.com/EinsteinToolkit/SpacetimeX/blob/main/Docs/thornlist/asterx-frontier.th
+    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
     ```
+
+* Note that you need to use the `eschnett/crusher` branch of the `flesh`. And you need to run `git merge master` locally to make it work with current version of `CarpetX`.
 
 
 ## The Short Way
