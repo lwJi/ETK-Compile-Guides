@@ -39,7 +39,7 @@
     gmake -j24 AsterX
     ```
 
-### CRAY (by Vassilios)
+### CRAY (by Vassili)
 
 #### cce17.0.0-rocm6.0
 
