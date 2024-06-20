@@ -39,9 +39,19 @@
     gmake -j24 AsterX
     ```
 
-### CRAY (not working for the moment)
+### CRAY (by Vassilios)
 
 #### cce17.0.0-rocm6.0
+
+* Install
+
+    ```bash
+    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce17-rocm6.0-cray.sh
+    cd Cactus
+    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-cray.cfg
+    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
+    gmake -j24 AsterX
+    ```
 
 
 
