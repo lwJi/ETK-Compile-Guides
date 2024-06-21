@@ -17,7 +17,7 @@ if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
   echo "  exe       = $exename"
   echo "  thornlist = $thornlist"
   echo "  configs   = $config"
-  echo "  modules   = $mlfile
+  echo "  modules   = $mlfile"
   exit 0
 fi
 
