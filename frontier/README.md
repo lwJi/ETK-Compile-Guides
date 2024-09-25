@@ -30,8 +30,8 @@
     mkdir build && cd build
     
     source ETK-Compile-Guides/frontier/amrex/Load-Module-AMReX.sh
-    source ETK-Compile-Guides/frontier/amrex/amd/Export-AMReX.sh
-    source ETK-Compile-Guides/frontier/amrex/amd/Compile-AMReX.sh
+    source ETK-Compile-Guides/frontier/amrex/Export-AMReX.sh
+    source ETK-Compile-Guides/frontier/amrex/Compile-AMReX.sh
     
     make -j24 install
     ```
