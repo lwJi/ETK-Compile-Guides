@@ -11,74 +11,45 @@
 * If you are setting `EXTERNAL_FOO` in you `cfg` file (say the `frontier.cfg` file in simfactory), you need to use the `eschnett/crusher` branch of the `flesh`, and you need to run `git merge master` locally to make it work with current version of `CarpetX`.
 
 
-## The Short Way
+## Compile AMReX
 
-### AMD
-
-#### cce15.0.0-rocm6.0 (recommended)
-
-* Install
+* Install `amrex` to `$HOME/local/amrex`
 
     ```bash
-    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce15-rocm6.0.sh
-    cd Cactus
-    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-amd-cce15.cfg
-    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
-    gmake -j24 AsterX
-    ```
+    mkdir $HOME/local/amrex  # this is the installation place
 
-#### cce17.0.0-rocm6.0 (not working with GPU-aware-MPI)
-
-* Install
-
-    ```bash
-    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce17-rocm6.0.sh
-    cd Cactus
-    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-amd-cce17.cfg
-    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
-    gmake -j24 AsterX
-    ```
-
-### CRAY (by Vassili)
-
-#### cce17.0.0-rocm6.0 (not working with GPU-aware-MPI)
-
-* Install
-
-    ```bash
-    source ETK-Compile-Guides/frontier/Load-Module-CarpetX-cce17-rocm6.0.sh
-    cd Cactus
-    gmake AsterX options=ETK-Compile-Guides/frontier/configs/frontier-cray-cce17.cfg
-    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/AsterX/ThornList
-    gmake -j24 AsterX
-    ```
-
-
-
-
-## The Long Way
-
-### Compile AMReX
-
-* Install `amrex` to `$HOME/local/amrex24.06-rocm6.0-cce15-amd`
-
-    ```bash
+    cd $HOME  # here we put the amrex source code
     git clone https://github.com/AMReX-Codes/amrex.git
+    ```
+    replace `inline bool UseGpuAwareMpi () { return use_gpu_aware_mpi; }`
+    with `inline bool UseGpuAwareMpi () { return true; }`
+    on line 111 in `Src/Base/AMReX_ParallelDescriptor.H` to turn on GPU-aware-MPI by default
 
+    ```
     cd amrex
     mkdir build && cd build
     
-    source ETK-Compile-Guides/frontier/amrex/Load-Module-AMReX-cce15.sh
+    source ETK-Compile-Guides/frontier/amrex/Load-Module-AMReX.sh
     source ETK-Compile-Guides/frontier/amrex/amd/Export-AMReX.sh
-    source ETK-Compile-Guides/frontier/amrex/amd/Compile-AMReX-cce15-rocm6.0.sh
+    source ETK-Compile-Guides/frontier/amrex/amd/Compile-AMReX.sh
     
     make -j24 install
     ```
 
     - modify `Compile-AMReX.sh` if you want to install `amrex` somewhere else.
 
-* Modify `ETK-Compile-Guides/frontier/configs/frontier-amd-cce15.cfg` to use your own `amrex` library.
+* Modify `ETK-Compile-Guides/frontier/configs/frontier-amd.cfg` to use your own `amrex` library.
 
-### Compile AsterX
 
-* Install AsterX as in The Short Way
+## Compile ETK
+
+* Install
+
+    ```bash
+    source ETK-Compile-Guides/frontier/Load-Module-CarpetX.sh
+    cd Cactus
+    gmake etk options=ETK-Compile-Guides/frontier/configs/frontier-amd.cfg
+    cp ETK-Compile-Guides/ThornList/asterx-frontier.th configs/etk/ThornList
+    gmake -j24 etk
+    ```
+
