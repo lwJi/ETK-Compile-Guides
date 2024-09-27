@@ -5,7 +5,7 @@ echo "PE_MPICH_GTL_DIR_amd_gfx90a  = $PE_MPICH_GTL_DIR_amd_gfx90a"
 echo "PE_MPICH_GTL_LIBS_amd_gfx90a = $PE_MPICH_GTL_LIBS_amd_gfx90a"
 
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${HOME}/local/amrex \
+      -DCMAKE_INSTALL_PREFIX=${HOME}/local/amrex-cce17 \
       -DCMAKE_PREFIX_PATH='/opt/rocm-6.1.3/lib/cmake/AMDDeviceLibs;/opt/rocm-6.1.3/lib/cmake/amd_comgr;/opt/rocm-6.1.3/lib/cmake/hip;/opt/rocm-6.1.3/lib/cmake/hiprand;/opt/rocm-6.1.3/lib/cmake/hsa-runtime64;/opt/rocm-6.1.3/lib/cmake/rocprim;/opt/rocm-6.1.3/lib/cmake/rocrand' \
       -DAMReX_GPU_BACKEND=HIP \
       -DAMReX_AMD_ARCH=gfx90a \
