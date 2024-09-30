@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#SBATCH -A AST182          # Project/Allocation name (req'd if you have more than 1)
+#SBATCH -t 00:05:00        # Run time (hh:mm:ss)
+#SBATCH -p batch           # Queue (partition) name
+#SBATCH -N 8               # Total # of nodes
+#SBATCH -n 64              # Total # of mpi tasks
+#SBATCH -c 7
+#SBATCH --tasks-per-node=8
+#SBATCH --gpus-per-task=1
+#SBATCH --gpu-bind=closest
+
+#SBATCH -J magTOV_Z4c_SC_480_b4_g60
+#SBATCH -o stdout.txt
+#SBATCH -e stderr.txt
+
+#source $FRONTIER/Load-Module-CarpetX.sh
+ml
+
+#export MPICH_ENV_DISPLAY=1
+export MPICH_GPU_SUPPORT_ENABLED=1
+export PE_MPICH_GTL_DIR_amd_gfx90a="-L/opt/cray/pe/mpich/8.1.28/gtl/lib"
+export PE_MPICH_GTL_LIBS_amd_gfx90a="-lmpi_gtl_hsa"
+#export MPICH_GPU_NO_ASYNC_COPY=1
+#export MPICH_GPU_IPC_ENABLED=0
+
+srun ${ETKINSTALL}/Cactus/exe/cactus_etk magTOV_Z4c_SC_480_b4_g60.par

@@ -1,0 +1,158 @@
+###############################
+# Simple test of magnetised TOV neutron star
+# Same neutron star as the gallery example
+# K=100, rho_c = 1.28e-3 => M = 1.4, M_b = 1.506
+# evolve for t = 48.82 M
+##############################
+ActiveThorns = "
+    ADMBaseX
+    BoxInBox
+    CarpetX
+    #Subcycling
+    HydroBaseX
+    IOUtil
+    ODESolvers
+    TimerReport
+    TmunuBaseX
+    AsterX
+    AsterSeeds
+    Z4c
+"
+
+$nlevels	= 8
+$ncells         = 480.0
+#120 for 8 nodes
+#80 for 27 nodes
+#60 for 64 nodes
+#48 for 125 nodes
+#40 for 216 nodes
+#30 for 512 nodes
+#24 for 1000 nodes
+$max_grid_size = 60
+
+CarpetX::verbose = no
+Cactus::presync_mode = "mixed-error"
+CarpetX::poison_undefined_values = no
+
+# Finest grid spacing is 0.125 
+# To have a symmetric grid along 0, we have odd number of points (256) 
+# along each direction going from -20.078125 to +20.078125 for the finest level
+
+CarpetX::xmin = -2048.0
+CarpetX::ymin = -2048.0
+CarpetX::zmin = -2048.0
+
+CarpetX::xmax = 2048.0
+CarpetX::ymax = 2048.0
+CarpetX::zmax = 2048.0
+
+CarpetX::ncells_x = $ncells
+CarpetX::ncells_y = $ncells
+CarpetX::ncells_z = $ncells
+
+CarpetX::boundary_x =  "neumann"
+CarpetX::boundary_y =  "neumann"
+CarpetX::boundary_z =  "neumann"
+CarpetX::boundary_upper_x =  "neumann"
+CarpetX::boundary_upper_y =  "neumann"
+CarpetX::boundary_upper_z =  "neumann"
+
+CarpetX::max_num_levels = $nlevels
+CarpetX::regrid_every = 1000000
+CarpetX::regrid_error_threshold = 0.9
+
+CarpetX::prolongation_type = "ddf"
+CarpetX::ghost_size = 3
+#CarpetX::dtfac = 64 #= dtfacold * 2^(maxlevels - 1) = 0.5*128
+CarpetX::dtfac = 0.5
+
+#CarpetX::use_subcycling_wip = yes
+#CarpetX::restrict_during_sync = no
+
+CarpetX::blocking_factor_x = 4
+CarpetX::blocking_factor_y = 4
+CarpetX::blocking_factor_z = 4
+
+CarpetX::max_tile_size_x = 1024000
+CarpetX::max_tile_size_y = 1024000
+CarpetX::max_tile_size_z = 1024000
+
+CarpetX::max_grid_size_x = $max_grid_size
+CarpetX::max_grid_size_y = $max_grid_size
+CarpetX::max_grid_size_z = $max_grid_size
+
+BoxInBox::num_regions = 1
+# Region 1
+BoxInBox::shape_1 = "cube"
+BoxInBox::num_levels_1 = $nlevels
+BoxInBox::radius_1 = [ -1.0, 1024, 512, 256, 128, 64, 32, 16 ]
+
+#ADMBaseX::set_adm_variables_during_evolution = "yes"
+ADMBaseX::initial_data       = "tov"
+ADMBaseX::initial_lapse      = "tov"
+ADMBaseX::initial_shift      = "tov"
+ADMBaseX::initial_dtlapse    = "zero"
+ADMBaseX::initial_dtshift    = "zero"
+
+ActiveThorns = "TOVSolverX"
+TOVSolverX::TOV_Rho_Central[0] = 1.28e-3
+TOVSolverX::TOV_Gamma          = 2.0
+TOVSolverX::TOV_K              = 100.0
+TOVSolverX::TOV_Cowling = no
+
+Z4c::calc_ADM_vars = yes                  # for Weyl
+Z4c::calc_ADMRHS_vars = no               # for Weyl
+Z4c::calc_constraints = no
+
+Z4c::chi_floor = 1.0e-6
+Z4c::alphaG_floor = 1.0e-8
+Z4c::epsdiss = 0.32
+
+
+AsterSeeds::test_type = "3DTest"
+AsterSeeds::test_case = "magTOV"
+AsterSeeds::Afield_config = "internal dipole"
+AsterSeeds::Ab = 100.0
+AsterSeeds::press_cut = 0.04
+AsterSeeds::press_max = 1.638e-4
+AsterSeeds::Avec_kappa = 2.0
+
+#AsterSeeds::Afield_config = "external dipole"
+#AsterSeeds::B0 = 1e-7
+#AsterSeeds::r0 = 5.0
+
+AsterX::debug_mode = "no"
+AsterX::flux_type = "HLLE"
+AsterX::vector_potential_gauge = "algebraic"
+AsterX::local_spatial_order = 2
+AsterX::local_estimate_error = "no"
+AsterX::update_tmunu = "yes"
+
+ReconX::reconstruction_method = "PPM"
+ReconX::ppm_zone_flattening = "yes"
+ReconX::ppm_shock_detection = "no"
+
+Con2PrimFactory::c2p_prime = "Noble"
+Con2PrimFactory::c2p_second = "Palenzuela"
+Con2PrimFactory::c2p_tol = 1e-8
+Con2PrimFactory::max_iter = 100
+Con2PrimFactory::rho_abs_min = 1e-9
+Con2PrimFactory::atmo_tol = 1e-3
+Con2PrimFactory::unit_test = "yes"
+Con2PrimFactory::B_lim = 1e8
+Con2PrimFactory::vw_lim = 1e8
+Con2PrimFactory::Ye_lenient = "yes"
+Con2PrimFactory::rho_strict = 6.4e-05
+
+EOSX::evolution_eos = "IdealGas"
+EOSX::gl_gamma = 2.0
+EOSX::poly_gamma = 2.0
+EOSX::poly_k = 100
+EOSX::rho_max = 1e8
+EOSX::eps_max = 1e8
+
+Cactus::terminate = "iteration"
+Cactus::cctk_itlast = 32
+#Cactus::cctk_final_time = 3000
+ODESolvers::method = "RK4"
+
