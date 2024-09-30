@@ -16,12 +16,7 @@
 * Download CarpetX, SpacetimeX and AsterX to `${ETKINSTALL}`
 
     ```bash
-    mkdir ${ETKINSTALL} && \
-    (cd ${ETKINSTALL} && \
-    curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && \
-    chmod a+x GetComponents && \
-    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th && \
-    )
+    mkdir ${ETKINSTALL} && cd ${ETKINSTALL} && curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && chmod a+x GetComponents && ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
     ```
 
 * Load Modules
