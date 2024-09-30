@@ -6,7 +6,9 @@
 
 cd ${ETKINSTALL}
 git clone https://github.com/lwJi/amrex.git
-git checkout --track origin/gpu-aware-mpi
+(cd amrex && \
+git checkout --track origin/gpu-aware-mpi && \
+)
 
 mkdir amrex-lib
 
