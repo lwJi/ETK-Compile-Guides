@@ -4,16 +4,13 @@
 #echo "PE_MPICH_GTL_DIR_amd_gfx90a  = $PE_MPICH_GTL_DIR_amd_gfx90a"
 #echo "PE_MPICH_GTL_LIBS_amd_gfx90a = $PE_MPICH_GTL_LIBS_amd_gfx90a"
 
-cd ${ETKINSTALL}
-git clone https://github.com/lwJi/amrex.git
-(cd amrex && \
-git checkout --track origin/gpu-aware-mpi && \
-)
+cd ${ETKINSTALL} && git clone https://github.com/lwJi/amrex.git
 
-mkdir amrex-lib
+cd ${ETKINSTALL}/amrex && git checkout --track origin/gpu-aware-mpi
 
-cd ${ETKINSTALL}/amrex && mkdir build && \
-(cd build && \
+cd ${ETKINSTALL} && mkdir amrex-lib
+
+cd ${ETKINSTALL}/amrex && mkdir build && cd build && \
 source $ETKDEBUG/Export-AMReX.sh && \
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_INSTALL_PREFIX=${ETKINSTALL}/amrex-lib \
@@ -26,6 +23,6 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DAMReX_PARTICLES=ON \
       -DAMReX_PRECISION=DOUBLE \
       .. && \
-make -j24 install && \
-)
+make -j24 install
 
+cd ${ETKINSTALL}
