@@ -17,7 +17,7 @@ cd ${ETKINSTALL}/amrex && mkdir build && \
 source $ETKDEBUG/Export-AMReX.sh && \
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_INSTALL_PREFIX=${ETKINSTALL}/amrex-lib \
-      -DCMAKE_PREFIX_PATH='/opt/rocm-6.1.3/lib/cmake/AMDDeviceLibs;/opt/rocm-6.1.3/lib/cmake/amd_comgr;/opt/rocm-6.1.3/lib/cmake/hip;/opt/rocm-6.1.3/lib/cmake/hiprand;/opt/rocm-6.1.3/lib/cmake/hsa-runtime64;/opt/rocm-6.1.3/lib/cmake/rocprim;/opt/rocm-6.1.3/lib/cmake/rocrand' \
+      -DCMAKE_PREFIX_PATH='${ROCM_PATH}/lib/cmake/AMDDeviceLibs;${ROCM_PATH}/lib/cmake/amd_comgr;${ROCM_PATH}/lib/cmake/hip;${ROCM_PATH}/lib/cmake/hiprand;${ROCM_PATH}/lib/cmake/hsa-runtime64;${ROCM_PATH}/lib/cmake/rocprim;${ROCM_PATH}/lib/cmake/rocrand' \
       -DAMReX_GPU_BACKEND=HIP \
       -DAMReX_AMD_ARCH=gfx90a \
       -DAMReX_FORTRAN=OFF \
