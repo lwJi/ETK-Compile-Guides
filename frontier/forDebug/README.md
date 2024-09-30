@@ -19,7 +19,8 @@
     (cd DebugETK && \
     curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && \
     chmod a+x GetComponents && \
-    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th)
+    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th && \
+    )
     ```
 
 * Load Modules
