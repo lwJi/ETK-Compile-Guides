@@ -25,8 +25,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DAMReX_OMP=OFF \
       -DAMReX_PARTICLES=ON \
       -DAMReX_PRECISION=DOUBLE \
-      ..
-
-make -j24 install
+      .. && \
+make -j24 install && \
 )
 
