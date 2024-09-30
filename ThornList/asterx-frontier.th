@@ -20,7 +20,8 @@
 # Cactus Flesh
 !TARGET   = $ROOT
 !TYPE     = git
-!URL      = https://bitbucket.org/cactuscode/cactus.git
+!URL      = https://lwJi@bitbucket.org/Cosmolo_Ji/cactus.git
+!REPO_BRANCH = eschnett/crusher
 !NAME     = flesh
 !CHECKOUT = .clang-format CONTRIBUTORS COPYRIGHT doc lib Makefile README.md src
 
