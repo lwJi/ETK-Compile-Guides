@@ -43,6 +43,9 @@
     ```
     - type `yes` when it ask 'Setup configuration etk'
     - remove the whole dir `${ETKINSTALL}/Cactus/configs/etk` if you want to recompile
+        ```bash
+        rm -rf ${ETKINSTALL}/Cactus/configs/etk
+        ```
 
 ## submit runs
 
