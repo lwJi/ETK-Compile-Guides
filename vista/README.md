@@ -1,4 +1,4 @@
-# Compile ETK on Frontier
+# Compile ETK on Vista
 
 * Download repo
 
@@ -9,14 +9,17 @@
 * Set env variable
 
     ```bash
-    export ETKGUIDE="{'where ETK-Compile-Guides is'}/frontier/forDebug"
-    export ETKPATH="$HOME/EinsteinToolkit"
+    export ETKGUIDE="{path_to_ETK-Compile-Guides}/vista"
+    export ETKPATH="$WORK/EinsteinToolkit"
     ```
 
 * Download CarpetX, SpacetimeX and AsterX to `${ETKPATH}`
 
     ```bash
-    mkdir ${ETKPATH} && cd ${ETKPATH} && curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && chmod a+x GetComponents && ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
+    mkdir ${ETKPATH} && cd ${ETKPATH} && \
+    curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && \
+    chmod a+x GetComponents && \
+    ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/spacetimex.th
     ```
 
 * Load Modules
