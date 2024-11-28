@@ -9,37 +9,37 @@
 * Set env variable
 
     ```bash
-    export ETKDEBUG="{'where ETK-Compile-Guides is'}/frontier/forDebug"
-    export ETKINSTALL="$HOME/EinsteinToolkit"
+    export ETKGUIDE="{'where ETK-Compile-Guides is'}/frontier/forDebug"
+    export ETKPATH="$HOME/EinsteinToolkit"
     ```
 
-* Download CarpetX, SpacetimeX and AsterX to `${ETKINSTALL}`
+* Download CarpetX, SpacetimeX and AsterX to `${ETKPATH}`
 
     ```bash
-    mkdir ${ETKINSTALL} && cd ${ETKINSTALL} && curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && chmod a+x GetComponents && ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
+    mkdir ${ETKPATH} && cd ${ETKPATH} && curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/master/GetComponents && chmod a+x GetComponents && ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
     ```
 
 * Load Modules
 
     ```bash
-    source ${ETKDEBUG}/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/Load-Module-CarpetX.sh
     ```
 
-* Install `amrex` to `${ETKINSTALL}/amrex-lib`
+* Install `amrex` to `${ETKPATH}/amrex-lib`
 
     ```bash
-    source ${ETKDEBUG}/Compile-AMReX.sh
+    source ${ETKGUIDE}/Compile-AMReX.sh
     ```
 
 * Compile `ETK`
 
     ```bash
-    source ${ETKDEBUG}/Compile-ETK.sh
+    source ${ETKGUIDE}/Compile-ETK.sh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - remove the whole dir `${ETKINSTALL}/Cactus/configs/etk` if you want to recompile
+    - remove the whole dir `${ETKPATH}/Cactus/configs/etk` if you want to recompile
         ```bash
-        rm -rf ${ETKINSTALL}/Cactus/configs/etk
+        rm -rf ${ETKPATH}/Cactus/configs/etk
         ```
 
 ## submit runs
