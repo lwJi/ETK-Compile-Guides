@@ -1,11 +1,9 @@
 #!/bin/bash
 
-export MPICH_GPU_SUPPORT_ENABLED=1
-export PE_MPICH_GTL_DIR_amd_gfx90a="-L/opt/cray/pe/mpich/8.1.28/gtl/lib"
 export AMREX_CUDA_ARCH=Hopper
-export CC=$(which cc)
-export CXX=$(which CC)
-export FC=$(which ftn)
-export CFLAGS="-I${ROCM_PATH}/include"
-export CXXFLAGS="-I${ROCM_PATH}/include -Wno-pass-failed -mllvm -amdgpu-function-calls=true"
-export LDFLAGS="-L${ROCM_PATH}/lib -lamdhip64 ${PE_MPICH_GTL_DIR_amd_gfx90a} -lmpi_gtl_hsa"
+export CC=$(which nvc)
+export CXX=$(which nvc++)
+export FC=$(which nvfortran)
+export CFLAGS="-I${TACC_NVIDIA_INC}"
+export CXXFLAGS="-I${TACC_NVIDIA_INC}"
+export LDFLAGS="-L${TACC_NVIDIA_LIB}"

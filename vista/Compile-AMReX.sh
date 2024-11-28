@@ -1,19 +1,20 @@
 #!/bin/bash
 
-#cd ${ETKINSTALL} && git clone https://github.com/lwJi/amrex.git
+#cd ${ETKPATH} && git clone https://github.com/lwJi/amrex.git
 #
-#cd ${ETKINSTALL}/amrex && git checkout --track origin/gpu-aware-mpi
+#cd ${ETKPATH}/amrex && git checkout --track origin/gpu-aware-mpi
 #
-#cd ${ETKINSTALL} && mkdir amrex-lib
+#cd ${ETKPATH} && mkdir amrex-lib
 #
-#cd ${ETKINSTALL}/amrex && mkdir build && cd build && \
+#cd ${ETKPATH}/amrex && mkdir build && cd build && \
 #
-#source $ETKDEBUG/Export-AMReX.sh && \
+#source $ETKGUIDE/Export-AMReX.sh && \
 
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${ETKINSTALL}/amrex-lib \
+      -DCMAKE_INSTALL_PREFIX=${ETKPATH}/amrex-lib \
       -DAMReX_GPU_BACKEND=CUDA \
-      -DAMReX_CUDA_ARCH=Hopper \
+      -DAMReX_CUDA_ARCH=Auto \
+      -DAMReX_DIFFERENT_COMPILER=ON \
       -DAMReX_FORTRAN=OFF \
       -DAMReX_FORTRAN_INTERFACES=OFF \
       -DAMReX_OMP=OFF \
@@ -22,4 +23,4 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       .. && \
 make -j24 install
 
-#cd ${ETKINSTALL}
+#cd ${ETKPATH}
