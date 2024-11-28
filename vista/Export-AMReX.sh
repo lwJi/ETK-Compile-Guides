@@ -2,7 +2,7 @@
 
 export MPICH_GPU_SUPPORT_ENABLED=1
 export PE_MPICH_GTL_DIR_amd_gfx90a="-L/opt/cray/pe/mpich/8.1.28/gtl/lib"
-export AMREX_AMD_ARCH=gfx90a
+export AMREX_CUDA_ARCH=Hopper
 export CC=$(which cc)
 export CXX=$(which CC)
 export FC=$(which ftn)
