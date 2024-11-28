@@ -1,6 +1,5 @@
 #!/bin/bash
 
-export AMREX_CUDA_ARCH=Hopper
 export CC=$(which nvc)
 export CXX=$(which nvc++)
 export FC=$(which nvfortran)
