@@ -168,7 +168,7 @@ CarpetX/TmunuBaseX
 !REPO_PATH= $2
 !CHECKOUT =
 SpacetimeX/AHFinderDirect
-SpacetimeX/AHFinderX
+#SpacetimeX/AHFinderX
 SpacetimeX/BrillLindquist
 SpacetimeX/Cowling
 SpacetimeX/NewRadX
