@@ -1,11 +1,19 @@
 #!/bin/bash
 
+module reset
+
+module unload openmpi
+module unload nvidia
+
+module load gcc/13.2.0
 module load cuda
-module load nvidia_math
+module load nvmath
+module load openmpi
+module load phdf5
 module load adios2
 module load boost
-module load hdf5
 module load fftw3
 module load gsl
-module load silo
 module load zlib
+
+#module load silo
