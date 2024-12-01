@@ -53,6 +53,7 @@
 sbatch sub-gpu
 ```
 
+
 ## notes about the machine
 
 ### NVIDIA Compilers
@@ -81,3 +82,9 @@ Armv9.0 architecture (CPU-only)
 
 * The env variable `$TACC_VEC_FLAGS` sets
     - `-O3 -mcpu-neoverse-v2`
+
+
+## Todo
+
+ - [ ] use NVPL
+ - [ ] use nvhpc
