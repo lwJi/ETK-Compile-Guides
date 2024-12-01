@@ -8,7 +8,7 @@
 #
 #cd ${ETKPATH}/amrex && mkdir build && cd build && \
 #
-#source $ETKGUIDE/Export-AMReX.sh && \
+#source $ETKGUIDE/gcc/Export-AMReX.sh && \
 
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DCMAKE_INSTALL_PREFIX=${ETKPATH}/amrex-lib \
