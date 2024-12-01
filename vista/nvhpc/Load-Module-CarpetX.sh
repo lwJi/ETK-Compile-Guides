@@ -2,7 +2,6 @@
 
 module reset
 
-module load cuda
 module load nvidia_math
 module load adios2
 module load boost
