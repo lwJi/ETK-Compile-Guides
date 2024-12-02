@@ -89,6 +89,4 @@ Armv9.0 architecture (CPU-only)
 
 
 ## Todo
-
- - [ ] use NVPL
- - [ ] use nvhpc
+ - [ ] make nvhpc work
