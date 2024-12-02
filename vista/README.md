@@ -38,13 +38,10 @@
 * Compile `ETK`
 
     ```bash
-    source ${ETKGUIDE}/gcc/Compile-ETK.sh
+    cd ${ETKPATH}/Cactus
+    source ${ETKGUIDE}/gcc/Compile-ETK.sh --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - remove the whole dir `${ETKPATH}/Cactus/configs/etk` if you want to recompile
-        ```bash
-        rm -rf ${ETKPATH}/Cactus/configs/etk
-        ```
 
 ## nvhpc (not working yet)
 
