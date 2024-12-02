@@ -152,6 +152,7 @@ CarpetX/Algo
 CarpetX/Arith
 CarpetX/BoxInBox
 CarpetX/CarpetX
+CarpetX/CarpetXRegrid
 CarpetX/CoordinatesX
 CarpetX/Derivs
 CarpetX/ErrorEstimator
@@ -170,6 +171,7 @@ SpacetimeX/AHFinderDirect
 SpacetimeX/AHFinderX
 SpacetimeX/BrillLindquist
 SpacetimeX/Cowling
+SpacetimeX/Multipole
 SpacetimeX/NewRadX
 SpacetimeX/TestNewRadX
 SpacetimeX/Punctures
@@ -179,6 +181,7 @@ SpacetimeX/SphericalSurface
 SpacetimeX/StaticTrumpet
 SpacetimeX/TwoPuncturesX
 SpacetimeX/Weyl
+SpacetimeX/WeylScal4
 SpacetimeX/Z4c
 
 # AsterX thorns
@@ -193,3 +196,4 @@ AsterX/Con2PrimFactory
 AsterX/EOSX
 AsterX/ReconX
 AsterX/TOVSolverX
+AsterX/AsterUtils
