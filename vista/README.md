@@ -1,5 +1,11 @@
 # Compile ETK on Vista
 
+* Hostname (username is the same as the one used on Frontera)
+
+    ```bash
+    vista.tacc.utexas.edu
+    ```
+
 * Download repo
 
     ```bash
