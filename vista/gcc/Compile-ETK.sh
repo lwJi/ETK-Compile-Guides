@@ -53,7 +53,7 @@ while [[ $# -gt 0 ]]; do
     *)
       echo "Unknown argument: $1"
       display_usage
-      exit 1
+      exit 0
       ;;
   esac
 done
