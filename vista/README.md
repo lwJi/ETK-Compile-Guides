@@ -22,28 +22,32 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/spacetimex.th
     ```
 
+## gcc + nvcc
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/Load-Module-CarpetX.sh
-    ```
-
-* Install `amrex` to `${ETKPATH}/amrex-lib`
-
-    ```bash
-    source ${ETKGUIDE}/Compile-AMReX.sh
+    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
     ```
 
 * Compile `ETK`
 
     ```bash
-    source ${ETKGUIDE}/Compile-ETK.sh
+    source ${ETKGUIDE}/gcc/Compile-ETK.sh
     ```
     - type `yes` when it ask 'Setup configuration etk'
     - remove the whole dir `${ETKPATH}/Cactus/configs/etk` if you want to recompile
         ```bash
         rm -rf ${ETKPATH}/Cactus/configs/etk
         ```
+
+## nvhpc (not working yet)
+
+* Install `amrex` to `${ETKPATH}/nvhpc/amrex-lib`
+
+    ```bash
+    source ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
+    ```
+
 
 ## submit runs
 
