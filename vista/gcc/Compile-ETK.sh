@@ -75,5 +75,3 @@ fi
 
 echo "Compiling '$executable_name' with $config_file..."
 run_command gmake -j24 "$executable_name"
-
-echo "Compile-ETK script completed."
