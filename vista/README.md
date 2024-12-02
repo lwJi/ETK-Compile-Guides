@@ -10,7 +10,7 @@
 
     ```bash
     export ETKGUIDE="{path_to_ETK-Compile-Guides}/vista"
-    export ETKPATH="$WORK/EinsteinToolkit"
+    export ETKPATH="$HOME/EinsteinToolkit"
     ```
 
 * Download CarpetX, SpacetimeX and AsterX to `${ETKPATH}`
