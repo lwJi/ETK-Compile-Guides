@@ -39,7 +39,7 @@
 
     ```bash
     cd ${ETKPATH}/Cactus
-    source ${ETKGUIDE}/gcc/Compile-ETK.sh --fresh
+    ${ETKGUIDE}/gcc/Compile-ETK.sh --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
 
@@ -48,7 +48,7 @@
 * Install `amrex` to `${ETKPATH}/nvhpc/amrex-lib`
 
     ```bash
-    source ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
+    ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
     ```
 
 
