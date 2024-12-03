@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ${ETKPATH}/Cactus
+cd ${WORK}/Laudau/Cactus
 
 rm std*.log
 rm -rf configs/etk-nvhpc
