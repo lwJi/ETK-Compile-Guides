@@ -45,10 +45,10 @@
 
     ```bash
     cd ${ETKPATH}/Cactus
-    ${ETKGUIDE}/gcc/Compile-ETK.sh --fresh
+    ${ETKGUIDE}/gcc/Compile-ETK --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/gcc/Compile-ETK.sh --help` to display the availible options
+    - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
 
 ## nvhpc (not working yet)
 
