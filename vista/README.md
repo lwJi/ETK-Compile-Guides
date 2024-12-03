@@ -35,6 +35,12 @@
     source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
     ```
 
+* Compile `AMReX`
+
+    ```bash
+    source ${ETKGUIDE}/gcc/Install-AMReX.sh
+    ```
+
 * Compile `ETK`
 
     ```bash
