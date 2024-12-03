@@ -13,6 +13,7 @@ executable_name="etk"
 thorn_list="thornlists/asterx.th"
 config_file="${ETKGUIDE}/gcc/vista.cfg"
 perform_fresh_compile=0
+num_cores=24
 
 # Display usage instructions
 display_usage() {
@@ -23,6 +24,7 @@ display_usage() {
   echo "  -exe=<executable>       Specify the executable name (default: $executable_name)"
   echo "  -thornlist=<thorn_list> Specify the thorn list file (default: $thorn_list)"
   echo "  -config=<config_file>   Specify the configuration file (default: $config_file)"
+  echo "  -j=<num_cores>          Specify the number of cores for parallel build (default: $num_cores)"
   echo
   echo "All arguments are optional. If not specified, default values are used."
 }
@@ -50,6 +52,10 @@ while [[ $# -gt 0 ]]; do
       config_file="${1#*=}"
       shift
       ;;
+    -j=*)
+      num_cores="${1#*=}"
+      shift
+      ;;
     *)
       echo "Unknown argument: $1"
       display_usage
@@ -62,8 +68,8 @@ done
 if [[ $perform_fresh_compile -eq 1 ]]; then
   echo "Performing a fresh compile for '$executable_name'..."
 
-  # Check if config path exists
   config_path="configs/$executable_name"
+  # Remove existing config directory
   if [[ -d "$config_path" ]]; then
     echo "Removing existing directory: $config_path"
     run_command rm -rf "$config_path"
@@ -73,5 +79,5 @@ if [[ $perform_fresh_compile -eq 1 ]]; then
   run_command cp "$thorn_list" "configs/$executable_name/ThornList"
 fi
 
-echo "Compiling '$executable_name' with $config_file..."
-run_command gmake -j24 "$executable_name"
+echo "Compiling '$executable_name' with $config_file using $num_cores cores..."
+run_command gmake -j"$num_cores" "$executable_name"
