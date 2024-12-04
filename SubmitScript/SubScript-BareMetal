@@ -5,41 +5,8 @@
 
 module list
 
-# --------------------------------------
-# Create a directory for the current run
-# --------------------------------------
+# ------------------------------------------------------
+# Create a directory for the current run and launch jobs
+# ------------------------------------------------------
+$(create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}")
 
-if ! command -v create_and_organize_job_directory &>/dev/null; then
-  echo "Error: 'create_and_organize_job_directory' function is not defined."
-  exit 1
-fi
-
-job_output_dir=$(create_and_organize_job_directory "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}")
-
-if [ -z "$job_output_dir" ]; then
-  echo "Error: Failed to generate a new directory name."
-  exit 1
-fi
-
-execute_command cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
-
-# ---------------
-# Launch MPI code
-# ---------------
-echo "======================================================================"
-echo "Launch MPI code..."
-echo "----------------------------------------------------------------------"
-echo "MPIRUN = $SUBMITJOBS_MPIRUN"
-echo
-echo "Job started on $(hostname) at $(date)"
-echo "======================================================================"
-
-time $SUBMITJOBS_MPIRUN
-
-if [ $? -ne 0 ]; then
-  echo "Error: MPI job failed."
-  exit 1
-fi
-
-echo "======================================================================"
-echo "Job Ended at $(date)"
