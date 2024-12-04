@@ -9,25 +9,15 @@ module list
 # Create a directory for the current run
 # --------------------------------------
 
-if ! command -v generate_new_directory_name &>/dev/null; then
-  echo "Error: 'generate_new_directory_name' function is not defined."
+if ! command -v create_and_organize_job_directory &>/dev/null; then
+  echo "Error: 'create_and_organize_job_directory' function is not defined."
   exit 1
 fi
 
-job_output_dir=$(generate_new_directory_name "${SUBMITJOBS_JOBNAME}")
+job_output_dir=$(create_and_organize_job_directory "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}")
 
 if [ -z "$job_output_dir" ]; then
   echo "Error: Failed to generate a new directory name."
-  exit 1
-fi
-
-# --------------------------------------
-# Move job files to the output directory
-# --------------------------------------
-$(create_new_job_directory_and "${job_output_dir}" "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}")
-
-if [ $? -ne 0 ]; then
-  echo "Error: Failed to set up the job directory. Exiting."
   exit 1
 fi
 
