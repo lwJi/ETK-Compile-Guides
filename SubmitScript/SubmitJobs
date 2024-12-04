@@ -119,8 +119,7 @@ DEFAULTS:
   job_name  = param_file without '.par'
 
 NOTES:
-  * Use '~/bin/SubScript-BareMetal-CPU' as subscript when specifying node-related options.
-  * Ensure a subscript file exists in the simulation directory if not specifying optional arguments.
+  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
   * Custom job_name formats as job_name-N?-OMP?.
 
 EOF
