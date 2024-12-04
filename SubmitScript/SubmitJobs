@@ -14,7 +14,7 @@ execute_command() {
 export -f execute_command
 
 # Generate a new directory name for a job
-generate_new_directory() {
+generate_new_directory_name() {
     # Base name for the new directory
     local base_name="${1}_r"
 
@@ -38,7 +38,7 @@ generate_new_directory() {
     # Output the new directory name
     echo "$new_directory"
 }
-export -f generate_new_directory
+export -f generate_new_directory_name
 
 # --------------
 # Default Values
