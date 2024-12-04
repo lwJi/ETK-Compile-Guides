@@ -1,0 +1,159 @@
+#!/bin/bash
+
+echo "SubmitJobs (c) 2023 Liwei Ji"
+
+# ---------
+# Functions
+# ---------
+
+# Execute and print the command
+execute_command() { 
+    echo "\$ $@" 
+    "$@" 
+}
+export -f execute_command
+
+# Generate a new directory name for a job
+generate_new_directory() {
+    # Base name for the new directory
+    local base_name="${1}_r"
+
+    # Check for existing directories matching the pattern
+    if compgen -G "${base_name}[0-9][0-9][0-9][0-9]" > /dev/null; then
+        # Get the list of matching directories, sort numerically, extract the last one
+        local last_run=$(ls -d ${base_name}[0-9][0-9][0-9][0-9] 2>/dev/null | sort | tail -n 1)
+
+        # Extract the numeric part of the last directory and increment it
+        local last_index=${last_run##*${base_name}}
+        local next_index=$((10#$last_index + 1))
+
+        # Format the new index as a 4-digit number
+        printf -v formatted_index "%04d" $next_index
+        local new_directory="${base_name}${formatted_index}"
+    else
+        # Default to the first directory if no matches
+        local new_directory="${base_name}0000"
+    fi
+
+    # Output the new directory name
+    echo "$new_directory"
+}
+export -f generate_new_directory
+
+# --------------
+# Default Values
+# --------------
+default_subscript="SubScript"
+
+# ----
+# Main
+# ----
+if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
+    echo "USAGE:"
+    echo "  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]"
+    echo "               |                                              |        |"
+    echo "               |                                              |   allocation=PHY20010,AST20021"
+    echo "             num_jobs=1,2,3,...:DependOnID                   queue=development,normal,small"
+    echo
+    echo "DEFAULTS:"
+    echo "  subscript = $default_subscript"
+    echo "  job_name  = param_file without '.par'"
+    echo
+    echo "NOTES:"
+    echo "  * Provide '~/bin/SubScript-BareMetal-CPU' as subscript when specifying [nodes mpi_tasks omp_threads wall_time queue allocation]."
+    echo "  * Ensure a subscript file exists in the simulation directory if not specifying these options."
+    echo "  * Custom job_name will format as job_name-N?-OMP?."
+    exit 0
+fi
+
+# Determine host-specific behavior
+if [[ $HOSTNAME =~ login[1-4]\.frontera\.tacc\.utexas\.edu ]]; then
+
+    # Parse input arguments
+    num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
+    dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
+    executable_path=$2
+    param_file=$3
+
+    # Initialize indexes and flags
+    subscript_index=4
+    job_name_index=5
+    nodes_args_provided=false
+
+    # Handle optional node arguments
+    if [[ $4 =~ ^[0-9]+$ ]]; then
+        nodes_args_provided=true
+        num_nodes=$4
+        num_mpi_tasks=$5
+        num_omp_threads=$6
+        wall_time=$7
+        queue_name=$8
+        allocation_name=$9
+        (( subscript_index += 6 ))
+        (( job_name_index += 6 ))
+    fi
+
+    # Parse subscript and job name with fallback to defaults
+    subscript=${!subscript_index:-$default_subscript}
+    if [[ -n ${!job_name_index} ]]; then
+        job_name=${!job_name_index}
+        # Append node and thread info to job name if provided
+        [[ -n $num_nodes && -n $num_omp_threads ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+    else
+        job_name=${param_file%.par}
+    fi
+
+    # Export variables for child shells
+    export SUBMITJOBS_JOBNAME="$job_name"
+    export SUBMITJOBS_PARFILE="$param_file"
+    if [[ "$executable_path" = /* ]]; then
+        export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
+    else
+        export SUBMITJOBS_MPIRUN="ibrun ../$executable_path $param_file"
+    fi
+
+    # Display the job configuration
+    echo "Job Configuration:"
+    echo "------------------"
+    echo "Number of jobs: $num_jobs"
+    echo "Executable:     $executable_path"
+    echo "Parameter file: $param_file"
+    if $nodes_args_provided; then
+        echo "Nodes:          $num_nodes"
+        echo "MPI tasks:      $num_mpi_tasks"
+        echo "OMP threads:    $num_omp_threads"
+        echo "Wall time:      $wall_time"
+        echo "Queue:          $queue_name"
+        echo "Allocation:     $allocation_name"
+    fi
+    echo "Subscript:      $subscript"
+    echo "Job name:       $job_name"
+
+    # Submit jobs
+    last_job_id=${dependent_job_id:-NoPreviousJob}
+    for ((i = 1; i <= num_jobs; i++)); do
+        sbatch_command="sbatch -J $job_name \
+                               -o stdout.txt \
+                               -e stderr.txt"
+        if $nodes_args_provided; then
+            export OMP_NUM_THREADS=$num_omp_threads
+            sbatch_command+=" -N $num_nodes \
+                              -n $num_mpi_tasks \
+                              -t $wall_time \
+                              -p $queue_name \
+                              -A $allocation_name"
+        fi
+        [[ $last_job_id != "NoPreviousJob" ]] && sbatch_command+=" -d afterany:$last_job_id"
+        sbatch_command+=" $subscript"
+
+        echo
+        echo "Executing sbatch command:"
+        echo "$sbatch_command"
+        sbatch_output=$($sbatch_command 2>&1 | tee "${job_name}.last-sbatch")
+        last_job_id=$(echo "$sbatch_output" | tail -n1 | awk '{ print $NF }')
+    done
+
+else
+    echo "Unknown host: $HOSTNAME"
+    echo "This host is not configured. Exiting."
+fi
