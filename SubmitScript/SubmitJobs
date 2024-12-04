@@ -7,9 +7,9 @@ echo "SubmitJobs (c) 2023 Liwei Ji"
 # ---------
 
 # Execute and print the command
-execute_command() { 
-    echo "\$ $@" 
-    "$@" 
+execute_command() {
+    echo "\$ $@"
+    "$@"
 }
 export -f execute_command
 
