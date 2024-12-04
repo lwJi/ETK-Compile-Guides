@@ -101,20 +101,29 @@ default_subscript="SubScript"
 # Main
 # ----
 if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
-    echo "USAGE:"
-    echo "  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]"
-    echo "                 |                                                                          |        |"
-    echo "                 |                                                                          |   allocation=PHY?????,AST?????"
-    echo "              num_jobs=1,2,3,...:DependOnID                                               queue=development,normal,small"
-    echo
-    echo "DEFAULTS:"
-    echo "  subscript = $default_subscript"
-    echo "  job_name  = param_file without '.par'"
-    echo
-    echo "NOTES:"
-    echo "  * Provide '~/bin/SubScript-BareMetal-CPU' as subscript when specifying [nodes mpi_tasks omp_threads wall_time queue allocation]."
-    echo "  * Ensure a subscript file exists in the simulation directory if not specifying these options."
-    echo "  * Custom job_name will format as job_name-N?-OMP?."
+    cat <<EOF
+USAGE:
+  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
+
+    Arguments:
+      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
+      executable:      Path to the executable script or binary.
+      param_file:      Path to the parameter file.
+      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
+                       Optional job-specific arguments.
+      subscript:       Submission script name (default: $default_subscript).
+      job_name:        Custom job name (default: param_file without '.par').
+
+DEFAULTS:
+  subscript = $default_subscript
+  job_name  = param_file without '.par'
+
+NOTES:
+  * Use '~/bin/SubScript-BareMetal-CPU' as subscript when specifying node-related options.
+  * Ensure a subscript file exists in the simulation directory if not specifying optional arguments.
+  * Custom job_name formats as job_name-N?-OMP?.
+
+EOF
     exit 0
 fi
 
