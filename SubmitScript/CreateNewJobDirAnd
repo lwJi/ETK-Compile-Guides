@@ -1,0 +1,28 @@
+#!/bin/bash
+
+job_dir=$1
+param_file=$2
+job_name=$3
+job_id=$4
+
+# --------------------------
+# create and cd into job_dir
+# --------------------------
+if [ -z "$job_dir" ] || [ -z "$param_file" ] || [ -z "$job_name" ] || [ -z "$job_id" ]; then
+  echo "Error: Missing arguments. Usage: $0 <job_dir> <param_file> <job_name> <job_id>"
+  exit 1
+fi
+
+if [ ! -d "$job_dir" ]; then
+  execute_command mkdir -p "$job_dir" || { echo "Error: Failed to create directory $job_dir"; exit 1; }
+  execute_command cp "$param_file" "$job_dir" || { echo "Error: Failed to copy $param_file to $job_dir"; exit 1; }
+  execute_command mv stdout.txt "$job_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
+  execute_command mv stderr.txt "$job_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
+
+  # Uncomment these lines if specific SLURM job logs are needed
+  # execute_command mv "$job_name.o$job_id" "$job_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
+  # execute_command mv "$job_name.e$job_id" "$job_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
+else
+  echo "Error: Directory '${job_dir}' already exists. Please check."
+  exit 1
+fi
