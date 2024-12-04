@@ -51,9 +51,9 @@ default_subscript="SubScript"
 if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
     echo "USAGE:"
     echo "  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]"
-    echo "               |                                              |        |"
-    echo "               |                                              |   allocation=PHY?????,AST?????"
-    echo "             num_jobs=1,2,3,...:DependOnID                   queue=development,normal,small"
+    echo "                 |                                                                          |        |"
+    echo "                 |                                                                          |   allocation=PHY?????,AST?????"
+    echo "              num_jobs=1,2,3,...:DependOnID                                               queue=development,normal,small"
     echo
     echo "DEFAULTS:"
     echo "  subscript = $default_subscript"
