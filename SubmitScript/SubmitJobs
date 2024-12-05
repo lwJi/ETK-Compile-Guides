@@ -91,6 +91,31 @@ export -f create_and_organize_job_directory_and_launch_jobs
 # Local Functions
 # ---------------
 
+# Display usage instructions
+display_usage() {
+    echo "
+USAGE:
+  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
+
+    Arguments:
+      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
+      executable:      Path to the executable script or binary.
+      param_file:      Path to the parameter file.
+      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
+                       Optional job-specific arguments.
+      subscript:       Submission script name (default: $default_subscript).
+      job_name:        Custom job name (default: param_file without '.par').
+
+DEFAULTS:
+  subscript = $default_subscript
+  job_name  = param_file without '.par'
+
+NOTES:
+  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
+  * Custom job_name formats as job_name-N?-OMP?.
+"
+}
+
 # Display job configuration
 display_job_config() {
     echo "Job Configuration:"
@@ -135,31 +160,6 @@ submit_job_slurm() {
         execute_command $sbatch_command | tee "${job_name}.last-sbatch"
         last_job_id=$(tail -n 1 "${job_name}.last-sbatch" | awk '{ print $NF }')
     done
-}
-
-# Display usage instructions
-display_usage() {
-    echo "
-USAGE:
-  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
-
-    Arguments:
-      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
-      executable:      Path to the executable script or binary.
-      param_file:      Path to the parameter file.
-      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
-                       Optional job-specific arguments.
-      subscript:       Submission script name (default: $default_subscript).
-      job_name:        Custom job name (default: param_file without '.par').
-
-DEFAULTS:
-  subscript = $default_subscript
-  job_name  = param_file without '.par'
-
-NOTES:
-  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
-  * Custom job_name formats as job_name-N?-OMP?.
-"
 }
 
 # -------------
