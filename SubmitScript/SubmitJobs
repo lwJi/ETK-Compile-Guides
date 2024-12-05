@@ -91,28 +91,63 @@ export -f create_and_organize_job_directory_and_launch_jobs
 # Local Functions
 # ---------------
 
-# Display usage instructions
+# Help message
 display_usage() {
-    echo "
-USAGE:
-  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
+    echo "Usage: $0 -n <num_jobs:dependent_job_id> -e <executable_path> -p <param_file> [options]"
+    echo ""
+    echo "Required Arguments:"
+    echo "  -n  Number of jobs and dependent job ID (format: num_jobs:dependent_job_id)"
+    echo "  -e  Path to the executable"
+    echo "  -p  Path to the parameter file"
+    echo ""
+    echo "Optional Arguments:"
+    echo "  -s  Subscript (default: ${default_subscript})"
+    echo "      If subscript is provided, other optional arguments are not mandatory."
+    echo "  OR provide all of the following:"
+    echo "    -N  Number of nodes"
+    echo "    -m  Number of MPI tasks"
+    echo "    -o  Number of OpenMP threads"
+    echo "    -w  Wall time (format: HH:MM:SS)"
+    echo "    -q  Queue name"
+    echo "    -a  Allocation name"
+    echo ""
+    echo "Additional Options:"
+    echo "  -j  Job name (default: based on parameter file name)"
+    echo "  -h  Display this help message"
+    echo ""
+    echo "Examples:"
+    echo "  $0 -n 5:12345 -e /path/to/executable -p params.par -s MySubscript"
+    echo "  $0 -n 5:12345 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -w 02:00:00 -q high_priority -a my_project"
+}
 
-    Arguments:
-      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
-      executable:      Path to the executable script or binary.
-      param_file:      Path to the parameter file.
-      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
-                       Optional job-specific arguments.
-      subscript:       Submission script name (default: $default_subscript).
-      job_name:        Custom job name (default: param_file without '.par').
 
-DEFAULTS:
-  subscript = $default_subscript
-  job_name  = param_file without '.par'
 
-NOTES:
-  * Custom job_name formats as job_name-N?-OMP? when optional job-specific arguments were privided also.
-"
+# Check all optional arguments when subscript is empty
+check_optional_args() {
+    # Validate each optional argument
+    if [[ -z "$num_nodes" ]]; then
+        echo "Error: Missing optional argument -N (number of nodes) when subscript is empty." >&2
+    fi
+    if [[ -z "$num_mpi_tasks" ]]; then
+        echo "Error: Missing optional argument -m (number of MPI tasks) when subscript is empty." >&2
+    fi
+    if [[ -z "$num_omp_threads" ]]; then
+        echo "Error: Missing optional argument -o (number of OpenMP threads) when subscript is empty." >&2
+    fi
+    if [[ -z "$wall_time" ]]; then
+        echo "Error: Missing optional argument -w (wall time) when subscript is empty." >&2
+    fi
+    if [[ -z "$queue_name" ]]; then
+        echo "Error: Missing optional argument -q (queue name) when subscript is empty." >&2
+    fi
+    if [[ -z "$allocation_name" ]]; then
+        echo "Error: Missing optional argument -a (allocation name) when subscript is empty." >&2
+    fi
+
+    # Exit if any optional arguments are missing
+    if [[ -z "$num_nodes" || -z "$num_mpi_tasks" || -z "$num_omp_threads" || -z "$wall_time" || -z "$queue_name" || -z "$allocation_name" ]]; then
+        exit 1
+    fi
 }
 
 # Display job configuration
@@ -225,32 +260,48 @@ main() {
         exit 0
     fi
 
-    # Parse input arguments
-    num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
-    dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
-    executable_path=$2
-    param_file=$3
+    # Parse command-line arguments
+    while getopts ":n:e:p:N:m:o:w:q:a:s:j:h" opt; do
+        case $opt in
+            n) num_jobs_dependent_job_id="$OPTARG" ;;
+            e) executable_path="$OPTARG" ;;
+            p) param_file="$OPTARG" ;;
+            N) num_nodes="$OPTARG" ;;
+            m) num_mpi_tasks="$OPTARG" ;;
+            o) num_omp_threads="$OPTARG" ;;
+            w) wall_time="$OPTARG" ;;
+            q) queue_name="$OPTARG" ;;
+            a) allocation_name="$OPTARG" ;;
+            s) subscript="$OPTARG" ;;
+            j) job_name="$OPTARG" ;;
+            h) display_usage; exit 0 ;;
+            :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
+            \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
+        esac
+    done
 
-    # Initialize indexes and flags
-    subscript_index=4
-    job_name_index=5
-    nodes_args_provided=false
+    # Ensure required arguments are provided
+    if [[ -z "$num_jobs_dependent_job_id" || -z "$executable_path" || -z "$param_file" ]]; then
+        echo "Error: Missing required arguments." >&2
+        display_usage
+        exit 1
+    fi
+
+    # Parse input arguments
+    num_jobs=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $1 }')
+    dependent_job_id=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $2 }')
 
     # Handle optional node arguments
-    if [[ ${!subscript_index} =~ ^[0-9]+$ ]]; then
+    if [[ -z ${subscript} ]]; then
         nodes_args_provided=true
-        num_nodes=${!subscript_index}
-        num_mpi_tasks=$(eval echo \${$((subscript_index + 1))})
-        num_omp_threads=$(eval echo \${$((subscript_index + 2))})
-        wall_time=$(eval echo \${$((subscript_index + 3))})
-        queue_name=$(eval echo \${$((subscript_index + 4))})
-        allocation_name=$(eval echo \${$((subscript_index + 5))})
-        subscript_index=$((subscript_index + 6))
-        job_name_index=$((job_name_index + 6))
+        # Check if `num_nodes`, `num_mpi_tasks`, ..., are set when subscript is empty
+        check_optional_args
+    else
+        nodes_args_provided=false
     fi
 
     # Parse subscript with fallback to defaults
-    subscript=${!subscript_index:-$default_subscript}
+    subscript=${subscript:-$default_subscript}
 
     # Parse job name with fallback to defaults
     job_name=${!job_name_index:-${param_file%.par}}
