@@ -189,14 +189,15 @@ EOF
     if [[ ${!subscript_index} =~ ^[0-9]+$ ]]; then
         nodes_args_provided=true
         num_nodes=${!subscript_index}
-        num_mpi_tasks=${!((subscript_index + 1))}
-        num_omp_threads=${!((subscript_index + 2))}
-        wall_time=${!((subscript_index + 3))}
-        queue_name=${!((subscript_index + 4))}
-        allocation_name=${!((subscript_index + 5))}
+        num_mpi_tasks=$(eval echo \${$((subscript_index + 1))})
+        num_omp_threads=$(eval echo \${$((subscript_index + 2))})
+        wall_time=$(eval echo \${$((subscript_index + 3))})
+        queue_name=$(eval echo \${$((subscript_index + 4))})
+        allocation_name=$(eval echo \${$((subscript_index + 5))})
         subscript_index=$((subscript_index + 6))
         job_name_index=$((job_name_index + 6))
     fi
+
 
     # Parse subscript with fallback to defaults
     subscript=${!subscript_index:-$default_subscript}
