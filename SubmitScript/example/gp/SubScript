@@ -23,4 +23,4 @@ echo ${PBS_JOBID} > .jobid
 # ------------------------------------------------------
 # Create a directory for the current run and launch jobs
 # ------------------------------------------------------
-create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}"
+create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${PBS_JOBID}"
