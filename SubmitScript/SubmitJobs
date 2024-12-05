@@ -2,16 +2,16 @@
 
 echo "SubmitJobs (c) 2024 Liwei Ji, Wolfgang Tichy"
 
-# ---------
-# Functions
-# ---------
-
 # Execute and print the command
 execute_command() {
     echo "\$ $@"
     "$@"
 }
 export -f execute_command
+
+# ----------------
+# Global Functions
+# ----------------
 
 # Generate a new directory name for a job
 generate_new_directory_name() {
@@ -92,105 +92,31 @@ create_and_organize_job_directory_and_launch_jobs() {
 }
 export -f create_and_organize_job_directory_and_launch_jobs
 
-# --------------
-# Default Values
-# --------------
-default_subscript="SubScript"
+# ---------------
+# Local Functions
+# ---------------
 
-# ----
-# Main
-# ----
-if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
-    cat <<EOF
-USAGE:
-  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
-
-    Arguments:
-      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
-      executable:      Path to the executable script or binary.
-      param_file:      Path to the parameter file.
-      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
-                       Optional job-specific arguments.
-      subscript:       Submission script name (default: $default_subscript).
-      job_name:        Custom job name (default: param_file without '.par').
-
-DEFAULTS:
-  subscript = $default_subscript
-  job_name  = param_file without '.par'
-
-NOTES:
-  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
-  * Custom job_name formats as job_name-N?-OMP?.
-
-EOF
-    exit 0
-fi
-
-# Parse input arguments
-num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
-dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
-executable_path=$2
-param_file=$3
-
-# Initialize indexes and flags
-subscript_index=4
-job_name_index=5
-nodes_args_provided=false
-
-# Handle optional node arguments
-if [[ $4 =~ ^[0-9]+$ ]]; then
-    nodes_args_provided=true
-    num_nodes=$4
-    num_mpi_tasks=$5
-    num_omp_threads=$6
-    wall_time=$7
-    queue_name=$8
-    allocation_name=$9
-    (( subscript_index += 6 ))
-    (( job_name_index += 6 ))
-fi
-
-# Parse subscript and job name with fallback to defaults
-subscript=${!subscript_index:-$default_subscript}
-if [[ -n ${!job_name_index} ]]; then
-    job_name=${!job_name_index}
-    # Append node and thread info to job name if provided
-    [[ -n $num_nodes && -n $num_omp_threads ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
-else
-    job_name=${param_file%.par}
-fi
-
-# Export variables for child shells
-export SUBMITJOBS_JOBNAME="$job_name"
-export SUBMITJOBS_PARFILE="$param_file"
-
-# Display the job configuration
-echo "Job Configuration:"
-echo "------------------"
-echo "Number of jobs: $num_jobs"
-echo "Executable:     $executable_path"
-echo "Parameter file: $param_file"
-if $nodes_args_provided; then
-    echo "Nodes:          $num_nodes"
-    echo "MPI tasks:      $num_mpi_tasks"
-    echo "OMP threads:    $num_omp_threads"
-    echo "Wall time:      $wall_time"
-    echo "Queue:          $queue_name"
-    echo "Allocation:     $allocation_name"
-fi
-echo "Subscript:      $subscript"
-echo "Job name:       $job_name"
-
-# Determine host-specific behavior
-if [[ $HOSTNAME =~ login[1-4]\.frontera\.tacc\.utexas\.edu ]]; then
-
-    if [[ "$executable_path" = /* ]]; then
-        export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
-    else
-        export SUBMITJOBS_MPIRUN="ibrun ../$executable_path $param_file"
+# Display job configuration
+display_job_config() {
+    echo "Job Configuration:"
+    echo "------------------"
+    echo "Number of jobs: $num_jobs"
+    echo "Executable:     $executable_path"
+    echo "Parameter file: $param_file"
+    if $nodes_args_provided; then
+        echo "Nodes:          $num_nodes"
+        echo "MPI tasks:      $num_mpi_tasks"
+        echo "OMP threads:    $num_omp_threads"
+        echo "Wall time:      $wall_time"
+        echo "Queue:          $queue_name"
+        echo "Allocation:     $allocation_name"
     fi
+    echo "Subscript:      $subscript"
+    echo "Job name:       $job_name"
+}
 
-    # Submit jobs
+# Submit job using slurm
+submit_job_slurm() {
     last_job_id=${dependent_job_id:-NoPreviousJob}
     for ((i = 1; i <= num_jobs; i++)); do
         sbatch_command="sbatch -J $job_name \
@@ -212,8 +138,97 @@ if [[ $HOSTNAME =~ login[1-4]\.frontera\.tacc\.utexas\.edu ]]; then
         execute_command $sbatch_command | tee "${job_name}.last-sbatch"
         last_job_id=$(tail -n 1 "${job_name}.last-sbatch" | awk '{ print $NF }')
     done
+}
 
-else
-    echo "Unknown host: $HOSTNAME"
-    echo "This host is not configured. Exiting."
-fi
+# ----
+# Main
+# ----
+main() {
+    # Help message
+    if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
+        cat <<EOF
+USAGE:
+  SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
+
+    Arguments:
+      num_jobs:        Number of jobs to submit (e.g., 1,2,3,...:DependOnID).
+      executable:      Path to the executable script or binary.
+      param_file:      Path to the parameter file.
+      nodes, mpi_tasks, omp_threads, wall_time, queue, allocation:
+                       Optional job-specific arguments.
+      subscript:       Submission script name (default: $default_subscript).
+      job_name:        Custom job name (default: param_file without '.par').
+
+DEFAULTS:
+  subscript = $default_subscript
+  job_name  = param_file without '.par'
+
+NOTES:
+  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
+  * Custom job_name formats as job_name-N?-OMP?.
+
+EOF
+        exit 0
+    fi
+
+    # Default Values
+    default_subscript="SubScript"
+
+    # Parse input arguments
+    num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
+    dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
+    executable_path=$2
+    param_file=$3
+
+    # Initialize indexes and flags
+    subscript_index=4
+    job_name_index=5
+    nodes_args_provided=false
+
+    # Handle optional node arguments
+    if [[ ${!subscript_index} =~ ^[0-9]+$ ]]; then
+        nodes_args_provided=true
+        num_nodes=${!subscript_index}
+        num_mpi_tasks=${!((subscript_index + 1))}
+        num_omp_threads=${!((subscript_index + 2))}
+        wall_time=${!((subscript_index + 3))}
+        queue_name=${!((subscript_index + 4))}
+        allocation_name=${!((subscript_index + 5))}
+        subscript_index=$((subscript_index + 6))
+        job_name_index=$((job_name_index + 6))
+    fi
+
+    # Parse subscript with fallback to defaults
+    subscript=${!subscript_index:-$default_subscript}
+
+    # Parse job name with fallback to defaults
+    job_name=${!job_name_index:-${param_file%.par}}
+    [[ $nodes_args_provided ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+
+    # Export variables for child shells
+    export SUBMITJOBS_JOBNAME="$job_name"
+    export SUBMITJOBS_PARFILE="$param_file"
+
+    # Display the job configuration
+    display_job_config
+
+    # Determine host-specific behavior
+    if [[ $HOSTNAME =~ login[1-4]\.frontera\.tacc\.utexas\.edu ]]; then
+
+        if [[ "$executable_path" = /* ]]; then
+            export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
+        else
+            export SUBMITJOBS_MPIRUN="ibrun ../$executable_path $param_file"
+        fi
+
+        # Submit jobs
+        submit_job_slurm
+
+    else
+        echo "Unknown host: $HOSTNAME"
+        echo "This host is not configured. Exiting."
+    fi
+}
+
+# Entry point
+main "$@"
