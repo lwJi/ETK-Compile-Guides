@@ -111,8 +111,7 @@ DEFAULTS:
   job_name  = param_file without '.par'
 
 NOTES:
-  * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
-  * Custom job_name formats as job_name-N?-OMP?.
+  * Custom job_name formats as job_name-N?-OMP? when optional job-specific arguments were privided also.
 "
 }
 
