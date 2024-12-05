@@ -126,68 +126,69 @@ EOF
     exit 0
 fi
 
+# Parse input arguments
+num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
+dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
+executable_path=$2
+param_file=$3
+
+# Initialize indexes and flags
+subscript_index=4
+job_name_index=5
+nodes_args_provided=false
+
+# Handle optional node arguments
+if [[ $4 =~ ^[0-9]+$ ]]; then
+    nodes_args_provided=true
+    num_nodes=$4
+    num_mpi_tasks=$5
+    num_omp_threads=$6
+    wall_time=$7
+    queue_name=$8
+    allocation_name=$9
+    (( subscript_index += 6 ))
+    (( job_name_index += 6 ))
+fi
+
+# Parse subscript and job name with fallback to defaults
+subscript=${!subscript_index:-$default_subscript}
+if [[ -n ${!job_name_index} ]]; then
+    job_name=${!job_name_index}
+    # Append node and thread info to job name if provided
+    [[ -n $num_nodes && -n $num_omp_threads ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+else
+    job_name=${param_file%.par}
+fi
+
+# Export variables for child shells
+export SUBMITJOBS_JOBNAME="$job_name"
+export SUBMITJOBS_PARFILE="$param_file"
+
+# Display the job configuration
+echo "Job Configuration:"
+echo "------------------"
+echo "Number of jobs: $num_jobs"
+echo "Executable:     $executable_path"
+echo "Parameter file: $param_file"
+if $nodes_args_provided; then
+    echo "Nodes:          $num_nodes"
+    echo "MPI tasks:      $num_mpi_tasks"
+    echo "OMP threads:    $num_omp_threads"
+    echo "Wall time:      $wall_time"
+    echo "Queue:          $queue_name"
+    echo "Allocation:     $allocation_name"
+fi
+echo "Subscript:      $subscript"
+echo "Job name:       $job_name"
+
 # Determine host-specific behavior
 if [[ $HOSTNAME =~ login[1-4]\.frontera\.tacc\.utexas\.edu ]]; then
 
-    # Parse input arguments
-    num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
-    dependent_job_id=$(echo "$1" | awk -F: '{ print $2 }')
-    executable_path=$2
-    param_file=$3
-
-    # Initialize indexes and flags
-    subscript_index=4
-    job_name_index=5
-    nodes_args_provided=false
-
-    # Handle optional node arguments
-    if [[ $4 =~ ^[0-9]+$ ]]; then
-        nodes_args_provided=true
-        num_nodes=$4
-        num_mpi_tasks=$5
-        num_omp_threads=$6
-        wall_time=$7
-        queue_name=$8
-        allocation_name=$9
-        (( subscript_index += 6 ))
-        (( job_name_index += 6 ))
-    fi
-
-    # Parse subscript and job name with fallback to defaults
-    subscript=${!subscript_index:-$default_subscript}
-    if [[ -n ${!job_name_index} ]]; then
-        job_name=${!job_name_index}
-        # Append node and thread info to job name if provided
-        [[ -n $num_nodes && -n $num_omp_threads ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
-    else
-        job_name=${param_file%.par}
-    fi
-
-    # Export variables for child shells
-    export SUBMITJOBS_JOBNAME="$job_name"
-    export SUBMITJOBS_PARFILE="$param_file"
     if [[ "$executable_path" = /* ]]; then
         export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
     else
         export SUBMITJOBS_MPIRUN="ibrun ../$executable_path $param_file"
     fi
-
-    # Display the job configuration
-    echo "Job Configuration:"
-    echo "------------------"
-    echo "Number of jobs: $num_jobs"
-    echo "Executable:     $executable_path"
-    echo "Parameter file: $param_file"
-    if $nodes_args_provided; then
-        echo "Nodes:          $num_nodes"
-        echo "MPI tasks:      $num_mpi_tasks"
-        echo "OMP threads:    $num_omp_threads"
-        echo "Wall time:      $wall_time"
-        echo "Queue:          $queue_name"
-        echo "Allocation:     $allocation_name"
-    fi
-    echo "Subscript:      $subscript"
-    echo "Job name:       $job_name"
 
     # Submit jobs
     last_job_id=${dependent_job_id:-NoPreviousJob}
