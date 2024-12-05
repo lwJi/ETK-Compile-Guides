@@ -51,6 +51,7 @@ create_and_organize_job_directory_and_launch_jobs() {
 
     # Generate a new directory name
     local job_output_dir=$(generate_new_directory_name "${job_name}")
+
     if [[ -d "$job_output_dir" ]]; then
         echo "Error: Directory '${job_output_dir}' already exists. Please check."
         exit 1
@@ -60,15 +61,8 @@ create_and_organize_job_directory_and_launch_jobs() {
     execute_command cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
     execute_command mv stdout.txt "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
     execute_command mv stderr.txt "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
-
-    # Uncomment these lines if specific SLURM job logs are needed
     # execute_command mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
     # execute_command mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
-
-    if [ -z "$job_output_dir" ]; then
-      echo "Error: Failed to generate a new directory name."
-      exit 1
-    fi
 
     execute_command cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
 
