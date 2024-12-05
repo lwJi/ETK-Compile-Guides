@@ -171,14 +171,14 @@ EOF
 # -------------
 
 main() {
+    # Default Values
+    default_subscript="SubScript"
+
     # Help message
     if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
         display_usage
         exit 0
     fi
-
-    # Default Values
-    default_subscript="SubScript"
 
     # Parse input arguments
     num_jobs=$(echo "$1" | awk -F: '{ print $1 }')
