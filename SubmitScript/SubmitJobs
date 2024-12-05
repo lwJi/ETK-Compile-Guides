@@ -141,11 +141,26 @@ display_job_config() {
 submit_job_slurm() {
     # Default value for last job ID if no dependency is provided
     local last_job_id=${dependent_job_id:-NoPreviousJob}
+
+    # Validate required variables
+    if [[ -z $job_name || -z $num_jobs || -z $subscript ]]; then
+        echo "Error: Required variables (job_name, num_jobs, or subscript) are not set."
+        return 1
+    fi
+
+    # Loop through the number of jobs to be submitted
     for ((i = 1; i <= num_jobs; i++)); do
+        # Start building the sbatch command
         local submit_command="sbatch -J $job_name \
                                      -o stdout.txt \
                                      -e stderr.txt"
+
+        # Add resource-specific arguments if provided
         if $nodes_args_provided; then
+            if [[ -z $num_nodes || -z $num_mpi_tasks || -z $wall_time || -z $queue_name || -z $allocation_name ]]; then
+                echo "Error: Resource arguments (num_nodes, num_mpi_tasks, wall_time, queue_name, allocation_name) must be set when nodes_args_provided is true."
+                return 1
+            fi
             export OMP_NUM_THREADS=$num_omp_threads
             submit_command+=" -N $num_nodes \
                               -n $num_mpi_tasks \
@@ -153,12 +168,19 @@ submit_job_slurm() {
                               -p $queue_name \
                               -A $allocation_name"
         fi
+
+        # Add job dependency if applicable
         [[ $last_job_id != "NoPreviousJob" ]] && submit_command+=" -d afterany:$last_job_id"
+
+        # Add the job script
         submit_command+=" $subscript"
 
+        # Log and execute the sbatch command
         echo
         echo "Executing sbatch command:"
         execute_command $submit_command | tee "${job_name}.last-sbatch"
+
+        # Capture the last job ID from sbatch output
         last_job_id=$(tail -n 1 "${job_name}.last-sbatch" | awk '{ print $NF }')
     done
 }
