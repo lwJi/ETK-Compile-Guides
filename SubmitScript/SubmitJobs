@@ -140,14 +140,8 @@ submit_job_slurm() {
     done
 }
 
-# -------------
-# Main Function
-# -------------
-
-main() {
-    # Help message
-    if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
-        cat <<EOF
+display_usage() {
+cat <<EOF
 USAGE:
   SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
 
@@ -169,6 +163,16 @@ NOTES:
   * Custom job_name formats as job_name-N?-OMP?.
 
 EOF
+}
+
+# -------------
+# Main Function
+# -------------
+
+main() {
+    # Help message
+    if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
+        display_usage
         exit 0
     fi
 
