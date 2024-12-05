@@ -10,6 +10,11 @@
 
     - specify parameters in commaned line
 
+        * run
+            ```
+            SubmitJobs <num_jobs> <executable> <param_file> <nodes> <mpi_tasks> <omp_threads> <wall_time> <queue> <allocation> [subscript] [job_name]]
+            ```
+
     - specify parameters through a SubScript
 
         * copy example `subscript` to your simulation directory
