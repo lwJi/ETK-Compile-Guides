@@ -1,8 +1,5 @@
 #!/bin/bash
 
-##SBATCH --mail-type=all    # Send email at begin and end of job
-##SBATCH --mail-user=ljsma@rit.edu
-
 module list
 
 # ------------------------------------------------------
