@@ -140,6 +140,7 @@ submit_job_slurm() {
     done
 }
 
+# Display usage instructions
 display_usage() {
 cat <<EOF
 USAGE:
