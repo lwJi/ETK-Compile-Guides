@@ -204,9 +204,7 @@ main() {
 
     # Parse job name with fallback to defaults
     job_name=${!job_name_index:-${param_file%.par}}
-    if [[ "$nodes_args_provided" == true && -n "${!job_name_index}" ]]; then
-        job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
-    fi
+    [[ "$nodes_args_provided" == true && -n "${!job_name_index}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
 
     # Export variables for child shells
     export SUBMITJOBS_JOBNAME="$job_name"
