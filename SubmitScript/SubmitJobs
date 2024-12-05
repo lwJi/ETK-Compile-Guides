@@ -228,8 +228,10 @@ main() {
         submit_job_slurm
 
     else
+
         echo "Unknown host: $HOSTNAME"
         echo "This host is not configured. Exiting."
+
     fi
 }
 
