@@ -66,6 +66,7 @@ create_and_organize_job_directory_and_launch_jobs() {
 
     execute_command cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
 
+    # Launch jobs
     echo "======================================================================"
     echo "Launch MPI code..."
     echo "----------------------------------------------------------------------"
