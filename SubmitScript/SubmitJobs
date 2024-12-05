@@ -139,25 +139,26 @@ display_job_config() {
 
 # Submit job using slurm
 submit_job_slurm() {
-    last_job_id=${dependent_job_id:-NoPreviousJob}
+    # Default value for last job ID if no dependency is provided
+    local last_job_id=${dependent_job_id:-NoPreviousJob}
     for ((i = 1; i <= num_jobs; i++)); do
-        sbatch_command="sbatch -J $job_name \
-                               -o stdout.txt \
-                               -e stderr.txt"
+        local submit_command="sbatch -J $job_name \
+                                     -o stdout.txt \
+                                     -e stderr.txt"
         if $nodes_args_provided; then
             export OMP_NUM_THREADS=$num_omp_threads
-            sbatch_command+=" -N $num_nodes \
+            submit_command+=" -N $num_nodes \
                               -n $num_mpi_tasks \
                               -t $wall_time \
                               -p $queue_name \
                               -A $allocation_name"
         fi
-        [[ $last_job_id != "NoPreviousJob" ]] && sbatch_command+=" -d afterany:$last_job_id"
-        sbatch_command+=" $subscript"
+        [[ $last_job_id != "NoPreviousJob" ]] && submit_command+=" -d afterany:$last_job_id"
+        submit_command+=" $subscript"
 
         echo
         echo "Executing sbatch command:"
-        execute_command $sbatch_command | tee "${job_name}.last-sbatch"
+        execute_command $submit_command | tee "${job_name}.last-sbatch"
         last_job_id=$(tail -n 1 "${job_name}.last-sbatch" | awk '{ print $NF }')
     done
 }
