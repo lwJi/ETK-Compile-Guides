@@ -95,19 +95,21 @@ export -f create_and_organize_job_directory_and_launch_jobs
 display_job_config() {
     echo "Job Configuration:"
     echo "------------------"
-    echo "Number of jobs: $num_jobs"
-    echo "Executable:     $executable_path"
-    echo "Parameter file: $param_file"
-    if $nodes_args_provided; then
-        echo "Nodes:          $num_nodes"
-        echo "MPI tasks:      $num_mpi_tasks"
-        echo "OMP threads:    $num_omp_threads"
-        echo "Wall time:      $wall_time"
-        echo "Queue:          $queue_name"
-        echo "Allocation:     $allocation_name"
+    echo "Number of jobs:  ${num_jobs:-N/A}"
+    echo "Executable:      ${executable_path:-N/A}"
+    echo "Parameter file:  ${param_file:-N/A}"
+
+    if [[ $nodes_args_provided == true ]]; then
+        echo "Nodes:           ${num_nodes:-N/A}"
+        echo "MPI tasks:       ${num_mpi_tasks:-N/A}"
+        echo "OMP threads:     ${num_omp_threads:-N/A}"
+        echo "Wall time:       ${wall_time:-N/A}"
+        echo "Queue:           ${queue_name:-N/A}"
+        echo "Allocation:      ${allocation_name:-N/A}"
     fi
-    echo "Subscript:      $subscript"
-    echo "Job name:       $job_name"
+
+    echo "Subscript:       ${subscript:-N/A}"
+    echo "Job name:        ${job_name:-N/A}"
 }
 
 # Submit job using slurm
@@ -137,7 +139,7 @@ submit_job_slurm() {
 
 # Display usage instructions
 display_usage() {
-cat <<EOF
+    echo "
 USAGE:
   SubmitJobs <num_jobs> <executable> <param_file> [[nodes mpi_tasks omp_threads wall_time queue allocation] [subscript] [job_name]]
 
@@ -157,8 +159,7 @@ DEFAULTS:
 NOTES:
   * Use 'SubScript-BareMetal' as subscript when specifying node-related options.
   * Custom job_name formats as job_name-N?-OMP?.
-
-EOF
+"
 }
 
 # -------------
