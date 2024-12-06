@@ -106,7 +106,7 @@ display_usage() {
     echo "    -N  Number of nodes"
     echo "    -m  Number of MPI tasks"
     echo "    -o  Number of OpenMP threads"
-    echo "    -w  Wall time (format: HH:MM:SS)"
+    echo "    -t  Wall time (format: HH:MM:SS)"
     echo "    -q  Queue name"
     echo "    -a  Allocation name"
     echo ""
@@ -116,7 +116,7 @@ display_usage() {
     echo ""
     echo "Examples:"
     echo "  $0 -n 5 -e /path/to/executable -p params.par -s MySubscript"
-    echo "  $0 -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -w 02:00:00 -q high_priority -a my_project"
+    echo "  $0 -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -t 02:00:00 -q high_priority -a my_project"
 }
 
 # Display job configuration
@@ -232,7 +232,7 @@ main() {
     done
 
     # Parse command-line arguments
-    while getopts ":n:e:p:N:m:o:w:q:a:s:j:h" opt; do
+    while getopts ":n:e:p:N:m:o:t:q:a:s:j:h" opt; do
         case $opt in
             n) num_jobs_dependent_job_id="$OPTARG" ;;
             e) executable_path="$OPTARG" ;;
@@ -240,7 +240,7 @@ main() {
             N) num_nodes="$OPTARG" ;;
             m) num_mpi_tasks="$OPTARG" ;;
             o) num_omp_threads="$OPTARG" ;;
-            w) wall_time="$OPTARG" ;;
+            t) wall_time="$OPTARG" ;;
             q) queue_name="$OPTARG" ;;
             a) allocation_name="$OPTARG" ;;
             s) subscript="$OPTARG" ;;
