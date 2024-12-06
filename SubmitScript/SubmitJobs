@@ -244,7 +244,7 @@ main() {
             q) queue_name="$OPTARG" ;;
             a) allocation_name="$OPTARG" ;;
             s) subscript="$OPTARG" ;;
-            j) job_name="$OPTARG" ;;
+            j) job_name_input="$OPTARG" ;;
             h) display_usage; exit 0 ;;
             :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
             \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
@@ -264,11 +264,12 @@ main() {
 
     # Fallback to defaults for optional arguments
     subscript=${subscript:-$default_subscript}
-    job_name=${job_name:-${param_file%.par}}
 
     # Enhance job name with resource details if available
-    if [[ -n "$job_name" && -n "$num_nodes" && -n "$num_omp_threads" ]]; then
-        job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+    if [[ -n "$job_name_input" && -n "$num_nodes" && -n "$num_omp_threads" ]]; then
+        job_name="${job_name_input}-N${num_nodes}-OMP${num_omp_threads}"
+    else
+        job_name=${job_name_input:-${param_file%.par}}
     fi
 
     # Export variables for child shells
