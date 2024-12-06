@@ -12,7 +12,7 @@
 
         * run
             ```
-            SubmitJobs <num_jobs> <executable> <param_file> <nodes> <mpi_tasks> <omp_threads> <wall_time> <queue> <allocation> [subscript] [job_name]]
+            SubmitJobs -n <num_jobs> -e <executable> -p <param_file> -N <nodes> -m <mpi_tasks> -o <omp_threads> -w <wall_time> -q <queue> -a <allocation> [-j <job_name>]
             ```
 
     - specify parameters through a SubScript
@@ -24,7 +24,7 @@
         * run
 
             ```
-            SubmitJobs <num_jobs> <executable> <param_file> subscript [job_name]
+            SubmitJobs -n <num_jobs:dependent_job_id> -e <executable_path> -p <param_file> -s <subscript> [-j <job_name>]
             ```
 
 * Run the following for help infos
