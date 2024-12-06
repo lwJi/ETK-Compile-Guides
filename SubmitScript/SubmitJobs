@@ -127,8 +127,8 @@ main() {
     subscript=${subscript:-$default_subscript}
 
     # Enhance job name with resource details if available
-    if [[ -n "$job_name_input" && -n "$num_nodes" && -n "$num_omp_threads" ]]; then
-        job_name="${job_name_input}-N${num_nodes}-OMP${num_omp_threads}"
+    if [[ -n "$job_name_input" && -n "$num_nodes" && -n "$num_mpi_tasks" ]]; then
+        job_name="${job_name_input}-N${num_nodes}-MPI${num_mpi_tasks}"
     else
         job_name=${job_name_input:-${param_file%.par}}
     fi
