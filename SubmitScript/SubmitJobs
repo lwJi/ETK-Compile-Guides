@@ -2,16 +2,16 @@
 
 echo "SubmitJobs (c) 2024 Liwei Ji, Wolfgang Tichy"
 
+# ----------------
+# Global Functions
+# ----------------
+
 # Execute and print the command
 execute_command() {
     echo "\$ $@"
     "$@"
 }
 export -f execute_command
-
-# ----------------
-# Global Functions
-# ----------------
 
 # Generate a new directory name for a job
 generate_new_directory_name() {
