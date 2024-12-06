@@ -152,7 +152,7 @@ main() {
         # Submit jobs
         submit_job_slurm
 
-    if [[ $HOSTNAME =~ login[1-4]\.vista\.tacc\.utexas\.edu ]]; then
+    elif [[ $HOSTNAME =~ login[1-4]\.vista\.tacc\.utexas\.edu ]]; then
 
         if [[ "$executable_path" = /* ]]; then
             export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
