@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Compile-ETK (c) 2024 Liwei Ji"
+#echo "Compile-ETK (c) 2024 Liwei Ji"
 
 # ----------------
 # Global Functions
@@ -19,14 +19,15 @@ export -f execute_command
 
 # Help message
 display_usage() {
-    echo "Usage: compile_etk [options]"
+    echo "Usage: $0 [options]"
+    echo
     echo "Options:"
     echo "  -h, --help       Show this help message and exit"
     echo "  --fresh          Perform a fresh compilation"
-    echo "  -e=<executable>  Specify the executable name (default: $executable_name)"
-    echo "  -t=<thorn_list>  Specify the thorn list file (default: $thorn_list)"
-    echo "  -c=<config_file> Specify the configuration file (default: $config_file)"
-    echo "  -j=<num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
+    echo "  -e <executable>  Specify the executable name (default: $executable_name)"
+    echo "  -t <thorn_list>  Specify the thorn list file (default: $thorn_list)"
+    echo "  -c <config_file> Specify the configuration file (default: $config_file)"
+    echo "  -j <num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
     echo
     echo "All arguments are optional. If not specified, default values are used."
 }
@@ -43,19 +44,18 @@ main() {
     perform_fresh_compile=false
     num_cores=24
     
-    # Preprocess command-line arguments for long options
     for arg in "$@"; do
-        case $arg in
-            --help)
-                display_usage
-                exit 0
-                ;;
-            --fresh)
-                perform_fresh_compile=true
-                shift # Remove this argument from $@
-                ;;
-        esac
+        if [[ "$arg" == "--fresh" ]]; then
+            perform_fresh_compile=true
+        elif [[ "$arg" == "--help" ]]; then
+            display_usage; exit 0
+        else
+            args+=("$arg")
+        fi
     done
+
+    # Reset positional arguments to remove handled --fresh
+    set -- "${args[@]}"
 
     # Parse short options
     while getopts ":e:t:c:j:h" opt; do
