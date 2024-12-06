@@ -252,12 +252,14 @@ main() {
     num_jobs=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $1 }')
     dependent_job_id=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $2 }')
 
-    # Parse subscript with fallback to defaults
+    # Fallback to defaults for optional arguments
     subscript=${subscript:-$default_subscript}
-
-    # Parse job name with fallback to defaults
     job_name=${job_name:-${param_file%.par}}
-    [[ -n "${job_name}" && -n "${num_nodes}" && -n "${num_omp_threads}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+
+    # Enhance job name with resource details if available
+    if [[ -n "$job_name" && -n "$num_nodes" && -n "$num_omp_threads" ]]; then
+        job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+    fi
 
     # Export variables for child shells
     export SUBMITJOBS_JOBNAME="$job_name"
