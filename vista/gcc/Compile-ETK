@@ -40,7 +40,7 @@ main() {
     executable_name="etk"
     thorn_list="thornlists/asterx.th"
     config_file="${ETKGUIDE}/gcc/vista.cfg"
-    perform_fresh_compile=0
+    perform_fresh_compile=false
     num_cores=24
     
     # Preprocess command-line arguments for long options
@@ -51,7 +51,7 @@ main() {
                 exit 0
                 ;;
             --fresh)
-                perform_fresh_compile=1
+                perform_fresh_compile=true
                 shift # Remove this argument from $@
                 ;;
         esac
@@ -71,7 +71,7 @@ main() {
     done
 
     # Main script logic
-    if [[ $perform_fresh_compile -eq 1 ]]; then
+    if [[ $perform_fresh_compile == true ]]; then
         echo "Performing a fresh compile for '$executable_name'..."
     
         config_path="configs/$executable_name"
