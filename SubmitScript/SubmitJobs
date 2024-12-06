@@ -176,11 +176,8 @@ display_job_config() {
     echo "Job name:        ${job_name:-N/A}"
 }
 
-# Submit job using PBS
-source $(dirname "$(realpath "$0")")/src/submit_job_pbs.sh
-
-# Function to submit jobs using Slurm
-source $(dirname "$(realpath "$0")")/src/submit_job_slurm.sh
+# Function to submit jobs
+source $(dirname "$(realpath "$0")")/src/submit_job_scripts.sh
 
 # -------------
 # Main Function
@@ -188,7 +185,6 @@ source $(dirname "$(realpath "$0")")/src/submit_job_slurm.sh
 
 
 main() {
-
     # Default Values
     default_subscript="subscript-baremetal"
 
