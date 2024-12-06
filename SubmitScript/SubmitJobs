@@ -96,13 +96,13 @@ display_usage() {
     echo "Usage: $0 -n <num_jobs:dependent_job_id> -e <executable_path> -p <param_file> [options]"
     echo ""
     echo "Required Arguments:"
-    echo "  -n  Number of jobs and dependent job ID (format: num_jobs:dependent_job_id)"
+    echo "  -n  Number of jobs and dependent job ID"
     echo "  -e  Path to the executable"
     echo "  -p  Path to the parameter file"
     echo ""
     echo "Optional Arguments:"
     echo "  -s  Subscript (default: ${default_subscript})"
-    echo "      If subscript is provided, other optional arguments are not mandatory."
+    echo "      If subscript is provided, other optional arguments are discarded."
     echo "  OR provide all of the following:"
     echo "    -N  Number of nodes"
     echo "    -m  Number of MPI tasks"
@@ -116,38 +116,8 @@ display_usage() {
     echo "  -h  Display this help message"
     echo ""
     echo "Examples:"
-    echo "  $0 -n 5:12345 -e /path/to/executable -p params.par -s MySubscript"
-    echo "  $0 -n 5:12345 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -w 02:00:00 -q high_priority -a my_project"
-}
-
-
-
-# Check all optional arguments when subscript is empty
-check_optional_args() {
-    # Validate each optional argument
-    if [[ -z "$num_nodes" ]]; then
-        echo "Error: Missing optional argument -N (number of nodes) when subscript is empty." >&2
-    fi
-    if [[ -z "$num_mpi_tasks" ]]; then
-        echo "Error: Missing optional argument -m (number of MPI tasks) when subscript is empty." >&2
-    fi
-    if [[ -z "$num_omp_threads" ]]; then
-        echo "Error: Missing optional argument -o (number of OpenMP threads) when subscript is empty." >&2
-    fi
-    if [[ -z "$wall_time" ]]; then
-        echo "Error: Missing optional argument -w (wall time) when subscript is empty." >&2
-    fi
-    if [[ -z "$queue_name" ]]; then
-        echo "Error: Missing optional argument -q (queue name) when subscript is empty." >&2
-    fi
-    if [[ -z "$allocation_name" ]]; then
-        echo "Error: Missing optional argument -a (allocation name) when subscript is empty." >&2
-    fi
-
-    # Exit if any optional arguments are missing
-    if [[ -z "$num_nodes" || -z "$num_mpi_tasks" || -z "$num_omp_threads" || -z "$wall_time" || -z "$queue_name" || -z "$allocation_name" ]]; then
-        exit 1
-    fi
+    echo "  $0 -n 5 -e /path/to/executable -p params.par -s MySubscript"
+    echo "  $0 -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -w 02:00:00 -q high_priority -a my_project"
 }
 
 # Display job configuration
@@ -158,7 +128,7 @@ display_job_config() {
     echo "Executable:      ${executable_path:-N/A}"
     echo "Parameter file:  ${param_file:-N/A}"
 
-    if [[ $nodes_args_provided == true ]]; then
+    if [[ $subscript_provided == false ]]; then
         echo "Nodes:           ${num_nodes:-N/A}"
         echo "MPI tasks:       ${num_mpi_tasks:-N/A}"
         echo "OMP threads:     ${num_omp_threads:-N/A}"
@@ -184,7 +154,7 @@ submit_job_pbs() {
                                    -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        if $nodes_args_provided; then
+        if [[ $subscript_provided == false ]]; then
             export OMP_NUM_THREADS=$num_omp_threads
             submit_command+=" -l select=$num_nodes:ncpus=$num_mpi_tasks \
                               -l walltime=$wall_time \
@@ -221,7 +191,7 @@ submit_job_slurm() {
                                      -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        if $nodes_args_provided; then
+        if [[ $subscript_provided == false ]]; then
             export OMP_NUM_THREADS=$num_omp_threads
             submit_command+=" -N $num_nodes \
                               -n $num_mpi_tasks \
@@ -253,12 +223,6 @@ submit_job_slurm() {
 main() {
     # Default Values
     default_subscript="SubScript"
-
-    # Help message
-    if [[ "$1" == "-h" || "$1" == "--help" || -z "$1" ]]; then
-        display_usage
-        exit 0
-    fi
 
     # Parse command-line arguments
     while getopts ":n:e:p:N:m:o:w:q:a:s:j:h" opt; do
@@ -292,12 +256,10 @@ main() {
     dependent_job_id=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $2 }')
 
     # Handle optional node arguments
-    if [[ -z ${subscript} ]]; then
-        nodes_args_provided=true
-        # Check if `num_nodes`, `num_mpi_tasks`, ..., are set when subscript is empty
-        check_optional_args
+    if [[ -n ${subscript} ]]; then
+        subscript_provided=true
     else
-        nodes_args_provided=false
+        subscript_provided=false
     fi
 
     # Parse subscript with fallback to defaults
@@ -305,7 +267,7 @@ main() {
 
     # Parse job name with fallback to defaults
     job_name=${!job_name_index:-${param_file%.par}}
-    [[ "$nodes_args_provided" == true && -n "${!job_name_index}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+    [[ "$subscript_provided" == false && -n "${!job_name_index}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
 
     # Export variables for child shells
     export SUBMITJOBS_JOBNAME="$job_name"
