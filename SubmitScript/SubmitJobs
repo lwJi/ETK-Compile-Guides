@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "SubmitJobs (c) 2024 Liwei Ji, Wolfgang Tichy"
+#echo "SubmitJobs (c) 2024 Liwei Ji, Wolfgang Tichy"
 
 # ----------------
 # Global Functions
@@ -119,6 +119,44 @@ display_usage() {
     echo "  $0 -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -t 02:00:00 -q high_priority -a my_project"
 }
 
+# Handle argument parsing
+process_arguments() {
+    local args=()
+
+    # Preprocess long options
+    for arg in "$@"; do
+        case "$arg" in
+            --help)
+                display_usage; exit 0 ;;
+            *)
+                args+=("$arg") ;;
+        esac
+    done
+
+    # Reset positional arguments for `getopts`
+    set -- "${args[@]}"
+
+    # Parse short options
+    while getopts ":n:e:p:N:m:o:t:q:a:s:j:h" opt; do
+        case $opt in
+            n) num_jobs_dependent_job_id="$OPTARG" ;;
+            e) executable_path="$OPTARG" ;;
+            p) param_file="$OPTARG" ;;
+            N) num_nodes="$OPTARG" ;;
+            m) num_mpi_tasks="$OPTARG" ;;
+            o) num_omp_threads="$OPTARG" ;;
+            t) wall_time="$OPTARG" ;;
+            q) queue_name="$OPTARG" ;;
+            a) allocation_name="$OPTARG" ;;
+            s) subscript="$OPTARG" ;;
+            j) job_name_input="$OPTARG" ;;
+            h) display_usage; exit 0 ;;
+            :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
+            \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
+        esac
+    done
+}
+
 # Display job configuration
 display_job_config() {
     echo "Job Configuration:"
@@ -221,35 +259,8 @@ main() {
     # Default Values
     default_subscript="subscript-baremetal"
 
-    # Preprocess command-line arguments to handle long options like --help
-    for arg in "$@"; do
-        case $arg in
-            --help)
-                display_usage
-                exit 0
-                ;;
-        esac
-    done
-
-    # Parse command-line arguments
-    while getopts ":n:e:p:N:m:o:t:q:a:s:j:h" opt; do
-        case $opt in
-            n) num_jobs_dependent_job_id="$OPTARG" ;;
-            e) executable_path="$OPTARG" ;;
-            p) param_file="$OPTARG" ;;
-            N) num_nodes="$OPTARG" ;;
-            m) num_mpi_tasks="$OPTARG" ;;
-            o) num_omp_threads="$OPTARG" ;;
-            t) wall_time="$OPTARG" ;;
-            q) queue_name="$OPTARG" ;;
-            a) allocation_name="$OPTARG" ;;
-            s) subscript="$OPTARG" ;;
-            j) job_name_input="$OPTARG" ;;
-            h) display_usage; exit 0 ;;
-            :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
-            \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
-        esac
-    done
+    # Process arguments
+    process_arguments "$@"
 
     # Ensure required arguments are provided
     if [[ -z "$num_jobs_dependent_job_id" || -z "$executable_path" || -z "$param_file" ]]; then
