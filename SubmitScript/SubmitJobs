@@ -221,6 +221,16 @@ main() {
     # Default Values
     default_subscript="subscript-baremetal"
 
+    # Preprocess command-line arguments to handle long options like --help
+    for arg in "$@"; do
+        case $arg in
+            --help)
+                display_usage
+                exit 0
+                ;;
+        esac
+    done
+
     # Parse command-line arguments
     while getopts ":n:e:p:N:m:o:w:q:a:s:j:h" opt; do
         case $opt in
