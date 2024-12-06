@@ -32,29 +32,23 @@ display_usage() {
     echo "All arguments are optional. If not specified, default values are used."
 }
 
-# -------------
-# Main Function
-# -------------
+# Handle argument parsing
+process_arguments() {
+    local args=()
 
-main() {
-    # Default values
-    executable_name="etk"
-    thorn_list="thornlists/asterx.th"
-    config_file="${ETKGUIDE}/gcc/vista.cfg"
-    perform_fresh_compile=false
-    num_cores=24
-    
+    # Preprocess long options
     for arg in "$@"; do
-        if [[ "$arg" == "--fresh" ]]; then
-            perform_fresh_compile=true
-        elif [[ "$arg" == "--help" ]]; then
-            display_usage; exit 0
-        else
-            args+=("$arg")
-        fi
+        case "$arg" in
+            --fresh)
+                perform_fresh_compile=true ;;
+            --help)
+                display_usage; exit 0 ;;
+            *)
+                args+=("$arg") ;;
+        esac
     done
 
-    # Reset positional arguments to remove handled --fresh
+    # Reset positional arguments for `getopts`
     set -- "${args[@]}"
 
     # Parse short options
@@ -69,11 +63,27 @@ main() {
             \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
         esac
     done
+}
+
+# -------------
+# Main Function
+# -------------
+
+main() {
+    # Default values
+    executable_name="etk"
+    thorn_list="thornlists/asterx.th"
+    config_file="${ETKGUIDE}/gcc/vista.cfg"
+    perform_fresh_compile=false
+    num_cores=24
+
+    # Process arguments
+    process_arguments "$@"
 
     # Main script logic
     if [[ $perform_fresh_compile == true ]]; then
         echo "Performing a fresh compile for '$executable_name'..."
-    
+
         config_path="configs/$executable_name"
 
         # Remove existing config directory
@@ -81,12 +91,12 @@ main() {
             echo "Removing existing directory: $config_path"
             execute_command rm -rf "$config_path"
         fi
-    
+
         # Fresh compile steps
         execute_command gmake "$executable_name" options="$config_file"
         execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
     fi
-    
+
     # Compilation with specified cores
     echo "Compiling '$executable_name' with $config_file using $num_cores cores..."
     execute_command gmake -j"$num_cores" "$executable_name"
