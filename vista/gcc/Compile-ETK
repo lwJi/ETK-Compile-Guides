@@ -1,12 +1,12 @@
 #!/bin/bash
 
+echo "Compile-ETK (c) 2024 Liwei Ji"
+
 # Function to echo and execute a command
-run_command() {
+execute_command() {
   echo "\$ $@"
   "$@"
 }
-
-echo "Compile-ETK (c) 2024 Liwei Ji"
 
 # Default values
 executable_name="etk"
@@ -72,12 +72,12 @@ if [[ $perform_fresh_compile -eq 1 ]]; then
   # Remove existing config directory
   if [[ -d "$config_path" ]]; then
     echo "Removing existing directory: $config_path"
-    run_command rm -rf "$config_path"
+    execute_command rm -rf "$config_path"
   fi
 
-  run_command gmake "$executable_name" options="$config_file"
-  run_command cp "$thorn_list" "configs/$executable_name/ThornList"
+  execute_command gmake "$executable_name" options="$config_file"
+  execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
 fi
 
 echo "Compiling '$executable_name' with $config_file using $num_cores cores..."
-run_command gmake -j"$num_cores" "$executable_name"
+execute_command gmake -j"$num_cores" "$executable_name"
