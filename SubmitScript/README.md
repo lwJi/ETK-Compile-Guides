@@ -24,7 +24,7 @@
         * run
 
             ```
-            SubmitJobs -n <num_jobs:dependent_job_id> -e <executable_path> -p <param_file> -s <subscript> [-j <job_name>]
+            SubmitJobs -n <num_jobs> -e <executable> -p <param_file> -s <subscript> [-j <job_name>]
             ```
 
 * Run the following for help infos
