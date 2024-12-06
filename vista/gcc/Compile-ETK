@@ -21,12 +21,12 @@ export -f execute_command
 display_usage() {
     echo "Usage: compile_etk [options]"
     echo "Options:"
-    echo "  -h, --help              Show this help message and exit"
-    echo "  --fresh                 Perform a fresh compilation"
-    echo "  -e=<executable>         Specify the executable name (default: $executable_name)"
-    echo "  -t=<thorn_list>         Specify the thorn list file (default: $thorn_list)"
-    echo "  -c=<config_file>        Specify the configuration file (default: $config_file)"
-    echo "  -j=<num_cores>          Specify the number of cores for parallel build (default: $num_cores)"
+    echo "  -h, --help       Show this help message and exit"
+    echo "  --fresh          Perform a fresh compilation"
+    echo "  -e=<executable>  Specify the executable name (default: $executable_name)"
+    echo "  -t=<thorn_list>  Specify the thorn list file (default: $thorn_list)"
+    echo "  -c=<config_file> Specify the configuration file (default: $config_file)"
+    echo "  -j=<num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
     echo
     echo "All arguments are optional. If not specified, default values are used."
 }
