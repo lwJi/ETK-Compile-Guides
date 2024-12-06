@@ -219,7 +219,7 @@ submit_job_slurm() {
 
 main() {
     # Default Values
-    default_subscript="SubScript"
+    default_subscript="subscript-baremetal"
 
     # Parse command-line arguments
     while getopts ":n:e:p:N:m:o:w:q:a:s:j:h" opt; do
