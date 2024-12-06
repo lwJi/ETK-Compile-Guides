@@ -151,15 +151,15 @@ submit_job_pbs() {
                                    -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        [[ -n $num_omp_threads ]] && export OMP_NUM_THREADS=$num_omp_threads
+        [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
 
-        if [[ -n $num_nodes && -z $num_mpi_tasks ]]; then
+        if [[ -n "$num_nodes" && -z "$num_mpi_tasks" ]]; then
             submit_command+=" -l select=$num_nodes:ncpus=$num_mpi_tasks"
         fi
 
-        [[ -n $wall_time ]] && submit_command+=" -l walltime=$wall_time"
-        [[ -n $queue_name ]] && submit_command+=" -q $queue_name"
-        [[ -n $allocation_name ]] && submit_command+=" -A $allocation_name"
+        [[ -n "$wall_time" ]] && submit_command+=" -l walltime=$wall_time"
+        [[ -n "$queue_name" ]] && submit_command+=" -q $queue_name"
+        [[ -n "$allocation_name" ]] && submit_command+=" -A $allocation_name"
 
         # Add job dependency if applicable
         [[ $last_job_id != "NoPreviousJob" ]] && submit_command+=" -W depend=afterany:$last_job_id"
@@ -190,12 +190,12 @@ submit_job_slurm() {
                                      -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        [[ -n $num_omp_threads ]] && export OMP_NUM_THREADS=$num_omp_threads
-        [[ -n $num_nodes ]] && submit_command+=" -N $num_nodes"
-        [[ -n $num_mpi_tasks ]] && submit_command+=" -n $num_mpi_tasks"
-        [[ -n $wall_time ]] && submit_command+=" -t $wall_time"
-        [[ -n $queue_name ]] && submit_command+=" -p $queue_name"
-        [[ -n $allocation_name ]] && submit_command+=" -A $allocation_name"
+        [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
+        [[ -n "$num_nodes" ]] && submit_command+=" -N $num_nodes"
+        [[ -n "$num_mpi_tasks" ]] && submit_command+=" -n $num_mpi_tasks"
+        [[ -n "$wall_time" ]] && submit_command+=" -t $wall_time"
+        [[ -n "$queue_name" ]] && submit_command+=" -p $queue_name"
+        [[ -n "$allocation_name" ]] && submit_command+=" -A $allocation_name"
 
         # Add job dependency if applicable
         [[ $last_job_id != "NoPreviousJob" ]] && submit_command+=" -d afterany:$last_job_id"
