@@ -128,14 +128,12 @@ display_job_config() {
     echo "Executable:      ${executable_path:-N/A}"
     echo "Parameter file:  ${param_file:-N/A}"
 
-    if [[ $subscript_provided == false ]]; then
-        echo "Nodes:           ${num_nodes:-N/A}"
-        echo "MPI tasks:       ${num_mpi_tasks:-N/A}"
-        echo "OMP threads:     ${num_omp_threads:-N/A}"
-        echo "Wall time:       ${wall_time:-N/A}"
-        echo "Queue:           ${queue_name:-N/A}"
-        echo "Allocation:      ${allocation_name:-N/A}"
-    fi
+    echo "Nodes:           ${num_nodes:-N/A}"
+    echo "MPI tasks:       ${num_mpi_tasks:-N/A}"
+    echo "OMP threads:     ${num_omp_threads:-N/A}"
+    echo "Wall time:       ${wall_time:-N/A}"
+    echo "Queue:           ${queue_name:-N/A}"
+    echo "Allocation:      ${allocation_name:-N/A}"
 
     echo "Subscript:       ${subscript:-N/A}"
     echo "Job name:        ${job_name:-N/A}"
@@ -154,12 +152,20 @@ submit_job_pbs() {
                                    -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        if [[ $subscript_provided == false ]]; then
+        if [[ -n $num_omp_threads ]]; then
             export OMP_NUM_THREADS=$num_omp_threads
-            submit_command+=" -l select=$num_nodes:ncpus=$num_mpi_tasks \
-                              -l walltime=$wall_time \
-                              -q $queue_name \
-                              -A $allocation_name"
+        fi
+        if [[ -n $num_nodes && -z $num_mpi_tasks ]]; then
+            submit_command+=" -l select=$num_nodes:ncpus=$num_mpi_tasks"
+        fi
+        if [[ -n $wall_time ]]; then
+            submit_command+=" -l walltime=$wall_time"
+        fi
+        if [[ -n $queue_name ]]; then
+            submit_command+=" -q $queue_name"
+        fi
+        if [[ -n $allocation_name ]]; then
+            submit_command+=" -A $allocation_name"
         fi
 
         # Add job dependency if applicable
@@ -191,13 +197,23 @@ submit_job_slurm() {
                                      -e stderr.txt"
 
         # Add resource-specific arguments if provided
-        if [[ $subscript_provided == false ]]; then
+        if [[ -n $num_omp_threads ]]; then
             export OMP_NUM_THREADS=$num_omp_threads
-            submit_command+=" -N $num_nodes \
-                              -n $num_mpi_tasks \
-                              -t $wall_time \
-                              -p $queue_name \
-                              -A $allocation_name"
+        fi
+        if [[ -n $num_nodes ]]; then
+            submit_command+=" -N $num_nodes"
+        fi
+        if [[ -n $num_mpi_tasks ]]; then
+            submit_command+=" -n $num_mpi_tasks"
+        fi
+        if [[ -n $wall_time ]]; then
+            submit_command+=" -t $wall_time"
+        fi
+        if [[ -n $queue_name ]]; then
+            submit_command+=" -p $queue_name"
+        fi
+        if [[ -n $allocation_name ]]; then
+            submit_command+=" -A $allocation_name"
         fi
 
         # Add job dependency if applicable
@@ -255,19 +271,12 @@ main() {
     num_jobs=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $1 }')
     dependent_job_id=$(echo "$num_jobs_dependent_job_id" | awk -F: '{ print $2 }')
 
-    # Handle optional node arguments
-    if [[ -n ${subscript} ]]; then
-        subscript_provided=true
-    else
-        subscript_provided=false
-    fi
-
     # Parse subscript with fallback to defaults
     subscript=${subscript:-$default_subscript}
 
     # Parse job name with fallback to defaults
-    job_name=${!job_name_index:-${param_file%.par}}
-    [[ "$subscript_provided" == false && -n "${!job_name_index}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
+    job_name=${job_name:-${param_file%.par}}
+    [[ -n "${job_name}" && -n "${num_nodes}" && -n "${num_omp_threads}" ]] && job_name="${job_name}-N${num_nodes}-OMP${num_omp_threads}"
 
     # Export variables for child shells
     export SUBMITJOBS_JOBNAME="$job_name"
