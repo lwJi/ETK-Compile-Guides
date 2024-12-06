@@ -177,7 +177,7 @@ display_job_config() {
 }
 
 # Submit job using PBS
-submit_job_pbs() {
+submit_job_pbs2() {
     # Default value for last job ID if no dependency is provided
     local last_job_id=${dependent_job_id:-NoPreviousJob}
 
@@ -216,7 +216,7 @@ submit_job_pbs() {
 }
 
 # Function to submit jobs using Slurm
-submit_job_slurm() {
+submit_job_slurm2() {
     # Default value for last job ID if no dependency is provided
     local last_job_id=${dependent_job_id:-NoPreviousJob}
 
@@ -300,7 +300,7 @@ main() {
         fi
 
         # Submit jobs
-        submit_job_slurm
+        source ./src/submit_job_slurm.sh
 
     elif [[ $HOSTNAME =~ green-prairies.cluster ]]; then
 
@@ -311,7 +311,7 @@ main() {
         fi
 
         # Submit jobs
-        submit_job_pbs
+        source ./src/submit_job_pbs.sh
 
     else
 
