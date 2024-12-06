@@ -300,7 +300,7 @@ main() {
         fi
 
         # Submit jobs
-        source ./src/submit_job_slurm.sh
+        source $(dirname "$(realpath "$0")")/src/submit_job_slurm.sh
 
     elif [[ $HOSTNAME =~ green-prairies.cluster ]]; then
 
@@ -311,7 +311,7 @@ main() {
         fi
 
         # Submit jobs
-        source ./src/submit_job_pbs.sh
+        source $(dirname "$(realpath "$0")")/src/submit_job_pbs.sh
 
     else
 
