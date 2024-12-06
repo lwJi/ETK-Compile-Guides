@@ -23,9 +23,9 @@ display_usage() {
     echo "Options:"
     echo "  -h, --help              Show this help message and exit"
     echo "  --fresh                 Perform a fresh compilation"
-    echo "  -exe=<executable>       Specify the executable name (default: $executable_name)"
-    echo "  -thornlist=<thorn_list> Specify the thorn list file (default: $thorn_list)"
-    echo "  -config=<config_file>   Specify the configuration file (default: $config_file)"
+    echo "  -e=<executable>         Specify the executable name (default: $executable_name)"
+    echo "  -t=<thorn_list>         Specify the thorn list file (default: $thorn_list)"
+    echo "  -c=<config_file>        Specify the configuration file (default: $config_file)"
     echo "  -j=<num_cores>          Specify the number of cores for parallel build (default: $num_cores)"
     echo
     echo "All arguments are optional. If not specified, default values are used."
@@ -43,41 +43,33 @@ main() {
     perform_fresh_compile=0
     num_cores=24
     
-    # Parse arguments
-    while [[ $# -gt 0 ]]; do
-        case $1 in
-            -h|--help)
-              display_usage
-              exit 0
-              ;;
+    # Preprocess command-line arguments to handle long options like --help
+    for arg in "$@"; do
+        case $arg in
+            --help)
+                display_usage
+                exit 0
+                ;;
             --fresh)
-              perform_fresh_compile=1
-              shift
-              ;;
-            -exe=*)
-              executable_name="${1#*=}"
-              shift
-              ;;
-            -thornlist=*)
-              thorn_list="${1#*=}"
-              shift
-              ;;
-            -config=*)
-              config_file="${1#*=}"
-              shift
-              ;;
-            -j=*)
-              num_cores="${1#*=}"
-              shift
-              ;;
-            *)
-              echo "Unknown argument: $1"
-              display_usage
-              exit 0
-              ;;
+                perform_fresh_compile=1
+                shift # Remove this argument from $@
+                ;;
         esac
     done
-    
+
+    # Parse command-line options
+    while getopts ":e:t:c:j:h" opt; do
+        case "$opt" in
+            e) executable_name="$OPTARG" ;;
+            t) thorn_list="$OPTARG" ;;
+            c) config_file="$OPTARG" ;;
+            j) num_cores="$OPTARG" ;;
+            h) display_usage; exit 0 ;;
+            :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
+            \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
+        esac
+    done
+
     # Main script logic
     if [[ $perform_fresh_compile -eq 1 ]]; then
         echo "Performing a fresh compile for '$executable_name'..."
