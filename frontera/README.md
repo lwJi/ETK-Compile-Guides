@@ -47,10 +47,10 @@
 
 ## gcc
 
-* Install `amrex` to `${ETKPATH}/nvhpc/amrex-lib`
+* Install `amrex` to `${ETKPATH}/gcc/amrex-lib`
 
     ```bash
-    ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
+    ${ETKGUIDE}/gcc/Compile-AMReX.sh
     ```
 
 
