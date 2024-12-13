@@ -29,12 +29,6 @@
     source ${ETKGUIDE}/oneapi/Load-Module-CarpetX.sh
     ```
 
-* Compile `AMReX`
-
-    ```bash
-    source ${ETKGUIDE}/oneapi/Install-AMReX.sh
-    ```
-
 * Compile `ETK`
 
     ```bash
