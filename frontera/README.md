@@ -45,12 +45,12 @@
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/oneapi/Compile-ETK --help` to display the availible options
 
-## gcc
+## gcc + nvcc
 
-* Install `amrex` to `${ETKPATH}/gcc/amrex-lib`
+* Install `amrex` to `${ETKPATH}/nvcc/amrex-lib`
 
     ```bash
-    ${ETKGUIDE}/gcc/Compile-AMReX.sh
+    ${ETKGUIDE}/nvcc/Compile-AMReX.sh
     ```
 
 
