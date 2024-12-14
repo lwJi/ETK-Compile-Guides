@@ -1,0 +1,32 @@
+#!/bin/bash
+#PBS -r n
+#PBS -q short
+#PBS -l walltime=00:30:00
+#PBS -l select=2:ncpus=32:mpiprocs=32:ompthreads=1
+#PBS -o stdout.txt
+#PBS -e stderr.txt
+#PBS -N readcalc
+#PBS -M ljsma@rit.edu
+#PBS -m bae
+
+cd $PBS_O_WORKDIR
+NN=$(cat $PBS_NODEFILE | wc -l)
+export IPATH_NO_CPUAFFINITY=1
+echo ${PBS_JOBID} > .jobid
+
+. ~spack/newspack/share/spack/setup-env.sh
+spack env activate etk_gcc_13
+
+export OMP_NUM_THREADS=1
+
+#mpiexec.hydra  -machinefile $PBS_NODEFILE -np $NN $EXE/cactus_etx readcalc-low-it00000000.par
+#mpiexec.hydra  -machinefile $PBS_NODEFILE -np $NN $EXE/cactus_etx readcalc-low-it00008192.par
+
+g_istart=0
+g_iend=22
+g_step_size=8192
+
+for i in $(seq "$g_istart" "$g_iend"); do
+    formatted_iter=$(printf "it%08d" "$((i * g_step_size))")
+    mpiexec.hydra  -machinefile $PBS_NODEFILE -np $NN ${EXE}/cactus_etx "readcalc-low-${formatted_iter}.par"
+done
