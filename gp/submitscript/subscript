@@ -27,6 +27,6 @@ g_iend=22
 g_step_size=8192
 
 for i in $(seq "$g_istart" "$g_iend"); do
-    formatted_iter=$(printf "it%08d" "$((i * g_step_size))")
-    mpiexec.hydra  -machinefile $PBS_NODEFILE -np $NN ${EXE}/cactus_etx "readcalc-low-${formatted_iter}.par"
+  formatted_iter=$(printf "it%08d" "$((i * g_step_size))")
+  mpiexec.hydra  -machinefile $PBS_NODEFILE -np $NN ${EXE}/cactus_etx "readcalc-low-${formatted_iter}.par"
 done
