@@ -44,7 +44,7 @@ export LDFLAGS="-L${ROCM_PATH}/lib -lamdhip64 ${PE_MPICH_GTL_DIR_amd_gfx90a} -lm
 echo "Building AMReX..."
 cd "${AMREX_BUILD_DIR}"
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${ETKINSTALL}/amrex-lib \
+      -DCMAKE_INSTALL_PREFIX=${ETKPATH}/amrex-lib \
       -DCMAKE_PREFIX_PATH='${ROCM_PATH}/lib/cmake/AMDDeviceLibs;${ROCM_PATH}/lib/cmake/amd_comgr;${ROCM_PATH}/lib/cmake/hip;${ROCM_PATH}/lib/cmake/hiprand;${ROCM_PATH}/lib/cmake/hsa-runtime64;${ROCM_PATH}/lib/cmake/rocprim;${ROCM_PATH}/lib/cmake/rocrand' \
       -DAMReX_GPU_BACKEND=HIP \
       -DAMReX_AMD_ARCH=gfx90a \
