@@ -82,7 +82,7 @@ main() {
 
     # Main script logic
     if [[ $perform_fresh_compile == true ]]; then
-        echo "Performing a fresh compile for '$executable_name'..."
+        echo "Performing a fresh compile for '$executable_name' with $config_file using $num_cores cores..."
 
         config_path="configs/$executable_name"
 
@@ -98,7 +98,6 @@ main() {
     fi
 
     # Compilation with specified cores
-    echo "Compiling '$executable_name' with $config_file using $num_cores cores..."
     execute_command gmake -j"$num_cores" "$executable_name"
 }
 
