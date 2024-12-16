@@ -1,6 +1,7 @@
 #!/bin/bash
 
-#echo "Compile-ETK (c) 2024 Liwei Ji"
+# Compile-ETK script
+# (c) 2024 Liwei Ji"
 
 # ----------------
 # Global Functions
@@ -19,23 +20,25 @@ export -f execute_command
 
 # Help message
 display_usage() {
-    echo "Usage: $0 [options]"
+    echo "Compile-ETK Script"
+    echo
+    echo "Usage:"
+    echo "  $0 [options]"
     echo
     echo "Options:"
     echo "  -h, --help       Show this help message and exit"
-    echo "  --fresh          Perform a fresh compilation"
-    echo "  -t <thorn_list>  Specify the thorn list file"
-    echo "  -c <config_file> Specify the configuration file"
+    echo "  --fresh          Perform a fresh compilation by clearing existing configurations"
     echo "  -e <executable>  Specify the executable name (default: $executable_name)"
+    echo "  -t <thorn_list>  Specify the thorn list file (required for fresh compile)"
+    echo "  -c <config_file> Specify the configuration file (required for fresh compile)"
     echo "  -j <num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
     echo
     echo "Example:"
-    echo
     echo "  Perform a fresh build with a specific thornlist and config file:"
-    echo "    $0 --fresh -e exe -t thornlist -c cfgfile -j 24"
+    echo "    $0 --fresh -e my_exe -t my_thornlist -c my_cfg -j 8"
     echo
-    echo "  Recompile:"
-    echo "    $0 -e exe"
+    echo "  Recompile an executable:"
+    echo "    $0 -e my_exe"
 }
 
 # Handle argument parsing
