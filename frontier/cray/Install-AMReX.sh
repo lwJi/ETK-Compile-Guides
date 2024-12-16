@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on error
-set -e
+#set -e
 
 # Check if ETKPATH is set
 if [ -z "${ETKPATH}" ]; then
