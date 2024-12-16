@@ -79,3 +79,19 @@
 ```
 sbatch sub-gpu
 ```
+
+## notes about the machine
+
+### Workaround when turn on GPU-aware-MPI
+
+* for `cray-mpich/8.1.28` or `cray-mpich/8.1.29` use
+
+    ```bash
+    export GTL_HSA_MAX_IPC_CACHE_SIZE=1000
+    ```
+
+* for `cray-mpich/8.1.30` use
+
+    ```bash
+    export MPICH_GPU_IPC_CACHE_MAX_SIZE=1000
+    ```
