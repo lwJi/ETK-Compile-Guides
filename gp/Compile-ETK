@@ -1,0 +1,105 @@
+#!/bin/bash
+
+#echo "Compile-ETK (c) 2024 Liwei Ji"
+
+# ----------------
+# Global Functions
+# ----------------
+
+# Execute and print the command
+execute_command() {
+    echo "\$ $@"
+    "$@"
+}
+export -f execute_command
+
+# ---------------
+# Local Functions
+# ---------------
+
+# Help message
+display_usage() {
+    echo "Usage: $0 [options]"
+    echo
+    echo "Options:"
+    echo "  -h, --help       Show this help message and exit"
+    echo "  --fresh          Perform a fresh compilation"
+    echo "  -e <executable>  Specify the executable name (default: $executable_name)"
+    echo "  -t <thorn_list>  Specify the thorn list file (default: $thorn_list)"
+    echo "  -c <config_file> Specify the configuration file (default: $config_file)"
+    echo "  -j <num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
+    echo
+    echo "All arguments are optional. If not specified, default values are used."
+}
+
+# Handle argument parsing
+process_arguments() {
+    local args=()
+
+    # Preprocess long options
+    for arg in "$@"; do
+        case "$arg" in
+            --fresh)
+                perform_fresh_compile=true ;;
+            --help)
+                display_usage; exit 0 ;;
+            *)
+                args+=("$arg") ;;
+        esac
+    done
+
+    # Reset positional arguments for `getopts`
+    set -- "${args[@]}"
+
+    # Parse short options
+    while getopts ":e:t:c:j:h" opt; do
+        case "$opt" in
+            e) executable_name="$OPTARG" ;;
+            t) thorn_list="$OPTARG" ;;
+            c) config_file="$OPTARG" ;;
+            j) num_cores="$OPTARG" ;;
+            h) display_usage; exit 0 ;;
+            :) echo "Error: Option -$OPTARG requires an argument." >&2; display_usage; exit 1 ;;
+            \?) echo "Error: Invalid option -$OPTARG" >&2; display_usage; exit 1 ;;
+        esac
+    done
+}
+
+# -------------
+# Main Function
+# -------------
+
+main() {
+    # Default values
+    executable_name="etk"
+    thorn_list="thornlists/asterx.th"
+    config_file="${ETKGUIDE}/gcc/vista.cfg"
+    perform_fresh_compile=false
+    num_cores=24
+
+    # Process arguments
+    process_arguments "$@"
+
+    # Main script logic
+    if [[ $perform_fresh_compile == true ]]; then
+        echo "Performing a fresh compile for '$executable_name' with $config_file using $num_cores cores..."
+
+        config_path="configs/$executable_name"
+
+        # Remove existing config directory
+        if [[ -d "$config_path" ]]; then
+            echo "Removing existing directory: $config_path"
+            execute_command rm -rf "$config_path"
+        fi
+
+        # Fresh compile steps
+        execute_command gmake "$executable_name" options="$config_file"
+        execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
+    fi
+
+    # Compilation with specified cores
+    execute_command gmake -j"$num_cores" "$executable_name"
+}
+
+# Entry point
+main "$@"
