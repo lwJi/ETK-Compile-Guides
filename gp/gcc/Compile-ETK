@@ -72,8 +72,8 @@ process_arguments() {
 main() {
     # Default values
     executable_name="etk"
-    thorn_list="thornlists/asterx.th"
-    config_file="${ETKGUIDE}/gcc/vista.cfg"
+    thorn_list="thornlists/asterx-gp.th"
+    config_file="${ETKGUIDE}/gcc/gp.cfg"
     perform_fresh_compile=false
     num_cores=24
 
