@@ -22,6 +22,30 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx-frontier.th
     ```
 
+## amd
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/amd/Load-Module-CarpetX.sh
+    ```
+
+* Install `amrex` to `${ETKPATH}/amrex-lib`
+
+    ```bash
+    source ${ETKGUIDE}/amd/Install-AMReX.sh
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/amd/Compile-ETK --fresh
+    ```
+    - type `yes` when it ask 'Setup configuration etk'
+    - run `${ETKGUIDE}/Compile-ETK --help` to display the availible options
+
 ## cray
 
 * Load Modules
@@ -45,8 +69,6 @@
     ```
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/Compile-ETK --help` to display the availible options
-
-## hipcc
 
 * Install `amrex` to `${ETKPATH}/amrex-lib`
 
