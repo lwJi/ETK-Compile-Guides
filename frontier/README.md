@@ -33,7 +33,7 @@
 * Install `amrex` to `${ETKPATH}/amrex-lib`
 
     ```bash
-    source ${ETKGUIDE}/amd/Install-AMReX.sh
+    ${ETKGUIDE}/amd/Install-AMReX.sh
     ```
 
 * Compile `ETK`
@@ -57,7 +57,7 @@
 * Install `amrex` to `${ETKPATH}/amrex-lib`
 
     ```bash
-    source ${ETKGUIDE}/cray/Install-AMReX.sh
+    ${ETKGUIDE}/cray/Install-AMReX.sh
     ```
 
 * Compile `ETK`
