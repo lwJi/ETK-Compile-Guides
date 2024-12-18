@@ -38,7 +38,7 @@
 * Compile `AMReX`
 
     ```bash
-    source ${ETKGUIDE}/gcc/Install-AMReX.sh
+    ${ETKGUIDE}/gcc/Install-AMReX.sh
     ```
 
 * Compile `ETK`
