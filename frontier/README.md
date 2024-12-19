@@ -44,7 +44,8 @@
     ${ETKGUIDE}/amd/Compile-ETK --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/amd/Compile-ETK --help` to display the availible options
+
 
 ## cray
 
@@ -68,9 +69,8 @@
     ${ETKGUIDE}/cray/Compile-ETK --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/cray/Compile-ETK --help` to display the availible options
 
-* Install `amrex` to `${ETKPATH}/amrex-lib`
 
 ## submit runs
 
