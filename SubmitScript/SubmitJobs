@@ -166,9 +166,9 @@ main() {
     elif [[ $HOSTNAME =~ login\d+\.frontier\.olcf\.ornl\.gov ]]; then
 
         if [[ "$executable_path" = /* ]]; then
-            export SUBMITJOBS_MPIRUN="ibrun $executable_path $param_file"
+            export SUBMITJOBS_MPIRUN="srun $executable_path $param_file"
         else
-            export SUBMITJOBS_MPIRUN="ibrun ../$executable_path $param_file"
+            export SUBMITJOBS_MPIRUN="srun ../$executable_path $param_file"
         fi
 
         # Submit jobs
