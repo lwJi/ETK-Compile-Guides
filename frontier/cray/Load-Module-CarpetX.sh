@@ -26,4 +26,11 @@ module load openblas
 module load zlib
 module load gsl
 
+###############################################################################
+# set more env variables
+###############################################################################
 export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
+
+export MPICH_GPU_SUPPORT_ENABLED=1
+export PE_MPICH_GTL_DIR_amd_gfx90a="-L/opt/cray/pe/mpich/8.1.30/gtl/lib"
+export PE_MPICH_GTL_LIBS_amd_gfx90a="-lmpi_gtl_hsa"
