@@ -1,5 +1,7 @@
 # SubmitScript
 
+## How to use SubmitScript
+
 * Add this dir to your path
 
     ```bash
@@ -32,3 +34,8 @@
     ```
     SubmitJobs --help
     ```
+
+
+## Add configs for a new machine
+
+* add new `elif` section in the `main` function
