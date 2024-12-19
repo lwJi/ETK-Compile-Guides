@@ -26,3 +26,5 @@ module load libjpeg-turbo
 module load openblas
 module load zlib
 module load gsl
+
+export LD_LIBRARY_PATH=${CRAY_LD_LIBRARY_PATH}:${LD_LIBRARY_PATH}
