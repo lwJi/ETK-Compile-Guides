@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH -p gh-dev          # Queue (partition) name
+#SBATCH -t 00:10:00        # Run time (hh:mm:ss)
+#SBATCH -A PHY20010        # Project/Allocation name (req'd if you have more than 1)
+##SBATCH --mail-type=all   # Send email at begin and end of job
+##SBATCH --mail-user=your@email
+
+# Any other commands must follow all #SBATCH directives...
+#export OMP_NUM_THREADS=2
+#export OMP_PROC_BIND=true
+#export OMP_PLACES=cores
+
+module list
+
+# ------------------------------------------------------
+# Create a directory for the current run and launch jobs
+# ------------------------------------------------------
+create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}"
