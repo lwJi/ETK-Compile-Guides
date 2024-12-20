@@ -51,6 +51,23 @@
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/gcc-nvcc/Compile-ETK --help` to display the availible options
 
+## gcc (for gg)
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/gcc/Compile-ETK --fresh
+    ```
+    - type `yes` when it ask 'Setup configuration etk'
+    - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
+
 ## nvhpc (not working yet)
 
 * Install `amrex` to `${ETKPATH}/nvhpc/amrex-lib`
