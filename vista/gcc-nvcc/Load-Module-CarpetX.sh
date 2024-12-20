@@ -16,5 +16,5 @@ module load fftw3
 module load gsl
 module load zlib
 
-#module load adios2
+#module load adios2  # not compatible with gcc13
 #module load silo
