@@ -32,13 +32,13 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/gcc-nvcc/Load-Module-CarpetX.sh
     ```
 
 * Compile `AMReX`
 
     ```bash
-    ${ETKGUIDE}/gcc/Install-AMReX.sh
+    ${ETKGUIDE}/gcc-nvcc/Install-AMReX.sh
     ```
 
 * Compile `ETK`
@@ -46,10 +46,10 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/gcc/Compile-ETK --fresh
+    ${ETKGUIDE}/gcc-nvcc/Compile-ETK --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/gcc-nvcc/Compile-ETK --help` to display the availible options
 
 ## nvhpc (not working yet)
 
