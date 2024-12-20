@@ -73,7 +73,7 @@ main() {
     # Default values
     executable_name="etk"
     thorn_list="thornlists/asterx.th"
-    config_file="${ETKGUIDE}/gcc/vista.cfg"
+    config_file="${ETKGUIDE}/gcc-nvcc/vista.cfg"
     perform_fresh_compile=false
     num_cores=24
 
