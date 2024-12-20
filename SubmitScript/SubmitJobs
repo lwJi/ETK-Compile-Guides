@@ -163,7 +163,7 @@ main() {
         # Submit jobs
         submit_job_slurm
 
-    elif [[ $HOSTNAME =~ login\d+\.frontier\.olcf\.ornl\.gov ]]; then
+    elif [[ $HOSTNAME =~ login0[1-9].frontier.olcf.ornl.gov ]]; then
 
         if [[ "$executable_path" = /* ]]; then
             export SUBMITJOBS_MPIRUN="srun $executable_path $param_file"
