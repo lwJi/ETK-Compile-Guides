@@ -17,4 +17,4 @@ module load gsl
 module load zlib
 
 #module load adios2  # not compatible with gcc13
-#module load silo
+#module load silo    # not compatible with phdf5
