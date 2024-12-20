@@ -48,17 +48,12 @@ create_and_organize_job_directory_and_launch_jobs() {
     fi
 
     # Generate a new directory name
-    local job_output_dir=$(generate_new_directory_name "${job_name}")
-
-    if [[ -d "$job_output_dir" ]]; then
-        echo "Error: Directory '${job_output_dir}' already exists. Please check."
-        exit 1
-    fi
+    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
 
     execute_command mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
     execute_command cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
-    execute_command mv stdout.txt "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
-    execute_command mv stderr.txt "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
+    # execute_command mv stdout.txt "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
+    # execute_command mv stderr.txt "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
     # execute_command mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
     # execute_command mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
 

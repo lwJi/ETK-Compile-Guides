@@ -135,7 +135,15 @@ main() {
 
     # Export variables for child shells
     export SUBMITJOBS_JOBNAME="$job_name"
+    export SUBMITJOBS_JOBOUTPUTDIR="$(generate_new_directory_name "${job_name}")"
     export SUBMITJOBS_PARFILE="$param_file"
+
+    # Check if the output directory already exists
+    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
+    if [[ -d "$job_output_dir" ]]; then
+        echo "Error: Directory '${job_output_dir}' already exists. Please check."
+        exit 1
+    fi
 
     # Display the job configuration
     display_job_config
