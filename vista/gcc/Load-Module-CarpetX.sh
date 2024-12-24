@@ -2,12 +2,12 @@
 
 module reset
 
-module unload openmpi
-module unload nvidia
+#module unload openmpi
+#module unload nvidia
 
-module load gcc/14.2.0
-module load nvpl/24.7
-module load openmpi/5.0.5
+module load gcc
+module load openmpi
+module load nvpl
 module load phdf5
 module load boost
 module load fftw3
