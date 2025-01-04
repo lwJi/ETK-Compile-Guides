@@ -45,7 +45,7 @@ export LDFLAGS="-L${TACC_CUDA_LIB}"
 echo "Building AMReX..."
 cd "${AMREX_BUILD_DIR}"
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${ETKPATH}/amrex-lib \
+      -DCMAKE_INSTALL_PREFIX=${AMREX_LIB_DIR} \
       -DAMReX_GPU_BACKEND=CUDA \
       -DAMReX_CUDA_ARCH=9.0 \
       -DAMReX_FORTRAN=OFF \
