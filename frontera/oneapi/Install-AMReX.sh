@@ -11,7 +11,6 @@ fi
 
 # Define paths
 AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
-ETKPATH=${ETKPATH:-$HOME/EinsteinToolkit}  # Default to a path if ETKPATH is not set
 AMREX_DIR="${ETKPATH}/amrex"
 AMREX_BUILD_DIR="${AMREX_DIR}/build"
 AMREX_LIB_DIR="${ETKPATH}/amrex-lib"
@@ -19,14 +18,20 @@ AMREX_LIB_DIR="${ETKPATH}/amrex-lib"
 # Clone AMReX repository
 echo "Cloning AMReX repository..."
 cd "${ETKPATH}"
-if [ ! -d "${AMREX_DIR}" ]; then
+if [[ ! -d "${AMREX_DIR}" ]]; then
     git clone "${AMREX_REPO}" amrex
 else
     echo "AMReX directory already exists. Skipping clone."
 fi
 
 # Create directories for build and installation
-mkdir -p "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"
+for dir in "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"; do
+    if [[ -d "${dir}" ]]; then
+        echo "Removing existing directory: ${dir}"
+        rm -rf "${dir}"
+    fi
+    mkdir -p "${dir}"
+done
 
 # Set environment variables for compiler and flags
 export CC=$(which icx)
@@ -40,7 +45,7 @@ export LDFLAGS="-L${TACC_IMPI_LIB}"
 echo "Building AMReX..."
 cd "${AMREX_BUILD_DIR}"
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${ETKPATH}/amrex-lib \
+      -DCMAKE_INSTALL_PREFIX=${AMREX_LIB_DIR} \
       -DAMReX_FORTRAN=OFF \
       -DAMReX_FORTRAN_INTERFACES=OFF \
       -DAMReX_OMP=ON \
