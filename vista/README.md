@@ -104,6 +104,15 @@
     ${ETKGUIDE}/nvc/Install-AMReX
     ```
 
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/nvc/Compile-ETK --fresh
+    ```
+    - type `yes` when it ask 'Setup configuration etk'
+    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
 
 ## submit runs
 
