@@ -29,6 +29,7 @@
     ```
 
 ## gcc + nvcc
+
 * Load Modules
 
     ```bash
@@ -52,6 +53,7 @@
     - run `${ETKGUIDE}/gcc-nvcc/Compile-ETK --help` to display the availible options
 
 ## gcc (for gg)
+
 * Load Modules
 
     ```bash
@@ -74,15 +76,34 @@
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
 
-## nvhpc (not working yet)
+## nvc + nvcc
 
-* Install `amrex` to `${ETKPATH}/nvhpc/amrex-lib`
+* Load Modules
 
     ```bash
-    ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
+    source ${ETKGUIDE}/nvc-nvcc/Load-Module-CarpetX
     ```
 
-## nvhpc (for gg)
+* Install `amrex` to `${ETKPATH}/amrex-lib-nvc-nvcc`
+
+    ```bash
+    ${ETKGUIDE}/nvc-nvcc/Install-AMReX
+    ```
+
+## nvc (for gg)
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/nvc/Load-Module-CarpetX
+    ```
+
+* Install `amrex` to `${ETKPATH}/amrex-lib-nvc`
+
+    ```bash
+    ${ETKGUIDE}/nvc/Install-AMReX
+    ```
+
 
 ## submit runs
 
