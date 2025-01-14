@@ -82,6 +82,7 @@
     ${ETKGUIDE}/nvhpc/Compile-AMReX.sh
     ```
 
+## nvhpc (for gg)
 
 ## submit runs
 
