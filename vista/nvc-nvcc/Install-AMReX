@@ -1,14 +1,51 @@
 #!/bin/bash
 
+# Exit on error
+set -e
+
+# Check if ETKPATH is set
+if [ -z "${ETKPATH}" ]; then
+    echo "Error: ETKPATH is not set. Please set it before running this script."
+    exit 1
+fi
+
+# Define paths
+AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
+AMREX_DIR="${ETKPATH}/amrex"
+AMREX_BUILD_DIR="${AMREX_DIR}/build"
+AMREX_LIB_DIR="${ETKPATH}/amrex-lib-nvc-nvcc"
+
+# Clone AMReX repository
+echo "Cloning AMReX repository..."
+cd "${ETKPATH}"
+if [[ ! -d "${AMREX_DIR}" ]]; then
+    git clone "${AMREX_REPO}" amrex
+else
+    echo "AMReX directory already exists. Skipping clone."
+fi
+
+# Create directories for build and installation
+for dir in "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"; do
+    if [[ -d "${dir}" ]]; then
+        echo "Removing existing directory: ${dir}"
+        rm -rf "${dir}"
+    fi
+    mkdir -p "${dir}"
+done
+
+# Set environment variables for compiler and flags
 export CC=$(which nvc)
 export CXX=$(which nvc++)
-export FC=$(which gfortran)
+export FC=$(which nvfortran)
 export CFLAGS="-I${TACC_NVIDIA_INC}"
 export CXXFLAGS="-I${TACC_NVIDIA_INC}"
 export LDFLAGS="-L${TACC_NVIDIA_LIB}"
 
+# Build and install AMReX
+echo "Building AMReX..."
+cd "${AMREX_BUILD_DIR}"
 cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DCMAKE_INSTALL_PREFIX=${WORK}/local/amrex-lib \
+      -DCMAKE_INSTALL_PREFIX=${AMREX_LIB_DIR} \
       -DAMReX_GPU_BACKEND=CUDA \
       -DAMReX_CUDA_ARCH=9.0 \
       -DAMReX_DIFFERENT_COMPILER=ON \
@@ -19,3 +56,5 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DAMReX_PRECISION=DOUBLE \
       .. && \
 make -j24 install
+
+echo "AMReX has been successfully built and installed in ${AMREX_LIB_DIR}."
