@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# Compile-ETK script
-# (c) 2024 Liwei Ji"
+#echo "Compile-ETK (c) 2024 Liwei Ji"
 
 # ----------------
 # Global Functions
@@ -20,25 +19,17 @@ export -f execute_command
 
 # Help message
 display_usage() {
-    echo "Compile-ETK Script"
-    echo
-    echo "Usage:"
-    echo "  $0 [options]"
+    echo "Usage: $0 [options]"
     echo
     echo "Options:"
     echo "  -h, --help       Show this help message and exit"
-    echo "  --fresh          Perform a fresh compilation by clearing existing configurations"
+    echo "  --fresh          Perform a fresh compilation"
     echo "  -e <executable>  Specify the executable name (default: $executable_name)"
-    echo "  -t <thorn_list>  Specify the thorn list file (required for fresh compile)"
-    echo "  -c <config_file> Specify the configuration file (required for fresh compile)"
+    echo "  -t <thorn_list>  Specify the thorn list file (default: $thorn_list)"
+    echo "  -c <config_file> Specify the configuration file (default: $config_file)"
     echo "  -j <num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
     echo
-    echo "Example:"
-    echo "  Perform a fresh build with a specific thornlist and config file:"
-    echo "    $0 --fresh -e my_exe -t my_thornlist -c my_cfg -j 8"
-    echo
-    echo "  Recompile an executable:"
-    echo "    $0 -e my_exe"
+    echo "All arguments are optional. If not specified, default values are used."
 }
 
 # Handle argument parsing
@@ -74,29 +65,6 @@ process_arguments() {
     done
 }
 
-# Validate user inputs
-validate_inputs() {
-    if [[ -z "$thorn_list" ]]; then
-        echo "Error: Thorn list file must be specified using -t." >&2
-        exit 1
-    fi
-
-    if [[ -z "$config_file" ]]; then
-        echo "Error: Configuration file must be specified using -c." >&2
-        exit 1
-    fi
-
-    if [[ -n "$thorn_list" && ! -f "$thorn_list" ]]; then
-        echo "Error: Specified thorn list file '$thorn_list' does not exist." >&2
-        exit 1
-    fi
-
-    if [[ -n "$config_file" && ! -f "$config_file" ]]; then
-        echo "Error: Specified configuration file '$config_file' does not exist." >&2
-        exit 1
-    fi
-}
-
 # -------------
 # Main Function
 # -------------
@@ -104,8 +72,8 @@ validate_inputs() {
 main() {
     # Default values
     executable_name="etk"
-    thorn_list=""
-    config_file=""
+    thorn_list="thornlists/asterx.th"
+    config_file="${ETKGUIDE}/gcc/vista.cfg"
     perform_fresh_compile=false
     num_cores=24
 
@@ -114,9 +82,6 @@ main() {
 
     # Main script logic
     if [[ $perform_fresh_compile == true ]]; then
-        # Validate inputs
-        validate_inputs
-
         echo "Performing a fresh compile for '$executable_name' with $config_file using $num_cores cores..."
 
         config_path="configs/$executable_name"
