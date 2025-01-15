@@ -28,6 +28,54 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx.th
     ```
 
+## nvc + nvcc
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/nvc-nvcc/Load-Module-CarpetX
+    ```
+
+* Install `amrex` to `${ETKPATH}/amrex-lib-nvc-nvcc`
+
+    ```bash
+    ${ETKGUIDE}/nvc-nvcc/Install-AMReX
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/nvc-nvcc/vista.cfg --fresh
+    ```
+    - type `yes` when it ask 'Setup configuration etk'
+    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
+
+## nvc (for gg)
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/nvc/Load-Module-CarpetX
+    ```
+
+* Install `amrex` to `${ETKPATH}/amrex-lib-nvc`
+
+    ```bash
+    ${ETKGUIDE}/nvc/Install-AMReX
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/nvc/Compile-ETK --fresh
+    ```
+    - type `yes` when it ask 'Setup configuration etk'
+    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
+
 ## gcc + nvcc
 
 * Load Modules
@@ -75,44 +123,6 @@
     ```
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
-
-## nvc + nvcc
-
-* Load Modules
-
-    ```bash
-    source ${ETKGUIDE}/nvc-nvcc/Load-Module-CarpetX
-    ```
-
-* Install `amrex` to `${ETKPATH}/amrex-lib-nvc-nvcc`
-
-    ```bash
-    ${ETKGUIDE}/nvc-nvcc/Install-AMReX
-    ```
-
-## nvc (for gg)
-
-* Load Modules
-
-    ```bash
-    source ${ETKGUIDE}/nvc/Load-Module-CarpetX
-    ```
-
-* Install `amrex` to `${ETKPATH}/amrex-lib-nvc`
-
-    ```bash
-    ${ETKGUIDE}/nvc/Install-AMReX
-    ```
-
-* Compile `ETK`
-
-    ```bash
-    cd ${ETKPATH}/Cactus
-
-    ${ETKGUIDE}/nvc/Compile-ETK --fresh
-    ```
-    - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
 
 ## submit runs
 
