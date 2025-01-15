@@ -1,9 +1,8 @@
 #!/bin/bash
 
-module purge
 module reset
 
-module load nvidia_math
+module load nvidia/24.9
 module load nvpl
 module load phdf5
 module load boost
@@ -12,5 +11,6 @@ module load gsl
 module load zlib
 module load adios2
 #module load cuda
+#module load nvidia_math
 
 #module load silo
