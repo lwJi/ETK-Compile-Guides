@@ -28,6 +28,8 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx.th
     ```
 
+* If you are using nvc compilers, please use the following branch `rhass/nvhpc` for CarpetX.
+
 ## nvc + nvcc
 
 * Load Modules
@@ -50,7 +52,7 @@
     ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/nvc-nvcc/vista.cfg --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/../CompileScript/Compile-ETK --help` to display the availible options
 
 ## nvc (for gg)
 
@@ -71,10 +73,8 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/nvc/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/nvc/vista.cfg --fresh
     ```
-    - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/nvc/Compile-ETK --help` to display the availible options
 
 ## gcc + nvcc
 
@@ -95,10 +95,8 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/gcc-nvcc/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc-nvcc/vista.cfg --fresh
     ```
-    - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/gcc-nvcc/Compile-ETK --help` to display the availible options
 
 ## gcc (for gg)
 
@@ -119,10 +117,8 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/gcc/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/vista.cfg --fresh
     ```
-    - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/gcc/Compile-ETK --help` to display the availible options
 
 ## submit runs
 
