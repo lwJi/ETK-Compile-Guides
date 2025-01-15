@@ -94,10 +94,10 @@ main() {
 
         # Fresh compile steps
         execute_command gmake "$executable_name" options="$config_file"
-        execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
     fi
 
     # Compilation with specified cores
+    execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
     execute_command gmake -j"$num_cores" "$executable_name"
 }
 
