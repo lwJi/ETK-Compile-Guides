@@ -120,21 +120,28 @@
     ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/vista.cfg --fresh
     ```
 
-## submit runs
+## Submit a job
 
-* Add a line
+* Add the following line to file `${ETKGUIDE}/../SubmitScript/subscript-baremetal`
     ```bash
     source {your_compiler}/Load-Module-CarpetX.sh
     ```
-    to file `${ETKGUIDE}/../SubmitScript/subscript-baremetal`
 
-* run the following to submit a job
+* Run the following to submit a job
 
     ```bash
     ${ETKGUIDE}/../SubmitScript/SubmitJobs -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -t 02:00:00 -q high_priority -a my_project -s ${ETKGUIDE}/../SubmitScript/subscript-baremetal
     ```
 
     - run `${ETKGUIDE}/../SubmitScript/SubmitJobs --help` for available options
+
+* You can also copy `subscript-baremetal` somewhere as long as you give the correct path to `SubmitJobs` with `-s`
+
+* Add common sbatch options to `subscript-baremetal` such that you don't need to provide them through command line. For example
+    ```bash
+    #SBATCH -p gh
+    #SBATCH -A ...
+    ```
 
 
 ## notes about the machine
