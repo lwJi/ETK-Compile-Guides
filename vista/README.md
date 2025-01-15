@@ -122,11 +122,19 @@
 
 ## submit runs
 
-* please use the parfile and submit script in `example` to reproduce the error
+* Add a line
+    ```bash
+    source {your_compiler}/Load-Module-CarpetX.sh
+    ```
+    to file `${ETKGUIDE}/../SubmitScript/subscript-baremetal`
 
-```
-sbatch sub-gpu
-```
+* run the following to submit a job
+
+    ```bash
+    ${ETKGUIDE}/../SubmitScript/SubmitJobs -n 5 -e /path/to/executable -p params.par -N 4 -m 8 -o 2 -t 02:00:00 -q high_priority -a my_project -s ${ETKGUIDE}/../SubmitScript/subscript-baremetal
+    ```
+
+    - run `${ETKGUIDE}/../SubmitScript/SubmitJobs --help` for available options
 
 
 ## notes about the machine
