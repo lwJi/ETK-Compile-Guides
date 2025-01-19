@@ -26,13 +26,13 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/oneapi/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/oneapi/Load-Module-CarpetX
     ```
 
 * Compile `AMReX`
 
     ```bash
-    ${ETKGUIDE}/oneapi/Install-AMReX.sh
+    ${ETKGUIDE}/oneapi/Install-AMReX
     ```
 
 * Compile `ETK`
@@ -40,19 +40,14 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/oneapi/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/oneapi/frontera.cfg --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/oneapi/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/../CompileScript/Compile-ETK --help` to display the availible options
 
 ## gcc + nvcc
 
-* Install `amrex` to `${ETKPATH}/nvcc/amrex-lib`
-
-    ```bash
-    ${ETKGUIDE}/nvcc/Compile-AMReX.sh
-    ```
-
+* To be set
 
 ## submit runs
 
