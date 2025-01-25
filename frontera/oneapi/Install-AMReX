@@ -13,7 +13,7 @@ fi
 AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
 AMREX_DIR="${ETKPATH}/amrex"
 AMREX_BUILD_DIR="${AMREX_DIR}/build"
-AMREX_LIB_DIR="${ETKPATH}/amrex-lib"
+AMREX_LIB_DIR="${ETKPATH}/amrex-lib-oneapi"
 
 # Clone AMReX repository
 echo "Cloning AMReX repository..."
@@ -55,6 +55,3 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
 make -j24 install
 
 echo "AMReX has been successfully built and installed in ${AMREX_LIB_DIR}."
-
-# Return to ETKPATH
-cd ${ETKPATH}
