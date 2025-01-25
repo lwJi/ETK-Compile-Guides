@@ -37,9 +37,9 @@ done
 export CC=$(which nvc)
 export CXX=$(which nvc++)
 export FC=$(which nvfortran)
-export CFLAGS="-tp neoverse-v2 -Mvect=simd -fast -mp -I${TACC_MPI_DIR}/include"
-export CXXFLAGS="-tp neoverse-v2 -Mvect=simd -fast -mp -I${TACC_MPI_DIR}/include"
-export LDFLAGS="-tp neoverse-v2 -Mvect=simd -fast -mp -L${TACC_MPI_DIR}/lib"
+export CFLAGS="-I${TACC_MPI_DIR}/include"
+export CXXFLAGS="-I${TACC_MPI_DIR}/include"
+export LDFLAGS="-L${TACC_MPI_DIR}/lib"
 
 # Build and install AMReX
 echo "Building AMReX..."
