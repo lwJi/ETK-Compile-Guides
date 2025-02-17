@@ -1,0 +1,72 @@
+# arrangement/thorn                # implements (inherits) [friend] {shares} <requires>
+#
+CactusBase/Boundary                # boundary ( ) [ ] {cactus} < >
+CactusBase/CartGrid3D              # grid (coordbase) [ ] {driver} <CoordBase>
+CactusBase/CoordBase               # CoordBase ( ) [ ] { } < >
+CactusBase/Fortran                 # Fortran ( ) [ ] { } <Fortran>
+CactusBase/IOASCII                 # IOASCII ( ) [ ] {IO} <IOUtil>
+CactusBase/IOBasic                 # IOBasic (IO) [ ] {IO} <IOUtil>
+CactusBase/IOUtil                  # IO ( ) [ ] { } < >
+CactusBase/InitBase                # InitBase ( ) [ ] { } < >
+CactusBase/SymBase                 # SymBase ( ) [ ] { } < >
+CactusBase/Time                    # time ( ) [ ] {cactus} < >
+CactusNumerical/Dissipation        # Dissipation (grid,SphericalSurface,SpaceMask) [ ] {SpaceMask} < >
+CactusNumerical/LocalInterp        # LocalInterp ( ) [ ] { } < >
+CactusNumerical/LocalReduce        # LocalReduce ( ) [ ] { } < >
+CactusNumerical/MoL                # MethodOfLines ( ) [ ] {cactus,Cactus} < >
+CactusNumerical/Periodic           # Periodic ( ) [ ] { } <Slab>
+CactusNumerical/ReflectionSymmetry # ReflectionSymmetry ( ) [ ] { } < >
+CactusNumerical/RotatingSymmetry180 # RotatingSymmetry180 ( ) [ ] { } <Slab>
+CactusNumerical/Slab               # Slab ( ) [ ] { } < >
+CactusNumerical/SpaceMask          # SpaceMask (grid) [ ] { } <CartGrid3D>
+CactusNumerical/SphericalSurface   # SphericalSurface (grid) [ ] { } < >
+CactusUtils/Formaline              # Formaline ( ) [ ] {IO} < >
+CactusUtils/NaNChecker             # NaNChecker (Reduce) [ ] { } < >
+CactusUtils/SystemStatistics       # SystemStatistics ( ) [ ] { } < >
+CactusUtils/SystemTopology         # SystemTopology ( ) [ ] { } <MPI,hwloc>
+CactusUtils/TerminationTrigger     # TerminationTrigger ( ) [ ] {IO} < >
+CactusUtils/TimerReport            # timerreport ( ) [ ] {IO} < >
+CactusUtils/Trigger                # trigger (IO) [ ] { } < >
+CactusUtils/Vectors                # Vectors ( ) [ ] { } <Vectors>
+Carpet/Carpet                      # Driver ( ) [ ] {Cactus,InitBase,IO,CarpetLib} <CarpetLib,IOUtil,MPI,Timers>
+Carpet/CarpetEvolutionMask         # CarpetEvolutionMask ( ) [ ] { } <Carpet>
+Carpet/CarpetIOASCII               # IOASCII ( ) [ ] {cactus,IO} <Carpet,CarpetLib,IOUtil>
+Carpet/CarpetIOBasic               # IOBasic (IO) [ ] {cactus,IO} <Carpet,CarpetLib,IOUtil>
+Carpet/CarpetIOHDF5                # IOHDF5 ( ) [ ] {cactus,IO,Cactus} <Carpet,CarpetLib,HDF5,IOUtil>
+Carpet/CarpetIOScalar              # IOScalar ( ) [ ] {cactus,IO} <Carpet,CarpetLib,IOUtil>
+Carpet/CarpetIntegrateTest         # CarpetIntegrateTest (Reduce,Grid,Driver) [ ] { } <Carpet>
+Carpet/CarpetInterp2               # interp2 ( ) [ ] { } <Carpet,CarpetLib>
+Carpet/CarpetLib                   # CarpetLib ( ) [ ] {IO} <MPI,Vectors>
+Carpet/CarpetMask                  # CarpetMask (grid,SphericalSurface) [ ] {SphericalSurface} < >
+Carpet/CarpetReduce                # reduce ( ) [ ] { } <Carpet,CarpetLib,MPI>
+Carpet/CarpetRegrid2               # CarpetRegrid2 ( ) [ ] { } <Carpet,CarpetLib>
+Carpet/CarpetSlab                  # Hyperslab ( ) [ ] { } <Carpet,CarpetLib>
+Carpet/CarpetTracker               # CarpetTracker (SphericalSurface,CarpetRegrid2) [ ] {SphericalSurface} < >
+Carpet/CycleClock                  # CycleClock ( ) [ ] { } < >
+Carpet/LoopControl                 # LoopControl (CycleClock) [ ] {IO} < >
+Carpet/PeriodicCarpet              # PeriodicCarpet (grid) [ ] { } <Carpet,CarpetLib>
+Carpet/Timers                      # Timers ( ) [ ] {IO} <CarpetLib>
+EinsteinAnalysis/ADMAnalysis       # ADMAnalysis (ADMBase,StaticConformal,Grid,ADMMacros) [ ] {ADMBase} <CartGrid3D>
+EinsteinAnalysis/ADMMass           # ADMMass (ADMBase,ADMMacros,StaticConformal,SpaceMask) [ ] { } < >
+EinsteinAnalysis/AHFinderDirect    # AHFinderDirect (Grid,ADMBase,StaticConformal,SpaceMask,SphericalSurface,IO) [ ] {grid,ADMBase,SpaceMask,IO,SphericalSurface} <SpaceMask>
+EinsteinAnalysis/Multipole         # multipole (Grid) [ ] {IO} < >
+EinsteinAnalysis/PunctureTracker   # PunctureTracker (ADMBase,CarpetRegrid2,SphericalSurface) [ ] {SphericalSurface} < >
+EinsteinBase/ADMBase               # ADMBase (grid) [ ] { } <CartGrid3D>
+EinsteinBase/ADMCoupling           # ADMCoupling ( ) [ ] { } < >
+EinsteinBase/ADMMacros             # ADMMacros ( ) [ ] { } < >
+EinsteinBase/Constants             # Constants ( ) [ ] { } < >
+EinsteinBase/CoordGauge            # CoordGauge ( ) [ ] {ADMBase} < >
+EinsteinBase/StaticConformal       # StaticConformal (grid) [ ] {ADMBase} < >
+EinsteinBase/TmunuBase
+EinsteinInitialData/TwoPunctures   # TwoPunctures (ADMBase,StaticConformal,grid) [ ] {ADMBase,StaticConformal,IO} <GSL>
+ExternalLibraries/BLAS             # BLAS ( ) [ ] { } < >
+ExternalLibraries/FFTW3            # FFTW3 ( ) [ ] { } <FFTW3>
+ExternalLibraries/GSL              # GSL ( ) [ ] { } <GSL>
+ExternalLibraries/HDF5             # HDF5 ( ) [ ] { } <HDF5,zlib>
+ExternalLibraries/LAPACK           # LAPACK ( ) [ ] { } <BLAS>
+ExternalLibraries/MPI              # MPI ( ) [ ] { } <MPI>
+ExternalLibraries/hwloc            # hwloc ( ) [ ] { } <hwloc,zlib>
+ExternalLibraries/pthreads         # PTHREADS ( ) [ ] { } <PTHREADS>
+ExternalLibraries/zlib             # zlib ( ) [ ] { } < >
+
+Spacetime/Z4cowCarpet
