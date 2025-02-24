@@ -27,13 +27,13 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/amd/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/amd/Load-Module-CarpetX
     ```
 
 * Install `amrex` to `${ETKPATH}/amrex-lib`
 
     ```bash
-    ${ETKGUIDE}/amd/Install-AMReX.sh
+    ${ETKGUIDE}/amd/Install-AMReX
     ```
 
 * Compile `ETK`
@@ -41,10 +41,10 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/amd/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/amd/frontier.cfg -t thornlists/asterx-frontier.th --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/amd/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/../CompileScript/Compile-ETK --help` to display the availible options
 
 
 ## cray
@@ -52,13 +52,13 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/cray/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/cray/Load-Module-CarpetX
     ```
 
 * Install `amrex` to `${ETKPATH}/amrex-lib`
 
     ```bash
-    ${ETKGUIDE}/cray/Install-AMReX.sh
+    ${ETKGUIDE}/cray/Install-AMReX
     ```
 
 * Compile `ETK`
@@ -66,10 +66,10 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/cray/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/cray/frontier.cfg -t thornlists/asterx-frontier.th --fresh
     ```
     - type `yes` when it ask 'Setup configuration etk'
-    - run `${ETKGUIDE}/cray/Compile-ETK --help` to display the availible options
+    - run `${ETKGUIDE}/../CompileScript/Compile-ETK --help` to display the availible options
 
 
 ## submit runs
