@@ -10,8 +10,8 @@ if [ -z "${ETKPATH}" ]; then
 fi
 
 # Define paths
-#AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
-AMREX_REPO="https://github.com/lwJi/amrex.git"
+AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
+#AMREX_REPO="https://github.com/lwJi/amrex.git"
 AMREX_DIR="${ETKPATH}/amrex"
 AMREX_BUILD_DIR="${AMREX_DIR}/build"
 AMREX_LIB_DIR="${ETKPATH}/amrex-lib"
