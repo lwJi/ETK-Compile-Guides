@@ -30,7 +30,7 @@
     source ${ETKGUIDE}/amd/Load-Module-CarpetX
     ```
 
-* Install `amrex` to `${ETKPATH}/amrex-lib`
+* Install `amrex` to `${ETKPATH}/amrex-amd`
 
     ```bash
     ${ETKGUIDE}/amd/Install-AMReX
@@ -55,7 +55,7 @@
     source ${ETKGUIDE}/cray/Load-Module-CarpetX
     ```
 
-* Install `amrex` to `${ETKPATH}/amrex-lib`
+* Install `amrex` to `${ETKPATH}/amrex-cray`
 
     ```bash
     ${ETKGUIDE}/cray/Install-AMReX
