@@ -185,13 +185,13 @@ main() {
     elif [[ $HOSTNAME =~ green-prairies.cluster ]]; then
 
         if [[ "$executable_path" = /* ]]; then
-            export SUBMITJOBS_MPIRUN="mpiexec.hydra -machinefile $PBS_NODEFILE -np $(wc -l < "$PBS_NODEFILE") $executable_path $param_file"
+            export SUBMITJOBS_MPIRUN="srun --mpi=pmix $executable_path $param_file"
         else
-            export SUBMITJOBS_MPIRUN="mpiexec.hydra -machinefile $PBS_NODEFILE -np $(wc -l < "$PBS_NODEFILE") ../$executable_path $param_file"
+            export SUBMITJOBS_MPIRUN="srun --mpi=pmix ../$executable_path $param_file"
         fi
 
         # Submit jobs
-        submit_job_pbs
+        submit_job_slurm
 
     else
 
