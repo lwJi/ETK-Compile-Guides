@@ -20,7 +20,7 @@ display_usage() {
     echo "Usage: $0 -n <num_jobs:dependent_job_id> -e <executable_path> -p <param_file> [options]"
     echo ""
     echo "Required Arguments:"
-    echo "  -n  Number of jobs and dependent job ID"
+    echo "  -n  Number of jobs and dependent job ID (njobs:dependentID)"
     echo "  -e  Path to the executable"
     echo "  -p  Path to the parameter file"
     echo ""
