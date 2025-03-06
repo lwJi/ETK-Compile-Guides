@@ -47,8 +47,12 @@ create_and_organize_job_directory_and_launch_jobs() {
         exit 1
     fi
 
-    # Generate a new directory name
+    # Check if the output directory already exists
     local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
+    if [[ -d "$job_output_dir" ]]; then
+        echo "Error: Directory '${job_output_dir}' already exists. Please check."
+        exit 1
+    fi
 
     execute_command mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
     execute_command cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }

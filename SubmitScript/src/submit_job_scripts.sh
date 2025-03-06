@@ -4,14 +4,13 @@
 submit_job_slurm() {
     # Default value for last job ID if no dependency is provided
     local last_job_id=${dependent_job_id:-NoPreviousJob}
-    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
 
     # Loop through the number of jobs to be submitted
     for ((i = 1; i <= num_jobs; i++)); do
         # Start building the sbatch command
         local submit_command="sbatch -J $job_name \
-                                     -o ${job_output_dir}/stdout.txt \
-                                     -e ${job_output_dir}/stderr.txt"
+                                     -o stdout.txt \
+                                     -e stderr.txt"
 
         # Add resource-specific arguments if provided
         [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
@@ -41,14 +40,13 @@ submit_job_slurm() {
 submit_job_pbs() {
     # Default value for last job ID if no dependency is provided
     local last_job_id=${dependent_job_id:-NoPreviousJob}
-    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
 
     # Loop through the number of jobs to be submitted
     for ((i = 1; i <= num_jobs; i++)); do
         # Start building the qsub command
         local submit_command="qsub -N $job_name \
-                                   -o ${job_output_dir}/stdout.txt \
-                                   -e ${job_output_dir}/stderr.txt"
+                                   -o stdout.txt \
+                                   -e stderr.txt"
 
         # Add resource-specific arguments if provided
         [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
