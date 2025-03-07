@@ -5,5 +5,5 @@ module list
 # ------------------------------------------------------
 # Create a directory for the current run and launch jobs
 # ------------------------------------------------------
-export SUBMITJOBS_JOBOUTPUTDIR="$(generate_new_directory_name "${job_name}")"
+export SUBMITJOBS_JOBOUTPUTDIR="$(generate_new_directory_name "${SUBMITJOBS_JOBNAME}")"
 create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}"
