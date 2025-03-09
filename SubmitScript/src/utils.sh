@@ -48,7 +48,7 @@ create_and_organize_job_directory_and_launch_jobs() {
     fi
 
     # Check if the output directory already exists
-    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
+    local job_output_dir="$(generate_new_directory_name "${job_name}")"
     if [[ -d "$job_output_dir" ]]; then
         echo "Error: Directory '${job_output_dir}' already exists. Please check."
         exit 1
