@@ -81,13 +81,13 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/gcc-nvcc/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX.sh
     ```
 
 * Compile `AMReX`
 
     ```bash
-    ${ETKGUIDE}/gcc-nvcc/Install-AMReX.sh
+    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX.sh
     ```
 
 * Compile `ETK`
@@ -95,7 +95,7 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc-nvcc/vista.cfg --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc13-nvcc/vista.cfg --fresh
     ```
 
 ## gcc (for gg)
