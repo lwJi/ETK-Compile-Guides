@@ -30,6 +30,59 @@
 
 * If you are using nvc compilers, please use the following branch `rhass/nvhpc` for CarpetX.
 
+## gcc13 + nvcc
+
+* Set serial HDF5 for Silo
+
+    Replace the following in file `repos/ExternalLibraries-Silo/src/build.sh`
+
+    ```bash
+    HDF5_INC_DIR="/home1/apps/gcc14/hdf5/1.14.4/include"
+    HDF5_LIB_DIR="/home1/apps/gcc14/hdf5/1.14.4/lib"
+    ```
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX.sh
+    ```
+
+* Compile `AMReX`
+
+    ```bash
+    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX.sh
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc13-nvcc/vista.cfg --fresh
+    ```
+
+## gcc (for gg)
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
+    ```
+
+* Compile `AMReX`
+
+    ```bash
+    ${ETKGUIDE}/gcc/Install-AMReX.sh
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/vista.cfg --fresh
+    ```
+
 ## nvc + nvcc
 
 * Load Modules
@@ -74,50 +127,6 @@
     cd ${ETKPATH}/Cactus
 
     ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/nvc/vista.cfg --fresh
-    ```
-
-## gcc + nvcc
-
-* Load Modules
-
-    ```bash
-    source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX.sh
-    ```
-
-* Compile `AMReX`
-
-    ```bash
-    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX.sh
-    ```
-
-* Compile `ETK`
-
-    ```bash
-    cd ${ETKPATH}/Cactus
-
-    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc13-nvcc/vista.cfg --fresh
-    ```
-
-## gcc (for gg)
-
-* Load Modules
-
-    ```bash
-    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
-    ```
-
-* Compile `AMReX`
-
-    ```bash
-    ${ETKGUIDE}/gcc/Install-AMReX.sh
-    ```
-
-* Compile `ETK`
-
-    ```bash
-    cd ${ETKPATH}/Cactus
-
-    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/vista.cfg --fresh
     ```
 
 ## Submit a job
