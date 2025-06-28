@@ -4,13 +4,6 @@
 # Global Functions
 # ----------------
 
-# Execute and print the command
-execute_command() {
-    echo "\$ $@"
-    "$@"
-}
-export -f execute_command
-
 # Generate a new directory name for a job
 generate_new_directory_name() {
     # Base name for the new directory
@@ -54,14 +47,14 @@ create_and_organize_job_directory_and_launch_jobs() {
         exit 1
     fi
 
-    execute_command mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
-    execute_command cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
-    execute_command mv "stdout.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
-    execute_command mv "stderr.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
-    # execute_command mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
-    # execute_command mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
+    mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
+    cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
+    mv "stdout.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
+    mv "stderr.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
+    # mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
+    # mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
 
-    execute_command cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
+    cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
 
     # Launch jobs
     echo "======================================================================"
