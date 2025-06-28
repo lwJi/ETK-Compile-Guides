@@ -4,6 +4,13 @@
 # Global Functions
 # ----------------
 
+# Execute and print the command
+execute_command() {
+    echo "\$ $@"
+    "$@"
+}
+export -f execute_command
+
 # Generate a new directory name for a job
 generate_new_directory_name() {
     # Base name for the new directory

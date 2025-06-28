@@ -27,7 +27,7 @@ submit_job_slurm() {
         # Log and execute the sbatch command
         echo
         echo "Executing sbatch command:"
-        $submit_command | tee "${job_name}.last-sbatch"
+        execute_command $submit_command | tee "${job_name}.last-sbatch"
 
         # Capture the last job ID from sbatch output
         last_job_id=$(tail -n 1 "${job_name}.last-sbatch" | awk '{ print $NF }')
@@ -64,7 +64,7 @@ submit_job_pbs() {
         # Log and execute the qsub command
         echo
         echo "Executing qsub command:"
-        $submit_command | tee "${job_name}.last-qsub"
+        execute_command $submit_command | tee "${job_name}.last-qsub"
 
         # Capture the last job ID from qsub output
         last_job_id=$(tail -n 1 "${job_name}.last-qsub" | awk '{ print $NF }')
