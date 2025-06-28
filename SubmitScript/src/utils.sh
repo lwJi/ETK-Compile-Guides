@@ -47,35 +47,39 @@ create_and_organize_job_directory_and_launch_jobs() {
         exit 1
     fi
 
-    # Generate a new directory name
-    local job_output_dir=${SUBMITJOBS_JOBOUTPUTDIR}
-
-    execute_command mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
-    execute_command cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
-    # execute_command mv stdout.txt "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
-    # execute_command mv stderr.txt "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
-    # execute_command mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
-    # execute_command mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
-
-    execute_command cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
-
-    # Launch jobs
-    echo "======================================================================"
-    echo "Launch MPI code..."
-    echo "----------------------------------------------------------------------"
-    echo "MPIRUN = $SUBMITJOBS_MPIRUN"
-    echo
-    echo "Job started on $(hostname) at $(date)"
-    echo "======================================================================"
-
-    time $SUBMITJOBS_MPIRUN
-
-    if [ $? -ne 0 ]; then
-      echo "Error: MPI job failed."
-      exit 1
+    # Check if the output directory already exists
+    local job_output_dir="$(generate_new_directory_name "${job_name}")"
+    if [[ -d "$job_output_dir" ]]; then
+        echo "Error: Directory '${job_output_dir}' already exists. Please check."
+        exit 1
     fi
 
-    echo "======================================================================"
-    echo "Job Ended at $(date)"
+    mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
+    cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
+    mv "stdlog.$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: stdlog.$job_id not found"
+    # mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
+
+    (
+        cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
+
+        # Launch jobs
+        echo "======================================================================"
+        echo "Launch MPI code..."
+        echo "----------------------------------------------------------------------"
+        echo "MPIRUN = $SUBMITJOBS_MPIRUN"
+        echo
+        echo "Job started on $(hostname) at $(date)"
+        echo "======================================================================"
+
+        time $SUBMITJOBS_MPIRUN > stdout.txt 2> stderr.txt
+
+        if [ $? -ne 0 ]; then
+          echo "Error: MPI job failed."
+          exit 1
+        fi
+
+        echo "======================================================================"
+        echo "Job Ended at $(date)"
+    )
 }
 export -f create_and_organize_job_directory_and_launch_jobs
