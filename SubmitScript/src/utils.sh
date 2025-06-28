@@ -49,30 +49,30 @@ create_and_organize_job_directory_and_launch_jobs() {
 
     mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
     cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
-    mv "stdout.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stdout.txt not found"
-    mv "stderr.txt" "$job_output_dir" 2>/dev/null || echo "Warning: stderr.txt not found"
     # mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
     # mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
 
-    cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
+    (
+        cd "$job_output_dir" || { echo "Error: Failed to change directory to $job_output_dir"; exit 1; }
 
-    # Launch jobs
-    echo "======================================================================"
-    echo "Launch MPI code..."
-    echo "----------------------------------------------------------------------"
-    echo "MPIRUN = $SUBMITJOBS_MPIRUN"
-    echo
-    echo "Job started on $(hostname) at $(date)"
-    echo "======================================================================"
+        # Launch jobs
+        echo "======================================================================"
+        echo "Launch MPI code..."
+        echo "----------------------------------------------------------------------"
+        echo "MPIRUN = $SUBMITJOBS_MPIRUN"
+        echo
+        echo "Job started on $(hostname) at $(date)"
+        echo "======================================================================"
 
-    time $SUBMITJOBS_MPIRUN
+        time $SUBMITJOBS_MPIRUN > stdout.txt 2> stderr.txt
 
-    if [ $? -ne 0 ]; then
-      echo "Error: MPI job failed."
-      exit 1
-    fi
+        if [ $? -ne 0 ]; then
+          echo "Error: MPI job failed."
+          exit 1
+        fi
 
-    echo "======================================================================"
-    echo "Job Ended at $(date)"
+        echo "======================================================================"
+        echo "Job Ended at $(date)"
+    )
 }
 export -f create_and_organize_job_directory_and_launch_jobs
