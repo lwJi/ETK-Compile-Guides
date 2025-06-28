@@ -56,7 +56,7 @@ create_and_organize_job_directory_and_launch_jobs() {
 
     mkdir -p "$job_output_dir" || { echo "Error: Failed to create directory $job_output_dir"; exit 1; }
     cp "$param_file" "$job_output_dir" || { echo "Error: Failed to copy $param_file to $job_output_dir"; exit 1; }
-    # mv "$job_name.o$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.o$job_id not found"
+    mv "stdlog.$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: stdlog.$job_id not found"
     # mv "$job_name.e$job_id" "$job_output_dir" 2>/dev/null || echo "Warning: $job_name.e$job_id not found"
 
     (

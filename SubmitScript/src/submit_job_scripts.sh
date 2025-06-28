@@ -8,7 +8,8 @@ submit_job_slurm() {
     # Loop through the number of jobs to be submitted
     for ((i = 1; i <= num_jobs; i++)); do
         # Start building the sbatch command
-        local submit_command="sbatch -J $job_name"
+        local submit_command="sbatch -J $job_name \
+                                     -o stdlog.%j"
 
         # Add resource-specific arguments if provided
         [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
@@ -42,7 +43,8 @@ submit_job_pbs() {
     # Loop through the number of jobs to be submitted
     for ((i = 1; i <= num_jobs; i++)); do
         # Start building the qsub command
-        local submit_command="qsub -N $job_name"
+        local submit_command="qsub -N $job_name \
+                                   -o stdlog.%j"
 
         # Add resource-specific arguments if provided
         [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
