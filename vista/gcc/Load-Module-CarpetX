@@ -14,5 +14,6 @@ module load fftw3
 module load gsl
 module load zlib
 module load adios2
+module load cmake/3.31.5
 
 #module load silo
