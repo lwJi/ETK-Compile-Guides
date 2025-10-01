@@ -63,6 +63,15 @@
 
 ## gcc (for gg)
 
+* Set serial HDF5 for Silo
+
+    Replace the following in file `repos/ExternalLibraries-Silo/src/build.sh`
+
+    ```bash
+    HDF5_INC_DIR="/home1/apps/gcc14/hdf5/1.14.4/include"
+    HDF5_LIB_DIR="/home1/apps/gcc14/hdf5/1.14.4/lib"
+    ```
+
 * Load Modules
 
     ```bash
