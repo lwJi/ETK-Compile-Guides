@@ -1,0 +1,51 @@
+16,19c16,19
+< export CC=mpicc       #${EXTERNAL_CC:-${CC}}
+< export CXX=mpicxx     #${EXTERNAL_CXX:-${CXX}}
+< export F90=mpifort    #${EXTERNAL_F90:-${F90}}
+< export LD=mpicc       #${EXTERNAL_LD:-${LD}}
+---
+> export CC=${EXTERNAL_CC:-${CC}}
+> export CXX=${EXTERNAL_CXX:-${CXX}}
+> export F90=${EXTERNAL_F90:-${F90}}
+> export LD=${EXTERNAL_LD:-${LD}}
+25,56d24
+< export FC=mpifort
+< export CCLD=mpicc 
+< export CXXLD=mpicxx
+< 
+< # Preprocessors for autoconf
+< export CPP="mpicc -E"
+< export CXXCPP="mpicxx -E"
+< export FPP="mpicc -E"
+< 
+< UCX_PREFIX=${UCX_PREFIX:-/opt/apps/ucx/1.17.0}
+< 
+< # Search paths + rpath (where to find libs)
+< export LDFLAGS="${LDFLAGS:-} \
+<   -L${UCX_PREFIX}/lib -Wl,-rpath,${UCX_PREFIX}/lib \
+<   -L${TACC_MPI_DIR}/lib -Wl,-rpath,${TACC_MPI_DIR}/lib \
+<   -L${TACC_HDF5_DIR}/lib -Wl,-rpath,${TACC_HDF5_DIR}/lib"
+< 
+< UCX_ABS_LIBS="${UCX_PREFIX}/lib/libucp.so ${UCX_PREFIX}/lib/libuct.so ${UCX_PREFIX}/lib/libucs.so"
+< 
+< test -f ${UCX_PREFIX}/lib/libucm.so && UCX_ABS_LIBS="${UCX_ABS_LIBS} ${UCX_PREFIX}/lib/libucm.so"
+< 
+< export LIBSUCX="-Wl,--push-state,--no-as-needed ${UCX_ABS_LIBS} -Wl,--pop-state"
+< 
+< # Force in MPI/HDF5 headers/libs for configure tests
+< export CPPFLAGS="-I${TACC_MPI_DIR}/include -I${TACC_HDF5_DIR}/include ${CPPFLAGS:-}"
+< 
+< export ac_cv_search_readline=no
+< export ac_cv_lib_readline_readline=no
+< export ac_cv_header_readline_readline_h=no
+< export ac_cv_lib_edit_el_init=no
+< export ac_cv_lib_editline_el_init=no
+< export ac_cv_header_editline_readline_h=no
+128c96
+< export LIBS="$(echo '' $(for lib in ${HDF5_LIBS} ${SILO_CCTK_LIBS}; do echo '' -l$lib; done)) ${LIBSUCX:-}"
+---
+> export LIBS="$(echo '' $(for lib in ${HDF5_LIBS} ${SILO_CCTK_LIBS}; do echo '' -l$lib; done))"
+136c104
+< ../configure --disable-zfp --disable-fortran ${SILO_OPTIMISE} --with-hdf5=${HDF5_INC_DIR},${HDF5_LIB_DIR} --prefix=${INSTALL_DIR} --libdir=${INSTALL_DIR}/lib --without-readline --without-editline --without-edit
+---
+> ../configure --disable-zfp --disable-fortran ${SILO_OPTIMISE} --with-hdf5=${HDF5_INC_DIR},${HDF5_LIB_DIR} --prefix=${INSTALL_DIR} --libdir=${INSTALL_DIR}/lib

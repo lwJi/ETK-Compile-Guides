@@ -1,0 +1,42 @@
+#!/bin/bash
+
+module reset
+
+#module unload openmpi
+#module unload nvidia
+
+module load gcc/14            # or gcc/15, but match HDF5 build!
+module load openmpi/5.0.5
+module load nvpl
+module load phdf5/1.14.6
+module load boost
+module load fftw3
+module load gsl
+module load zlib
+module load adios2
+module load cmake/3.31.5
+module load ucx/1.17.0
+
+#module load silo
+
+# use MPI wrappers for compilers
+unset CC CXX FC CCLD CXXLD LD LINKER
+
+export CC=mpicc
+export CXX=mpicxx
+export FC=mpifort
+export F90=mpifort
+
+# ensure libtool/autotools use the C++ linker for C++ targets
+export CCLD=mpicxx
+export CXXLD=mpicxx
+export LD=mpicxx
+
+# some build systems use LINKER
+export LINKER=mpicxx
+
+# include OpenMP
+export CFLAGS="${CFLAGS:-} -fopenmp"
+export CXXFLAGS="${CXXFLAGS:-} -fopenmp"
+export FFLAGS="${FFLAGS:-} -fopenmp"
+export LDFLAGS="${LDFLAGS:-} -fopenmp"
