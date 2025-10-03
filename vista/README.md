@@ -37,8 +37,15 @@
     Replace the following in file `repos/ExternalLibraries-Silo/src/build.sh`
 
     ```bash
+    mkdir build
+    cd build
+    # need to extract the actual directory with HDF5 in it from the potentially
+    # longer list HDF5 supplied
     HDF5_INC_DIR="/home1/apps/gcc14/hdf5/1.14.4/include"
     HDF5_LIB_DIR="/home1/apps/gcc14/hdf5/1.14.4/lib"
+    #export LIBS="$(echo '' $(for lib in ${HDF5_LIBS} ${SILO_CCTK_LIBS}; do echo '' -l$lib; done))"
+    #export CFLAGS="$CFLAGS $(echo '' $(for dir in ${HDF5_INC_DIRS}; do echo '' -I${dir}; done))"
+    #export LDFLAGS="$LDFLAGS $(echo '' $(for dir in ${HDF5_LIB_DIRS} ${SILO_CCTK_LIBDIRS}; do echo '' -L${dir} -Wl,-rpath,${dir}; done))"
     ```
 
 * Load Modules
@@ -68,8 +75,15 @@
     Replace the following in file `repos/ExternalLibraries-Silo/src/build.sh`
 
     ```bash
+    mkdir build
+    cd build
+    # need to extract the actual directory with HDF5 in it from the potentially
+    # longer list HDF5 supplied
     HDF5_INC_DIR="/home1/apps/gcc14/hdf5/1.14.4/include"
     HDF5_LIB_DIR="/home1/apps/gcc14/hdf5/1.14.4/lib"
+    #export LIBS="$(echo '' $(for lib in ${HDF5_LIBS} ${SILO_CCTK_LIBS}; do echo '' -l$lib; done))"
+    #export CFLAGS="$CFLAGS $(echo '' $(for dir in ${HDF5_INC_DIRS}; do echo '' -I${dir}; done))"
+    #export LDFLAGS="$LDFLAGS $(echo '' $(for dir in ${HDF5_LIB_DIRS} ${SILO_CCTK_LIBDIRS}; do echo '' -L${dir} -Wl,-rpath,${dir}; done))"
     ```
 
 * Load Modules
