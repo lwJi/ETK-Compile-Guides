@@ -106,6 +106,38 @@
     ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/vista.cfg --fresh
     ```
 
+## gcc + phdf5 (for gg)
+
+* Change Silo build script
+
+    Use `MPI` wrappers; include `ucx`, `mpi` and `phdf5` library paths explicitly; 
+    disable `readline/editline` in Silo configuration; ...
+    Have a look at `build-silo.sh` (used for successful compilation with `phdf5`, 
+    includes changes), `build-silo-old.sh` (unmodified script) and 
+    `diff-build-silo.txt` (output from `diff build-silo.sh build-silo-old.sh`).
+
+    Replace `repos/ExternalLibraries-Silo/src/build.sh` with `build-silo.sh`
+
+* Load Modules
+
+    ```bash
+    source ${ETKGUIDE}/gcc-phdf5/Load-Module-CarpetX
+    ```
+
+* Compile `AMReX`
+
+    ```bash
+    ${ETKGUIDE}/gcc-phdf5/Install-AMReX
+    ```
+
+* Compile `ETK`
+
+    ```bash
+    cd ${ETKPATH}/Cactus
+
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc-phdf5/vista.cfg --fresh
+    ```
+
 ## nvc + nvcc
 
 * Load Modules
