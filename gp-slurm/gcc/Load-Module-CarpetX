@@ -1,0 +1,5 @@
+#!/bin/bash
+
+module restore gcc12_4_0
+. /home/spack/rocky8/share/spack/setup-env.sh
+spack env activate gcc12

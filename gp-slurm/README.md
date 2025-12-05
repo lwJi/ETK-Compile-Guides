@@ -1,9 +1,5 @@
 # Install CarpetX on gp
 
-read `/home/spack/doc/Readme`
-
-check `/home/spack/rocky8/var/spack/environments/gcc12/spack.yaml`
-
 * Download repo
 
     ```bash
@@ -13,7 +9,7 @@ check `/home/spack/rocky8/var/spack/environments/gcc12/spack.yaml`
 * Set env variable
 
     ```bash
-    export ETKGUIDE="{path_to_ETK-Compile-Guides}/gp"
+    export ETKGUIDE="{path_to_ETK-Compile-Guides}/gp-slurm"
     export ETKPATH="$HOME/EinsteinToolkit"
     ```
 
@@ -28,12 +24,10 @@ check `/home/spack/rocky8/var/spack/environments/gcc12/spack.yaml`
 
 ## gcc
 
-* Load spack
+* Load modules and activate spack env `gcc_12`
 
     ```bash
-    . ~spack/newspack/share/spack/setup-env.sh
-    spack env list
-    spack env activate etk_gcc_13
+    source ${ETKGUIDE}/gcc/Load-Module-CarpetX.sh
     ```
 
 * Compile `ETK`
@@ -41,5 +35,11 @@ check `/home/spack/rocky8/var/spack/environments/gcc12/spack.yaml`
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/gcc/Compile-ETK --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/gp.cfg --fresh
     ```
+
+## Refs
+
+* read `/home/spack/doc/Readme`
+
+* check `/home/spack/rocky8/var/spack/environments/gcc12/spack.yaml` for installed packages in env `gcc_12`
