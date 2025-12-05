@@ -83,7 +83,7 @@ CactusUtils/Formaline
 CactusUtils/MemSpeed
 CactusUtils/NaNCatcher
 CactusUtils/Nice
-CactusUtils/NoMPI
+#CactusUtils/NoMPI
 CactusUtils/SystemStatistics
 CactusUtils/SystemTopology
 CactusUtils/TerminationTrigger
@@ -104,7 +104,7 @@ ExternalLibraries/GSL
 ExternalLibraries/HDF5
 ExternalLibraries/hwloc
 ExternalLibraries/LAPACK
-ExternalLibraries/libjpeg
+#ExternalLibraries/libjpeg
 ExternalLibraries/MPI
 ExternalLibraries/OpenSSL
 #ExternalLibraries/PAPI
@@ -152,6 +152,7 @@ CarpetX/Algo
 CarpetX/Arith
 CarpetX/BoxInBox
 CarpetX/CarpetX
+CarpetX/CarpetXRegrid
 CarpetX/CoordinatesX
 CarpetX/Derivs
 CarpetX/ErrorEstimator

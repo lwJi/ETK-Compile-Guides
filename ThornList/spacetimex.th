@@ -83,7 +83,7 @@ CactusUtils/Formaline
 CactusUtils/MemSpeed
 CactusUtils/NaNCatcher
 CactusUtils/Nice
-CactusUtils/NoMPI
+#CactusUtils/NoMPI
 CactusUtils/SystemStatistics
 CactusUtils/SystemTopology
 CactusUtils/TerminationTrigger
@@ -104,7 +104,7 @@ ExternalLibraries/GSL
 ExternalLibraries/HDF5
 ExternalLibraries/hwloc
 ExternalLibraries/LAPACK
-ExternalLibraries/libjpeg
+#ExternalLibraries/libjpeg
 ExternalLibraries/MPI
 ExternalLibraries/OpenSSL
 #ExternalLibraries/PAPI
@@ -171,13 +171,15 @@ SpacetimeX/AHFinderDirect
 #SpacetimeX/AHFinderX
 SpacetimeX/BrillLindquist
 SpacetimeX/Cowling
+SpacetimeX/Multipole
 SpacetimeX/NewRadX
 SpacetimeX/TestNewRadX
 SpacetimeX/Punctures
 SpacetimeX/PunctureTracker
-SpacetimeX/SphericalHarmonics
+#SpacetimeX/SphericalHarmonics
 SpacetimeX/SphericalSurface
 SpacetimeX/StaticTrumpet
 SpacetimeX/TwoPuncturesX
-SpacetimeX/Weyl
+#SpacetimeX/Weyl
+SpacetimeX/WeylScal4
 SpacetimeX/Z4c
