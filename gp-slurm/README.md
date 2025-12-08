@@ -35,7 +35,7 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/gp.cfg --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc/gp.cfg -t thornlist/asterx-gp.th --fresh
     ```
 
 ## Refs
