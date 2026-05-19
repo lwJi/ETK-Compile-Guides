@@ -10,7 +10,7 @@ if [ -z "${ETKPATH}" ]; then
 fi
 
 # Define paths
-AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
+AMREX_REPO="https://github.com/lwJi/amrex.git"
 AMREX_DIR="${ETKPATH}/amrex"
 AMREX_BUILD_DIR="${AMREX_DIR}/build"
 AMREX_LIB_DIR="${ETKPATH}/amrex-lib-oneapi"
@@ -19,7 +19,7 @@ AMREX_LIB_DIR="${ETKPATH}/amrex-lib-oneapi"
 echo "Cloning AMReX repository..."
 cd "${ETKPATH}"
 if [[ ! -d "${AMREX_DIR}" ]]; then
-    git clone "${AMREX_REPO}" amrex
+    git clone -b dev-101025 "${AMREX_REPO}" amrex
 else
     echo "AMReX directory already exists. Skipping clone."
 fi
