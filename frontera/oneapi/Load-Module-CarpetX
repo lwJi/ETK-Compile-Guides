@@ -13,5 +13,7 @@ module load petsc/3.22
 module load papi/5.7.0
 module load hwloc/1.11.13
 module load cmake/3.24.2
-module load adios2/2.10.2
+
+# We are not using the system-provided ADIOS2 because it triggers UCX warnings
+#module load adios2/2.10.2
 
