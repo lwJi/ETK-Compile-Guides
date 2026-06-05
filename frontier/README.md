@@ -71,13 +71,12 @@
     - type `yes` when it ask 'Setup configuration etk'
     - run `${ETKGUIDE}/../CompileScript/Compile-ETK --help` to display the availible options
 
-### cray-20.0.0 (test stack)
+### cray-20.0.0
 
 * Same steps as `cray`, but use `cray-20.0.0` in place of `cray` in the commands above
   (`amrex` is installed to `${ETKPATH}/amrex-cray-20.0.0`)
 * This builds against the newer coherent CPE stack: `cpe/25.09` + `cce/20.0.0` +
   `cray-mpich/9.0.1` + `rocm/6.4.2`
-* Validate before production use
 
 
 ## submit runs
