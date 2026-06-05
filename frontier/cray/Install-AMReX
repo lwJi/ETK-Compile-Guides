@@ -13,7 +13,7 @@ fi
 AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
 #AMREX_REPO="https://github.com/lwJi/amrex.git"
 AMREX_DIR="${ETKPATH}/amrex"
-AMREX_BUILD_DIR="${AMREX_DIR}/build"
+AMREX_BUILD_DIR="${AMREX_DIR}/build-cray-18.0.0"
 AMREX_LIB_DIR="${ETKPATH}/amrex-cray"
 
 # Clone AMReX repository

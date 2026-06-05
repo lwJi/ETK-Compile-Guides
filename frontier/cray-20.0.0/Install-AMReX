@@ -13,8 +13,10 @@ fi
 AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
 #AMREX_REPO="https://github.com/lwJi/amrex.git"
 AMREX_DIR="${ETKPATH}/amrex"
-AMREX_BUILD_DIR="${AMREX_DIR}/build"
-AMREX_LIB_DIR="${ETKPATH}/amrex-cray"
+# Keep the cpe/25.09 + cce/20.0.0 + rocm/6.4.2 build separate from the
+# production amrex-cray build (do not reuse build products between stacks)
+AMREX_BUILD_DIR="${AMREX_DIR}/build-cray-20.0.0"
+AMREX_LIB_DIR="${ETKPATH}/amrex-cray-20.0.0"
 
 # Clone AMReX repository
 echo "Cloning AMReX repository..."
