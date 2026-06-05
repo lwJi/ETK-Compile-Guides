@@ -78,6 +78,9 @@
 * This builds against the newer coherent CPE stack: `cpe/25.09` + `cce/20.0.0` +
   `cray-mpich/9.0.1` + `rocm/6.4.2`
 
+### cray-20.0.0-adios2-patch
+
+* Same steps as `cray-20.0.0`
 
 ## submit runs
 
