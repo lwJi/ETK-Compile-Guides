@@ -34,9 +34,15 @@ for dir in "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"; do
 done
 
 # Set environment variables for compiler and flags
-export CC=$(which mpicc)
-export CXX=$(which mpicxx)
-export FC=$(which mpifort)
+for tool in mpicc mpicxx mpifort; do
+    if ! command -v "${tool}" >/dev/null 2>&1; then
+        echo "Error: required compiler '${tool}' not found in PATH." >&2
+        exit 1
+    fi
+done
+export CC=$(command -v mpicc)
+export CXX=$(command -v mpicxx)
+export FC=$(command -v mpifort)
 export CFLAGS="-I${TACC_MPI_DIR}/include -fopenmp"
 export CXXFLAGS="-I${TACC_MPI_DIR}/include -fopenmp"
 export LDFLAGS="-L${TACC_MPI_DIR}/lib -fopenmp"
@@ -51,7 +57,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DAMReX_OMP=ON \
       -DAMReX_PARTICLES=ON \
       -DAMReX_PRECISION=DOUBLE \
-      .. && \
+      ..
 make -j24 install
 
 echo "AMReX has been successfully built and installed in ${AMREX_LIB_DIR}."

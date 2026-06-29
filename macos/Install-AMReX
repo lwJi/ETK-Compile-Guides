@@ -7,7 +7,7 @@ set -e
 AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
 AMREX_DIR="${REPO}/amrex"
 AMREX_BUILD_DIR="${AMREX_DIR}/build"
-AMREX_LIB_DIR="${WORK}/local/amrex"
+AMREX_LIB_DIR="${HOME}/local/amrex"
 
 # Clone AMReX repository
 echo "Cloning AMReX repository..."
@@ -28,10 +28,16 @@ for dir in "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"; do
 done
 
 # Set environment variables for compiler and flags
-export CC=$(which mpicc)
-export CXX=$(which mpicxx)
-export FC=$(which mpif90)
-export F90=$(which mpif90)
+for tool in mpicc mpicxx mpif90; do
+    if ! command -v "${tool}" >/dev/null 2>&1; then
+        echo "Error: required compiler '${tool}' not found in PATH." >&2
+        exit 1
+    fi
+done
+export CC=$(command -v mpicc)
+export CXX=$(command -v mpicxx)
+export FC=$(command -v mpif90)
+export F90=$(command -v mpif90)
 
 #export CFLAGS="-I${TACC_MPI_DIR}/include"
 #export CXXFLAGS="-I${TACC_MPI_DIR}/include"
@@ -47,7 +53,7 @@ cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DAMReX_OMP=ON \
       -DAMReX_PARTICLES=ON \
       -DAMReX_PRECISION=DOUBLE \
-      .. && \
+      ..
 make -j8 install
 
 echo "AMReX has been successfully built and installed in ${AMREX_LIB_DIR}."
