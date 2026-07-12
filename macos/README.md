@@ -9,7 +9,7 @@
 * Set env variable
 
     ```bash
-    export ETKGUIDE="{path_to_ETK-Compile-Guides}/vista"
+    export ETKGUIDE="{path_to_ETK-Compile-Guides}/macos"
     export ETKPATH="$HOME/EinsteinToolkit"
     ```
 
@@ -22,14 +22,12 @@
     ./GetComponents --root Cactus --parallel --no-shallow https://raw.githubusercontent.com/lwJi/ETK-Compile-Guides/main/ThornList/asterx.th
     ```
 
-* If you are using nvc compilers, please use the following branch `rhass/nvhpc` for CarpetX.
-
-## gcc
+## gcc (Homebrew GCC 15)
 
 * Compile `AMReX`
 
     ```bash
-    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX.sh
+    ${ETKGUIDE}/Install-AMReX
     ```
 
 * Compile `ETK`
@@ -37,6 +35,26 @@
     ```bash
     cd ${ETKPATH}/Cactus
 
-    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/gcc13-nvcc/vista.cfg --fresh
+    ${ETKGUIDE}/../CompileScript/Compile-ETK -c ${ETKGUIDE}/macos.cfg --fresh
+    ```
+
+## Run
+
+* Add `SubmitScript` to your path
+
+    ```bash
+    export PATH="{path_to_ETK-Compile-Guides}/SubmitScript:$PATH"
+    ```
+
+* Copy the example subscript next to your parameter file and adjust the environment setup if needed
+
+    ```bash
+    cp ${ETKGUIDE}/../SubmitScript/example/macos/subscript .
+    ```
+
+* Run in the foreground (no scheduler): `-m` sets `mpirun -np`, `-o` sets `OMP_NUM_THREADS`, and `-n` must be `1`
+
+    ```bash
+    SubmitJobs -n 1 -e ${ETKPATH}/Cactus/exe/cactus_etk -p my.par -m 4 -o 2 -s subscript
     ```
 
