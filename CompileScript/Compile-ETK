@@ -93,12 +93,14 @@ main() {
         fi
 
         # Fresh compile steps
-        execute_command gmake "$executable_name" options="$config_file"
+        # PROMPT=no: skip Cactus' interactive "Setup configuration (yes)?"
+        # confirmation, which auto-cancels when stdin is not a terminal
+        execute_command gmake "$executable_name" options="$config_file" PROMPT=no
     fi
 
     # Compilation with specified cores
     execute_command cp "$thorn_list" "configs/$executable_name/ThornList"
-    execute_command gmake -j"$num_cores" "$executable_name"
+    execute_command gmake -j"$num_cores" "$executable_name" PROMPT=no
 }
 
 # Entry point
