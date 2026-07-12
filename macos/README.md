@@ -24,6 +24,10 @@
 
 ## gcc (Homebrew GCC 15)
 
+```
+brew install c-blosc2
+```
+
 * Compile `AMReX`
 
     ```bash
