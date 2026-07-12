@@ -35,6 +35,36 @@ submit_job_slurm() {
     done
 }
 
+# Run job locally in the foreground (no scheduler, e.g. macOS)
+submit_job_local() {
+    # Job chaining is a scheduler concept; only a single foreground run is supported
+    if [[ "$num_jobs" -gt 1 ]]; then
+        echo "Error: local runs support only a single job, got -n $num_jobs." >&2
+        exit 1
+    fi
+    if [[ -n "$dependent_job_id" ]]; then
+        echo "Error: job dependencies are not supported for local runs." >&2
+        exit 1
+    fi
+
+    # Scheduler-only options have no effect locally
+    [[ -n "$num_nodes" ]] && echo "Note: -N (nodes) is ignored for local runs."
+    [[ -n "$wall_time" ]] && echo "Note: -t (wall time) is ignored for local runs."
+    [[ -n "$queue_name" ]] && echo "Note: -q (queue) is ignored for local runs."
+    [[ -n "$allocation_name" ]] && echo "Note: -a (allocation) is ignored for local runs."
+
+    [[ -n "$num_omp_threads" ]] && export OMP_NUM_THREADS=$num_omp_threads
+
+    # Use the PID as the job ID and mirror the scheduler's stdout file
+    export SUBMITJOBS_JOBID=$$
+
+    echo
+    echo "Running subscript locally:"
+    execute_command bash "$subscript" 2>&1 | tee "stdlog.$SUBMITJOBS_JOBID"
+
+    return ${PIPESTATUS[0]}
+}
+
 # Submit job using PBS
 submit_job_pbs() {
     # Default value for last job ID if no dependency is provided

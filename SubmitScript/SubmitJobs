@@ -185,6 +185,23 @@ main() {
         # Submit jobs
         submit_job_slurm
 
+    elif [[ $OSTYPE == darwin* ]]; then
+
+        # No scheduler on macOS: run in the foreground with mpirun
+        if [[ -z "$num_mpi_tasks" ]]; then
+            echo "Error: -m <num_mpi_tasks> is required on macOS (used for mpirun -np)." >&2
+            exit 1
+        fi
+
+        if [[ "$executable_path" = /* ]]; then
+            export SUBMITJOBS_MPIRUN="mpirun -np $num_mpi_tasks $executable_path $param_file"
+        else
+            export SUBMITJOBS_MPIRUN="mpirun -np $num_mpi_tasks ../$executable_path $param_file"
+        fi
+
+        # Run jobs
+        submit_job_local
+
     else
 
         echo "Unknown host: $HOSTNAME"

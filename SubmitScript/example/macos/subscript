@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# No scheduler on macOS: this script is run in the foreground by SubmitJobs.
+# Any environment setup goes here...
+#export OMP_PROC_BIND=true
+#export OMP_PLACES=cores
+
+# ------------------------------------------------------
+# Create a directory for the current run and launch jobs
+# ------------------------------------------------------
+create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SUBMITJOBS_JOBID}"
