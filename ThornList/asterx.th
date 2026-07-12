@@ -187,7 +187,7 @@ SpacetimeX/Z4c
 # AsterX thorns
 !TARGET   = $ARR
 !TYPE     = git
-!URL      = https://github.com/jaykalinani/AsterX.git
+!URL      = https://github.com/EinsteinToolkit/AsterX.git
 !REPO_PATH= $2
 !CHECKOUT =
 AsterX/AsterMasks
