@@ -29,8 +29,8 @@ brew install gcc
 ```
 
 ```
-export HOMEBREW_CC=gcc-15 #clang-13
-export HOMEBREW_CXX=g++-15 #clang++-13
+export HOMEBREW_CC=gcc-15
+export HOMEBREW_CXX=g++-15
 
 export CC=$(which mpicc)
 export CXX=$(which mpicxx)
@@ -42,6 +42,8 @@ brew install --build-from-source hdf5
 brew install make
 brew install c-blosc2
 ```
+
+use branch `macos` of fork `https://github.com/lwJi/ExternalLibraries-ADIOS2`
 
 * Compile `AMReX`
 
