@@ -25,6 +25,21 @@
 ## gcc (Homebrew GCC 15)
 
 ```
+brew install gcc
+```
+
+```
+export HOMEBREW_CC=gcc-15 #clang-13
+export HOMEBREW_CXX=g++-15 #clang++-13
+
+export CC=$(which mpicc)
+export CXX=$(which mpicxx)
+```
+
+```
+brew install open-mpi
+brew install --build-from-source hdf5
+brew install make
 brew install c-blosc2
 ```
 
