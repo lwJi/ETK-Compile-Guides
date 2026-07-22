@@ -26,10 +26,10 @@ display_usage() {
     echo "  --fresh          Perform a fresh compilation"
     echo "  -e <executable>  Specify the executable name (default: $executable_name)"
     echo "  -t <thorn_list>  Specify the thorn list file (default: $thorn_list)"
-    echo "  -c <config_file> Specify the configuration file (default: $config_file)"
+    echo "  -c <config_file> Specify the configuration file (required with --fresh)"
     echo "  -j <num_cores>   Specify the number of cores for parallel build (default: $num_cores)"
     echo
-    echo "All arguments are optional. If not specified, default values are used."
+    echo "Arguments are optional unless noted; unspecified ones use default values."
 }
 
 # Handle argument parsing
@@ -73,18 +73,42 @@ main() {
     # Default values
     executable_name="etk"
     thorn_list="thornlists/asterx.th"
-    config_file="${ETKGUIDE}/gcc/vista.cfg"
+    config_file=""
     perform_fresh_compile=false
     num_cores=24
 
     # Process arguments
     process_arguments "$@"
 
+    config_path="configs/$executable_name"
+
+    # Sanity checks before touching the build tree
+    if [[ ! -f "$thorn_list" ]]; then
+        echo "Error: Thorn list '$thorn_list' not found." >&2
+        exit 1
+    fi
+
+    if [[ $perform_fresh_compile == true ]]; then
+        if [[ -z "$config_file" ]]; then
+            echo "Error: --fresh requires a configuration file (-c <config_file>)." >&2
+            display_usage
+            exit 1
+        fi
+        if [[ ! -f "$config_file" ]]; then
+            echo "Error: Configuration file '$config_file' not found." >&2
+            exit 1
+        fi
+    elif [[ ! -d "$config_path" ]]; then
+        # Without this guard, gmake would silently create a new configuration
+        # from the bare environment (no option list), leaving a broken config
+        echo "Error: Configuration '$executable_name' does not exist yet." >&2
+        echo "Run with --fresh -c <config_file> to create it first." >&2
+        exit 1
+    fi
+
     # Main script logic
     if [[ $perform_fresh_compile == true ]]; then
         echo "Performing a fresh compile for '$executable_name' with $config_file using $num_cores cores..."
-
-        config_path="configs/$executable_name"
 
         # Remove existing config directory
         if [[ -d "$config_path" ]]; then
