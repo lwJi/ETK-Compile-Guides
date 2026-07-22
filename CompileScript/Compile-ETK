@@ -6,10 +6,11 @@
 # Global Functions
 # ----------------
 
-# Execute and print the command
+# Execute and print the command; abort on failure so a broken step
+# (e.g. a failed reconfigure) never cascades into the next one
 execute_command() {
     echo "\$ $@"
-    "$@"
+    "$@" || { local status=$?; echo "Error: command failed with status $status: $@" >&2; exit $status; }
 }
 export -f execute_command
 
