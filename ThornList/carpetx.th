@@ -144,7 +144,8 @@ Numerical/AEILocalInterp
 # CarpetX thorns
 !TARGET   = $ARR
 !TYPE     = git
-!URL      = https://github.com/EinsteinToolkit/CarpetX.git
+!URL      = https://github.com/lwJi/CarpetX.git
+!REPO_BRANCH = dev
 !REPO_PATH= $2
 !CHECKOUT =
 CarpetX/ADMBaseX
