@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -euo pipefail
+
+cd @RUNDIR@-active
+
+echo "DeltaAI job configuration:"
+echo "  nodes:                  @NODES@"
+echo "  MPI processes:          @NUM_PROCS@"
+echo "  MPI processes per node: @NODE_PROCS@"
+echo "  CPU cores per process:  @NUM_THREADS@"
+echo "  GPUs per process:       1"
+
+module list
+date
+hostname
+
+export SIMULATION_ID='@SIMULATION_ID@'
+export CACTUS_MAX_MEMORY='@(@MEMORY@ * 1024)@'
+export CACTUS_NUM_PROCS='@NUM_PROCS@'
+export CACTUS_NUM_THREADS='@NUM_THREADS@'
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export GLIBCXX_FORCE_NEW=1
+export MPICH_GPU_SUPPORT_ENABLED=1
+export OMP_DISPLAY_ENV=FALSE
+export OMP_NUM_THREADS='@NUM_THREADS@'
+export OMP_PLACES=cores
+export OMP_PROC_BIND=spread
+export OMP_STACKSIZE=64M
+
+mkdir -p SIMFACTORY
+env | sort > SIMFACTORY/ENVIRONMENT
+printf '%s\n' "${SLURM_NODELIST:-unknown}" > SIMFACTORY/NODES
+
+export CACTUS_STARTTIME
+CACTUS_STARTTIME="$(date +%s)"
+
+time srun \
+  --ntasks=@NUM_PROCS@ \
+  --ntasks-per-node=@NODE_PROCS@ \
+  --cpus-per-task=@NUM_THREADS@ \
+  --gpus-per-task=1 \
+  --gpu-bind=closest \
+  --cpu-bind=cores \
+  --distribution=block:block \
+  "@EXECUTABLE@" -L 3 "@PARFILE@"
+
+date
