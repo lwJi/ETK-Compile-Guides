@@ -1,0 +1,27 @@
+#!/bin/bash
+#SBATCH --output=@RUNDIR@/@SIMULATION_NAME@.out
+#SBATCH --error=@RUNDIR@/@SIMULATION_NAME@.err
+#SBATCH --account=@ALLOCATION@
+#SBATCH --job-name=@SHORT_SIMULATION_NAME@
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=@EMAIL@
+#SBATCH --time=@WALLTIME@
+#SBATCH --partition=@QUEUE@
+#SBATCH --nodes=@NODES@
+#SBATCH --ntasks=@NUM_PROCS@
+#SBATCH --ntasks-per-node=@NODE_PROCS@
+#SBATCH --cpus-per-task=@NUM_THREADS@
+#SBATCH --gpus-per-node=@NODE_PROCS@
+#SBATCH --gpus-per-task=1
+#SBATCH --gpu-bind=closest
+#SBATCH --exclusive
+#SBATCH --mem=0
+#SBATCH --no-requeue
+#SBATCH @("@CHAINED_JOB_ID@" != "" ? "--dependency=afterany:@CHAINED_JOB_ID@" : "")@
+#SBATCH --export=ALL
+
+set -euo pipefail
+
+cd @SOURCEDIR@
+@SIMFACTORY@ run @SIMULATION_NAME@ --basedir=@BASEDIR@ --machine=@MACHINE@ \
+  --restart-id=@RESTART_ID@ @FROM_RESTART_COMMAND@
