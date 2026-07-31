@@ -76,7 +76,7 @@ main() {
     thorn_list="thornlists/asterx.th"
     config_file=""
     perform_fresh_compile=false
-    num_cores=24
+    num_cores=8
 
     # Process arguments
     process_arguments "$@"
