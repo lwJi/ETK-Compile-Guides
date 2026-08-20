@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+CMAKE_VERSION=3.30.7
+ETKPATH="${ETKPATH:-/home/jkalinan/EinsteinToolkit}"
+CMAKE_PREFIX="${ETKPATH}/cmake"
+CMAKE_WORK="${ETKPATH}/dependencies/cmake-${CMAKE_VERSION}"
+CMAKE_ARCHIVE="${CMAKE_WORK}/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz"
+
+mkdir -p "${CMAKE_WORK}" "${CMAKE_PREFIX}"
+
+if [[ ! -f "${CMAKE_ARCHIVE}" ]]; then
+  curl -fL \
+    "https://cmake.org/files/v3.30/cmake-${CMAKE_VERSION}-linux-x86_64.tar.gz" \
+    -o "${CMAKE_ARCHIVE}"
+fi
+
+tar -xzf "${CMAKE_ARCHIVE}" \
+  --strip-components=1 \
+  -C "${CMAKE_PREFIX}"
+
+"${CMAKE_PREFIX}/bin/cmake" --version

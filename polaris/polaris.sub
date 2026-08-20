@@ -1,0 +1,13 @@
+#!/bin/bash
+#PBS -A @ALLOCATION@
+#PBS -q @QUEUE@
+#PBS -l select=@NODES@:system=polaris
+#PBS -l filesystems=home:eagle
+#PBS -l walltime=@WALLTIME@
+#PBS -N @SHORT_SIMULATION_NAME@
+#PBS -o @RUNDIR@/@SIMULATION_NAME@.out
+#PBS -e @RUNDIR@/@SIMULATION_NAME@.err
+
+set -euo pipefail
+cd @SOURCEDIR@
+@SIMFACTORY@ run @SIMULATION_NAME@ --basedir=@BASEDIR@ --machine=@MACHINE@ --restart-id=@RESTART_ID@ @FROM_RESTART_COMMAND@
