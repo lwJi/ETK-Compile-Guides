@@ -11,7 +11,6 @@ Scripts and configuration files for building the [Einstein Toolkit](https://eins
 | `frontera-spack/` | TACC Frontera | alternative Spack-based environment setup |
 | `vista/` | TACC Vista | `gcc`, `gcc-nvcc`, `nvc`, `nvc-nvcc`, … variants |
 | `deltaai/` | NCSA DeltaAI | GH200 build and run guide |
-| `polaris/` | ALCF Polaris | GNU + CUDA build and PBS run guide |
 | `gp-pbs/`, `gp-slurm/` | Green Prairies | same cluster under PBS or Slurm |
 | `macos/` | macOS | local build, no scheduler |
 
