@@ -18,14 +18,16 @@ module load hipfort/6.4.2
 # more for carpetx
 ###############################################################################
 module load cray-fftw
-module load cray-hdf5-parallel/1.14.3.7
+# Use the Spack HDF5 that the openpmd-api and adios2 modules were built against
+# (Cray hdf5-parallel has a different soname, so mixing it with them loads two HDF5s)
+module load hdf5/1.14.6-mpi
 # NOTE: make sure the available openpmd-api/adios2 module variants are
 # compatible with the cpe/25.09 + cray-mpich/9.0.1 stack
 # (check with `module spider openpmd-api` and `module spider adios2`)
-module load openpmd-api
+module load openpmd-api/0.16.1-mpi
 module load boost
 module load hwloc
-module load adios2
+module load adios2/2.10.2-mpi
 module load libjpeg-turbo
 module load openblas
 module load zlib
