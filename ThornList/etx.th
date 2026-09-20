@@ -160,7 +160,6 @@ CarpetX/ErrorEstimator
 CarpetX/HydroBaseX
 CarpetX/Loop
 CarpetX/ODESolvers
-CarpetX/Subcycling
 CarpetX/TmunuBaseX
 
 # CarpetX thorns
