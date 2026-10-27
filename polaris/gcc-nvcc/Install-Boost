@@ -26,8 +26,9 @@ fi
 cd "${BOOST_SOURCE}"
 ./bootstrap.sh --prefix="${BOOST_PREFIX}" --with-libraries=filesystem,system
 ./b2 -j"${BUILD_JOBS}" \
+  --build-dir="${BOOST_WORK}/build-gcc14-cxx20" \
   toolset=gcc \
-  cxxstd=17 \
+  cxxstd=20 \
   variant=release \
   threading=multi \
   link=static \

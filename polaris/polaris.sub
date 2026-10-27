@@ -2,8 +2,10 @@
 #PBS -A @ALLOCATION@
 #PBS -q @QUEUE@
 #PBS -l select=@NODES@:system=polaris
+#PBS -l place=scatter
 #PBS -l filesystems=home:eagle
 #PBS -l walltime=@WALLTIME@
+#PBS -r y
 #PBS -N @SHORT_SIMULATION_NAME@
 #PBS -o @RUNDIR@/@SIMULATION_NAME@.out
 #PBS -e @RUNDIR@/@SIMULATION_NAME@.err
