@@ -236,21 +236,3 @@ BNSTools/MHD_Diagnostics
 BNSTools/Outflow
 BNSTools/VolumeIntegrals_GRMHDX
 BNSTools/VolumeIntegrals_vacuumX
-
-# BH Cluster thorns
-!TARGET   = $ARR
-!TYPE     = git
-!URL      = https://github.com/jaykalinani/GRTresna.git
-!REPO_PATH = $2
-!REPO_BRANCH = etk
-!CHECKOUT =
-GRTresna/GRTresnaIDX
-
-!TARGET   = $ARR
-!TYPE     = git
-!URL      = https://github.com/jaykalinani/BHClusterX.git
-!REPO_PATH = $2
-!CHECKOUT =
-BHClusterX/BHClusterX
-BHClusterX/BHCluster_Utils
-
