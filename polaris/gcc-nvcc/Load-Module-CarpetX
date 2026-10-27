@@ -1,0 +1,14 @@
+#!/bin/bash
+
+module reset
+module swap PrgEnv-nvidia PrgEnv-gnu
+module load nvidia-mixed/25.9
+module load cuda/13.0
+module load craype-accel-nvidia80
+module load cray-hdf5-parallel/1.14.3.9
+module load cray-fftw/3.3.10.11
+module unload darshan 2>/dev/null || true
+
+export MPICH_GPU_SUPPORT_ENABLED=1
+export ETKPATH="${ETKPATH:-/home/jkalinan/EinsteinToolkit}"
+export PATH="${ETKPATH}/cmake/bin:${PATH}"

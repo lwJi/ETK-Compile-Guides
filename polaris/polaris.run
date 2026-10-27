@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+# A single MPI abort must not create one multi-gigabyte core file per GPU rank.
+ulimit -c 0
+cd @RUNDIR@-active
+export SIMULATION_ID='@SIMULATION_ID@'
+export CACTUS_MAX_MEMORY='@(@MEMORY@ * 1024)@'
+export CACTUS_NUM_PROCS='@NUM_PROCS@'
+export CACTUS_NUM_THREADS='@NUM_THREADS@'
+export CUDA_DEVICE_ORDER=PCI_BUS_ID
+export MPICH_GPU_SUPPORT_ENABLED=1
+export OMP_NUM_THREADS='@NUM_THREADS@'
+export OMP_PLACES=cores
+export OMP_PROC_BIND=spread
+mkdir -p SIMFACTORY
+env | sort > SIMFACTORY/ENVIRONMENT
+printf '%s\n' "${PBS_NODEFILE:-unknown}" > SIMFACTORY/NODES
+mpiexec \
+  --no-transfer \
+  -n @NUM_PROCS@ \
+  --ppn @NODE_PROCS@ \
+  --depth=@NUM_THREADS@ \
+  --cpu-bind depth \
+  --env OMP_NUM_THREADS=@NUM_THREADS@ \
+  bash -c '
+    num_gpus=4
+    gpu=$((num_gpus - 1 - PMI_LOCAL_RANK % num_gpus))
+    export CUDA_VISIBLE_DEVICES="${gpu}"
+    if [[ "${POLARIS_AFFINITY_VERBOSE:-0}" == 1 ]]; then
+      printf "RANK=%s LOCAL_RANK=%s GPU=%s\n" "${PMI_RANK}" "${PMI_LOCAL_RANK}" "${gpu}"
+    fi
+    exec "$@"
+  ' bash "@EXECUTABLE@" -L 3 "@PARFILE@"

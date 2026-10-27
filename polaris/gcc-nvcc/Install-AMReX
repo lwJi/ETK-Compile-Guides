@@ -1,0 +1,77 @@
+#!/bin/bash
+
+set -euo pipefail
+
+AMREX_VERSION=26.09
+AMREX_SHA256=318320dac39597205754aa995904d27af7b79be1eb2ad042fb5e7158a9d29969
+ETKPATH="${ETKPATH:-/home/jkalinan/EinsteinToolkit}"
+AMREX_PREFIX="${ETKPATH}/amrex-gcc-nvcc"
+AMREX_WORK="${ETKPATH}/dependencies/amrex-${AMREX_VERSION}"
+AMREX_ARCHIVE="${AMREX_WORK}/amrex-${AMREX_VERSION}.tar.gz"
+AMREX_SOURCE="${AMREX_WORK}/amrex-${AMREX_VERSION}"
+AMREX_BUILD="${AMREX_WORK}/build-gcc14-cuda13-cxx20"
+BUILD_JOBS="${BUILD_JOBS:-4}"
+CMAKE="${ETKPATH}/cmake/bin/cmake"
+
+if [[ ! -x "${CMAKE}" ]]; then
+  echo "CMake is missing at ${CMAKE}; run Install-CMake first." >&2
+  exit 1
+fi
+
+if [[ "$(g++ -dumpversion | cut -d. -f1)" != 14 ]]; then
+  echo "GNU 14 is not active; source Load-Module-CarpetX first." >&2
+  exit 1
+fi
+
+if ! nvcc --version | grep -q 'release 13\.0'; then
+  echo "CUDA 13.0 is not active; source Load-Module-CarpetX first." >&2
+  exit 1
+fi
+
+mkdir -p "${AMREX_WORK}"
+
+if [[ ! -f "${AMREX_ARCHIVE}" ]]; then
+  curl -fL \
+    "https://github.com/AMReX-Codes/amrex/archive/refs/tags/${AMREX_VERSION}.tar.gz" \
+    -o "${AMREX_ARCHIVE}"
+fi
+
+printf '%s  %s\n' "${AMREX_SHA256}" "${AMREX_ARCHIVE}" | sha256sum --check --status
+
+if [[ ! -d "${AMREX_SOURCE}" ]]; then
+  tar -xzf "${AMREX_ARCHIVE}" -C "${AMREX_WORK}"
+fi
+
+"${CMAKE}" --fresh \
+  -S "${AMREX_SOURCE}" \
+  -B "${AMREX_BUILD}" \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_INSTALL_PREFIX="${AMREX_PREFIX}" \
+  -DCMAKE_C_COMPILER=cc \
+  -DCMAKE_CXX_COMPILER=CC \
+  -DCMAKE_CUDA_COMPILER=nvcc \
+  -DCMAKE_CUDA_HOST_COMPILER=g++ \
+  -DCMAKE_CXX_STANDARD=20 \
+  -DCMAKE_CXX_STANDARD_REQUIRED=ON \
+  -DCMAKE_CXX_EXTENSIONS=OFF \
+  -DCMAKE_CUDA_STANDARD=20 \
+  -DCMAKE_CUDA_STANDARD_REQUIRED=ON \
+  -DCMAKE_CUDA_EXTENSIONS=OFF \
+  -DCMAKE_CUDA_FLAGS="-I${CRAY_MPICH_DIR}/include" \
+  -DCMAKE_CUDA_ARCHITECTURES=80 \
+  -DMPI_C_ADDITIONAL_INCLUDE_DIRS="${CRAY_MPICH_DIR}/include" \
+  -DMPI_CXX_ADDITIONAL_INCLUDE_DIRS="${CRAY_MPICH_DIR}/include" \
+  -DAMReX_GPU_BACKEND=CUDA \
+  -DAMReX_GPU_RDC=ON \
+  -DAMReX_CUDA_FASTMATH=OFF \
+  -DAMReX_MPI=ON \
+  -DAMReX_OMP=ON \
+  -DAMReX_PARTICLES=ON \
+  -DAMReX_FORTRAN=OFF \
+  -DAMReX_ASSERTIONS=OFF \
+  -DAMReX_DIFFERENT_COMPILER=ON
+
+"${CMAKE}" --build "${AMREX_BUILD}" --parallel "${BUILD_JOBS}"
+"${CMAKE}" --install "${AMREX_BUILD}"
+
+echo "AMReX ${AMREX_VERSION} installed in ${AMREX_PREFIX}"
