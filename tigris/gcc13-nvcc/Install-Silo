@@ -1,0 +1,101 @@
+#!/bin/bash
+# Build Silo outside the ETK source tree on RIT tigris and install it into
+# ${ETKPATH}/silo-lib-gcc13 (= SILO_DIR in tigris.cfg).
+#
+# Why: with SILO_DIR = BUILD, the bundled ExternalLibraries/Silo build.sh
+# (since commit 549bb85, 2026-10-29) hands CMake LIBS=" -lhdf5_hl ..." with a
+# leading space via link_libraries(), which CMake rejects (policy CMP0004).
+# Prebuilding Silo and pointing SILO_DIR at it makes the Silo thorn only
+# *detect* the library, so the ETK source stays unmodified.
+#
+# The Silo source is the tarball shipped in the thorn's dist/ directory (read
+# only). Silo is compiled with the MPI wrappers so the parallel HDF5, whose
+# hdf5.h includes mpi.h, works without extra flags.
+#
+# Requires: source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX
+# Usage:    cd ${ETKPATH} && ${ETKGUIDE}/gcc13-nvcc/Install-Silo [num_jobs]
+#           num_jobs defaults to 2: the tigris login node caps each user at
+#           2 cores / 24 GB. Use more inside a Slurm job.
+
+# Exit on error
+set -e
+
+# ETKPATH: use the environment variable, else the current directory if it
+# contains the Cactus checkout
+if [ -z "${ETKPATH}" ]; then
+    if [ -d "${PWD}/Cactus/arrangements" ]; then
+        export ETKPATH="${PWD}"
+        echo "ETKPATH not set; using current directory ${ETKPATH}"
+    else
+        echo "Error: ETKPATH is not set. Please set it before running this script." >&2
+        exit 1
+    fi
+fi
+if [ -z "${ETK_HDF5_DIR}" ]; then
+    echo "Error: environment not loaded. Source Load-Module-CarpetX first." >&2
+    exit 1
+fi
+for tool in mpicc mpicxx cmake make tar; do
+    if ! command -v "${tool}" >/dev/null 2>&1; then
+        echo "Error: required tool '${tool}' not found in PATH." >&2
+        exit 1
+    fi
+done
+
+NJOBS=${1:-2}
+
+# Define paths
+SILO_DIST_DIR="${ETKPATH}/Cactus/arrangements/ExternalLibraries/Silo/dist"
+SILO_TARBALL=${SILO_TARBALL:-$(ls "${SILO_DIST_DIR}"/Silo-*.tar 2>/dev/null | sort -V | tail -n 1)}
+SILO_SRC_DIR="${ETKPATH}/silo-src"
+SILO_LIB_DIR="${ETKPATH}/silo-lib-gcc13"
+
+if [[ ! -f "${SILO_TARBALL}" ]]; then
+    echo "Error: no Silo tarball found in ${SILO_DIST_DIR} (set SILO_TARBALL to override)." >&2
+    exit 1
+fi
+SILO_NAME=$(basename "${SILO_TARBALL}" .tar)
+echo "Using ${SILO_TARBALL}"
+
+# Fresh source and install directories
+for dir in "${SILO_SRC_DIR}" "${SILO_LIB_DIR}"; do
+    if [[ -d "${dir}" ]]; then
+        echo "Removing existing directory: ${dir}"
+        rm -rf "${dir}"
+    fi
+done
+mkdir -p "${SILO_SRC_DIR}"
+tar -xf "${SILO_TARBALL}" -C "${SILO_SRC_DIR}"
+mkdir -p "${SILO_SRC_DIR}/${SILO_NAME}/build"
+
+# Build and install Silo. Options mirror the thorn's build.sh; tools needing
+# extra dependencies (Qt silex, browser, python) are disabled.
+echo "Building ${SILO_NAME}..."
+cd "${SILO_SRC_DIR}/${SILO_NAME}/build"
+cmake -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_INSTALL_PREFIX="${SILO_LIB_DIR}" \
+      -DCMAKE_INSTALL_LIBDIR=lib \
+      -DCMAKE_C_COMPILER="$(command -v mpicc)" \
+      -DCMAKE_CXX_COMPILER="$(command -v mpicxx)" \
+      -DSILO_CONFIG_SITE=/dev/null \
+      -DSILO_ENABLE_HDF5=ON \
+      -DHDF5_ROOT="${ETK_HDF5_DIR}" \
+      -DSILO_ENABLE_FORTRAN=OFF \
+      -DSILO_ENABLE_ZFP=OFF \
+      -DSILO_ENABLE_FPZIP=OFF \
+      -DSILO_ENABLE_SILEX=OFF \
+      -DSILO_ENABLE_BROWSER=OFF \
+      -DSILO_ENABLE_PYTHON_MODULE=OFF \
+      -DBUILD_TESTING=OFF \
+      ..
+make -j"${NJOBS}" install
+
+# The Silo thorn's detect.sh looks for exactly these
+for f in "${SILO_LIB_DIR}/include/silo.h" "${SILO_LIB_DIR}/lib/libsiloh5.so"; do
+    if [[ ! -e "${f}" ]]; then
+        echo "Error: expected ${f} was not installed." >&2
+        exit 1
+    fi
+done
+
+echo "Silo has been successfully built and installed in ${SILO_LIB_DIR}."

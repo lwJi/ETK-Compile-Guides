@@ -1,0 +1,59 @@
+#!/bin/bash
+# Environment for CarpetX/AsterX on RIT "tigris" (GH200 nodes, sm_90).
+# Source this file:  source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX
+#
+# tigris has no TACC-style module tree; everything comes from the central
+# Spack installation (/tools/spack). Spack packages are immutable by hash, so
+# we pin exact installs and set paths directly (much faster than `spack load`,
+# and safe to source in batch jobs).
+#
+# All MPI-dependent packages below are built against the SAME OpenMPI
+# (/2vcg2fe), which itself is built with CUDA 12.8.0 (/m3hunyc).
+#
+#   gcc        13.2.0   /fj4gaqb
+#   cuda       12.8.0   /m3hunyc
+#   openmpi    4.1.6    /2vcg2fe   (+cuda, ucx, slurm, pmix)
+#   ucx        1.15.0   /5wtd7nf
+#   hwloc      2.9.1    /2odanji
+#   hdf5       1.14.3   /52kvtuj   (+mpi, parallel HDF5)
+#   fftw       3.3.10   /p3ygd2g   (+mpi)
+#   gsl        2.7.1    /so3qf2a
+#   openblas   0.3.26   /bu72jp5   (the one gsl links against)
+#   boost      1.84.0   /5o7rmwi   (has libboost_filesystem)
+#   perl       5.38.0   /b4dgnpy   (system perl lacks FindBin, needed by Cactus)
+#
+# Not available for neoverse_v2 + this MPI in Spack, so Cactus builds them
+# from the bundled tarballs: ADIOS2, openPMD, Silo, yaml-cpp, NSIMD, ssht.
+
+_SPACK_ROOT=/.autofs/tools/spack/opt/spack/linux-rhel9-neoverse_v2
+_S=${_SPACK_ROOT}/gcc-13.2.0
+
+export ETK_GCC_DIR=${_SPACK_ROOT}/gcc-11.4.1/gcc-13.2.0-fj4gaqbnf3r5wb3obg44xdiwztm6mxeg
+export ETK_CUDA_DIR=${_S}/cuda-12.8.0-m3hunycye5tgazc5d7i42lc7zrykvbbf
+export ETK_MPI_DIR=${_S}/openmpi-4.1.6-2vcg2feewtz6jsujvjswbx3ro5nio7zo
+export ETK_UCX_DIR=${_S}/ucx-1.15.0-5wtd7nf2wvlcnq7kltyj6qsi4pdccrxr
+export ETK_HWLOC_DIR=${_S}/hwloc-2.9.1-2odanji46exyfntde47r7f423yt5j2go
+export ETK_HDF5_DIR=${_S}/hdf5-1.14.3-52kvtujwkjawhe6zcsqpxxnnc2ezsjgl
+export ETK_FFTW3_DIR=${_S}/fftw-3.3.10-p3ygd2glms2uvpgwbvqhq3wntm4dc4b5
+export ETK_GSL_DIR=${_S}/gsl-2.7.1-so3qf2a4fntsbrkq4obrickvrwnre55z
+export ETK_OPENBLAS_DIR=${_S}/openblas-0.3.26-bu72jp5dxwpv4tm6mnagsfrezjcsgbwv
+export ETK_BOOST_DIR=${_S}/boost-1.84.0-5o7rmwiu6ycfp4jhtpok7uxunvuwjn4x
+export ETK_PERL_DIR=${_S}/perl-5.38.0-b4dgnpygl447lzio4rminlpz35gngmhq
+
+for _d in ${ETK_GCC_DIR} ${ETK_CUDA_DIR} ${ETK_MPI_DIR} ${ETK_HDF5_DIR} \
+          ${ETK_FFTW3_DIR} ${ETK_GSL_DIR} ${ETK_OPENBLAS_DIR} ${ETK_BOOST_DIR}; do
+    [[ -d ${_d} ]] || echo "WARNING: missing Spack install ${_d}" >&2
+done
+
+# The system gcc is hidden behind /tools/bin/blindfold, so gcc 13 must come first.
+export PATH=${ETK_GCC_DIR}/bin:${ETK_CUDA_DIR}/bin:${ETK_MPI_DIR}/bin:${ETK_HDF5_DIR}/bin:${ETK_PERL_DIR}/bin:${PATH}
+
+_LDP=${ETK_GCC_DIR}/lib64:${ETK_CUDA_DIR}/lib64:${ETK_MPI_DIR}/lib:${ETK_UCX_DIR}/lib
+_LDP=${_LDP}:${ETK_HWLOC_DIR}/lib:${ETK_HDF5_DIR}/lib:${ETK_FFTW3_DIR}/lib:${ETK_GSL_DIR}/lib
+_LDP=${_LDP}:${ETK_OPENBLAS_DIR}/lib:${ETK_BOOST_DIR}/lib
+export LD_LIBRARY_PATH=${_LDP}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+
+export CUDA_HOME=${ETK_CUDA_DIR}
+export MPI_HOME=${ETK_MPI_DIR}
+
+unset _SPACK_ROOT _S _d _LDP

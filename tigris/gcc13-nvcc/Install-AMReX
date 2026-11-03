@@ -1,0 +1,86 @@
+#!/bin/bash
+# Build AMReX (CUDA backend, sm_90 for GH200) on RIT tigris.
+# Requires: source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX
+# Usage:    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX [num_jobs]
+
+# Exit on error
+set -e
+
+# Check if ETKPATH is set
+if [ -z "${ETKPATH}" ]; then
+    echo "Error: ETKPATH is not set. Please set it before running this script."
+    exit 1
+fi
+if [ -z "${ETK_CUDA_DIR}" ]; then
+    echo "Error: environment not loaded. Source Load-Module-CarpetX first."
+    exit 1
+fi
+
+NJOBS=${1:-24}
+
+# Pin to the AMReX release bundled with ExternalLibraries-AMReX
+# (arrangements/ExternalLibraries/AMReX/dist), known to work with CarpetX.
+# AMREX_VERSION=${AMREX_VERSION:-25.11}
+
+# Define paths
+AMREX_REPO="https://github.com/AMReX-Codes/amrex.git"
+AMREX_DIR="${ETKPATH}/amrex"
+AMREX_BUILD_DIR="${AMREX_DIR}/build-gcc13-nvcc"
+AMREX_LIB_DIR="${ETKPATH}/amrex-lib-gcc13-nvcc"
+
+# Clone AMReX repository
+echo "Cloning AMReX repository..."
+cd "${ETKPATH}"
+if [[ ! -d "${AMREX_DIR}" ]]; then
+    git clone "${AMREX_REPO}" amrex
+else
+    echo "AMReX directory already exists. Skipping clone."
+fi
+
+# Create directories for build and installation
+for dir in "${AMREX_BUILD_DIR}" "${AMREX_LIB_DIR}"; do
+    if [[ -d "${dir}" ]]; then
+        echo "Removing existing directory: ${dir}"
+        rm -rf "${dir}"
+    fi
+    mkdir -p "${dir}"
+done
+
+# Set environment variables for compiler and flags
+for tool in gcc g++ gfortran nvcc mpicc mpicxx; do
+    if ! command -v "${tool}" >/dev/null 2>&1; then
+        echo "Error: required compiler '${tool}' not found in PATH." >&2
+        exit 1
+    fi
+done
+export CC=$(command -v gcc)
+export CXX=$(command -v g++)
+export FC=$(command -v gfortran)
+export CUCC=$(command -v nvcc)
+export CUDAHOSTCXX=${CXX}
+export CFLAGS="-I${ETK_CUDA_DIR}/include"
+export CXXFLAGS="-I${ETK_CUDA_DIR}/include"
+export LDFLAGS="-L${ETK_CUDA_DIR}/lib64"
+
+# Build and install AMReX
+echo "Building AMReX ${AMREX_VERSION}..."
+cd "${AMREX_BUILD_DIR}"
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_INSTALL_PREFIX=${AMREX_LIB_DIR} \
+      -DCMAKE_CUDA_COMPILER=${CUCC} \
+      -DCMAKE_CUDA_HOST_COMPILER=${CXX} \
+      -DCUDAToolkit_ROOT=${ETK_CUDA_DIR} \
+      -DMPI_C_COMPILER=$(command -v mpicc) \
+      -DMPI_CXX_COMPILER=$(command -v mpicxx) \
+      -DAMReX_GPU_BACKEND=CUDA \
+      -DAMReX_CUDA_ARCH=90 \
+      -DAMReX_MPI=ON \
+      -DAMReX_FORTRAN=OFF \
+      -DAMReX_FORTRAN_INTERFACES=OFF \
+      -DAMReX_OMP=OFF \
+      -DAMReX_PARTICLES=ON \
+      -DAMReX_PRECISION=DOUBLE \
+      ..
+make -j${NJOBS} install
+
+echo "AMReX has been successfully built and installed in ${AMREX_LIB_DIR}."
