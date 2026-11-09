@@ -57,3 +57,6 @@ export CUDA_HOME=${ETK_CUDA_DIR}
 export MPI_HOME=${ETK_MPI_DIR}
 
 unset _SPACK_ROOT _S _d _LDP
+
+export PMIX_MCA_psec=native
+export PMIX_SECURITY_MODE=native
