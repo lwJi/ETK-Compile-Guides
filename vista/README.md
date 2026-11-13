@@ -51,14 +51,18 @@
 * Load Modules
 
     ```bash
-    source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX.sh
+    source ${ETKGUIDE}/gcc13-nvcc/Load-Module-CarpetX
     ```
+
+    Since the Nov 2026 maintenance this uses `openmpi/5.0.11` (`openmpi/5.0.5` needs the removed hcoll library); see the comments in `Load-Module-CarpetX`.
 
 * Compile `AMReX`
 
     ```bash
-    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX.sh
+    ${ETKGUIDE}/gcc13-nvcc/Install-AMReX
     ```
+
+    On a login node (1 core, 100 processes per user) this builds with 1 job; run it on a compute node for a faster build, or set `MAKE_JOBS`.
 
 * Compile `ETK`
 
