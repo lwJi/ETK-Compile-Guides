@@ -1,0 +1,42 @@
+#!/bin/bash
+
+set -e
+
+: "${ETKPATH:?Set ETKPATH before running this script.}"
+: "${TACC_NVIDIA_MATH_DIR:?Source Load-Module-CarpetX first.}"
+
+# Prebuild the thorn's Silo source. Its build script passes a leading space in
+# LIBS to CMake's link_libraries(), which fails under CMP0004.
+silo_dist="${ETKPATH}/Cactus/arrangements/ExternalLibraries/Silo/dist"
+silo_archives=("$silo_dist"/Silo-*.tar)
+silo_archive=${silo_archives[0]}
+if [[ ${#silo_archives[@]} -ne 1 || ! -f "$silo_archive" ]]; then
+    echo "Expected one Silo source archive in $silo_dist. Run GetComponents first." >&2
+    exit 1
+fi
+
+silo_name=${silo_archive##*/}
+silo_build="${ETKPATH}/silo-build-horizon-gcc-nvcc"
+silo_install="${ETKPATH}/silo-horizon-gcc-nvcc"
+mkdir -p "$silo_build"
+tar -xf "$silo_archive" -C "$silo_build"
+
+cmake -S "$silo_build/${silo_name%.tar}" -B "$silo_build/build" \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_C_COMPILER="$(command -v gcc)" \
+    -DCMAKE_CXX_COMPILER="$(command -v g++)" \
+    -DCMAKE_INSTALL_PREFIX="$silo_install" \
+    -DCMAKE_INSTALL_LIBDIR=lib \
+    -DHDF5_ROOT=/usr \
+    -DSILO_ENABLE_HDF5=ON \
+    -DSILO_ENABLE_FORTRAN=OFF \
+    -DSILO_ENABLE_ZFP=OFF \
+    -DSILO_ENABLE_FPZIP=OFF \
+    -DSILO_ENABLE_SILEX=OFF \
+    -DSILO_ENABLE_BROWSER=OFF \
+    -DSILO_ENABLE_PYTHON_MODULE=OFF \
+    -DSILO_CONFIG_SITE=/dev/null \
+    -DBUILD_TESTING=OFF
+
+cmake --build "$silo_build/build" --parallel "${MAKE_JOBS:-${SLURM_CPUS_PER_TASK:-1}}"
+cmake --install "$silo_build/build"

@@ -1,0 +1,12 @@
+#!/bin/bash -l
+
+#SBATCH -p debug
+#SBATCH -N 1
+#SBATCH -n 4
+#SBATCH -t 00:10:00
+
+source "${ETKGUIDE:?Set ETKGUIDE to the Horizon guide directory.}/gcc-nvcc/Load-Module-CarpetX" || exit 1
+export OMP_NUM_THREADS="${OMP_NUM_THREADS:-1}"
+module list
+
+create_and_organize_job_directory_and_launch_jobs "${SUBMITJOBS_PARFILE}" "${SUBMITJOBS_JOBNAME}" "${SLURM_JOB_ID}"

@@ -1,0 +1,34 @@
+#!/bin/bash
+
+set -e
+
+: "${ETKPATH:?Set ETKPATH before running this script.}"
+: "${TACC_NVIDIA_MATH_DIR:?Source Load-Module-CarpetX first.}"
+
+amrex_source="${ETKPATH}/amrex"
+amrex_build="${ETKPATH}/amrex-build-horizon-gcc-nvcc"
+amrex_install="${ETKPATH}/amrex-horizon-gcc-nvcc"
+
+if [[ ! -d "$amrex_source" ]]; then
+    git clone https://github.com/AMReX-Codes/amrex.git "$amrex_source"
+fi
+
+cmake -S "$amrex_source" -B "$amrex_build" \
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+    -DCMAKE_INSTALL_PREFIX="$amrex_install" \
+    -DCMAKE_C_COMPILER="$(command -v gcc)" \
+    -DCMAKE_CXX_COMPILER="$(command -v g++)" \
+    -DCMAKE_CUDA_COMPILER="$(command -v nvcc)" \
+    -DCMAKE_CUDA_HOST_COMPILER="$(command -v g++)" \
+    -DCMAKE_CUDA_ARCHITECTURES=100 \
+    -DCMAKE_LIBRARY_PATH="$TACC_NVIDIA_MATH_LIB" \
+    -DAMReX_GPU_BACKEND=CUDA \
+    -DAMReX_GPU_RDC=ON \
+    -DAMReX_MPI=ON \
+    -DAMReX_FORTRAN=OFF \
+    -DAMReX_OMP=OFF \
+    -DAMReX_PARTICLES=ON \
+    -DAMReX_PRECISION=DOUBLE
+
+cmake --build "$amrex_build" --parallel "${MAKE_JOBS:-${SLURM_CPUS_PER_TASK:-1}}"
+cmake --install "$amrex_build"

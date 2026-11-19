@@ -10,6 +10,7 @@ Scripts and configuration files for building the [Einstein Toolkit](https://eins
 | `frontera/` | TACC Frontera | `icc`, `oneapi` variants (module-based) |
 | `frontera-spack/` | TACC Frontera | alternative Spack-based environment setup |
 | `vista/` | TACC Vista | `gcc`, `gcc-nvcc`, `nvc`, `nvc-nvcc`, … variants |
+| [`horizon/`](horizon/README.md) | TACC Horizon | Grace Blackwell `gcc-nvcc` build and Slurm job example |
 | `deltaai/` | NCSA DeltaAI | GH200 build and run guide |
 | `polaris/` | ALCF Polaris | GNU + CUDA build and PBS run guide |
 | `tigris/` | RIT Tigris | GH200 `gcc13-nvcc` build (Spack-based) |

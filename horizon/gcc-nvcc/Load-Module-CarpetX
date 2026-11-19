@@ -1,0 +1,5 @@
+#!/bin/bash
+
+# CUDA 13.3 supports GCC 15 as its host compiler on Horizon.
+module reset &&
+    module load gcc/15.3.0 cuda/13.3 openmpi/5.0.11 nvpl/26.9
