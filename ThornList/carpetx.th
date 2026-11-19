@@ -171,6 +171,7 @@ CarpetX/StaggeredWaveToyX
 CarpetX/TestArrayGroup
 CarpetX/TestBoundaries
 CarpetX/TestBoxInBox
+CarpetX/TestCarpetXAPI
 CarpetX/TestDerivs
 CarpetX/TestInterpolate
 CarpetX/TestLoopX
@@ -184,6 +185,9 @@ CarpetX/TestSubcycleStepping
 CarpetX/TestSubcyclingCC
 CarpetX/TestSubcyclingMC2
 CarpetX/TestSubcyclingProlong
+CarpetX/TestSubcyclingMixedProlong
+CarpetX/TestSubcyclingNoRestrict
+CarpetX/TestRestrictTags
 CarpetX/TestSymmetries
 CarpetX/TmunuBaseX
 CarpetX/VGFWaveToyX

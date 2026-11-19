@@ -184,7 +184,7 @@ SpacetimeX/Cowling
 SpacetimeX/Multipole
 SpacetimeX/NewRadX
 SpacetimeX/TestNewRadX
-SpacetimeX/Punctures
+#SpacetimeX/Punctures
 SpacetimeX/PunctureTracker
 #SpacetimeX/SphericalHarmonics
 SpacetimeX/SphericalSurface
@@ -212,3 +212,4 @@ AsterX/FishboneMoncriefIDX
 AsterX/ReconX
 AsterX/TOVSolverX
 AsterX/AsterUtils
+
