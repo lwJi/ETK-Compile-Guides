@@ -76,7 +76,8 @@ CactusBase/Time
 # CactusUtils thorns
 !TARGET   = $ARR
 !TYPE     = git
-!URL      = https://bitbucket.org/cactuscode/cactusutils.git
+!URL      = https://github.com/lwJi/cactusutils.git
+!REPO_BRANCH = horizon
 !REPO_PATH= $2
 !CHECKOUT = CactusUtils/Accelerator CactusUtils/OpenCLRunTime
 CactusUtils/Formaline
@@ -160,7 +161,6 @@ CarpetX/ErrorEstimator
 CarpetX/HydroBaseX
 CarpetX/Loop
 CarpetX/ODESolvers
-CarpetX/Subcycling
 CarpetX/TmunuBaseX
 
 # CarpetXUtils thorns
